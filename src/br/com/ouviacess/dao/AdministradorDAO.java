@@ -27,10 +27,8 @@ public class AdministradorDAO {
             //Cria o Statement que responsavel por executar alguma coisa no banco de dados
             stmt = ConexaoDAO.con.createStatement();
             //Comando SQL que sera executado no banco de dados
-            String comando = "INSERT INTO administrador (nome, cpf, rg, email, senha, ddd, telefone)" + "VALUES ( "
+            String comando = "INSERT INTO administrador (nome, email, senha, ddd, telefone)" + "VALUES ( "
                 + "'" + administradorDTO.getNome() + "', "
-                + "'" + administradorDTO.getCpf() + ", "
-                + "'" + administradorDTO.getRg() + "', "
                 + "'" + administradorDTO.getEmail() + "', "
                 + "'" + administradorDTO.getSenha() + "', "
                 + "'" + administradorDTO.getDdd() + "', "                   
@@ -104,8 +102,6 @@ public class AdministradorDAO {
             //Comando SQL que sera executado no banco de dados
             String comando = "UPDTATE administrador set "
                 + "nome = '" + administradorDTO.getNome() + "', "
-                + "cpf = '" + administradorDTO.getCpf() + ", "
-                + "rg = '" + administradorDTO.getRg() + "', "
                 + "email = '" + administradorDTO.getEmail() + "', "
                 + "senha = '" + administradorDTO.getSenha() + "', "
                 + "ddd = '" + administradorDTO.getDdd() + "', "                   

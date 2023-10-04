@@ -2,7 +2,7 @@ package br.com.ouviacess.dto;
 
 public class AdministradorDTO {
     private int id_administrador;
-    private String nome, cpf, rg, email, senha, ddd, telefone;
+    private String nome, email, senha, ddd, telefone;
 
     public int getId_administrador() {
         return id_administrador;
@@ -18,22 +18,6 @@ public class AdministradorDTO {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getRg() {
-        return rg;
-    }
-
-    public void setRg(String rg) {
-        this.rg = rg;
     }
 
     public String getEmail() {

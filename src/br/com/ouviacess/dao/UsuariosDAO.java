@@ -21,6 +21,7 @@ public class UsuariosDAO {
      * @param usuariosDTO que vem da classe UsuariosCTR
      * @return Um boolean
      *
+     * /
     public boolean excluirUsuarios(UsuariosDTO usuariosDTO) {
         try {
             //Chama o metodo que esta na classe ConexaoDAO para abrir o banco de dados

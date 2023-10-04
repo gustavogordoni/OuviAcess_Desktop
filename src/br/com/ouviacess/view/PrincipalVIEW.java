@@ -41,40 +41,12 @@ public class PrincipalVIEW extends javax.swing.JFrame {
             }
         };
         menuBar = new javax.swing.JMenuBar();
-        menuLogin = new javax.swing.JMenu();
-        menuCadastro = new javax.swing.JMenu();
         menuRequerimentos = new javax.swing.JMenu();
         menuUsuarios = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
         menuSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        menuLogin.setMnemonic('f');
-        menuLogin.setText("Login");
-        menuLogin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                menuLoginMouseClicked(evt);
-            }
-        });
-        menuLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuLoginActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuLogin);
-
-        menuCadastro.setText("Cadastro");
-        menuCadastro.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                menuCadastroMouseClicked(evt);
-            }
-        });
-        menuCadastro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuCadastroActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuCadastro);
 
         menuRequerimentos.setText("Requerimentos");
         menuRequerimentos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -96,6 +68,9 @@ public class PrincipalVIEW extends javax.swing.JFrame {
             }
         });
         menuBar.add(menuUsuarios);
+
+        jMenu1.setText("Perfil");
+        menuBar.add(jMenu1);
 
         menuSair.setBackground(new java.awt.Color(255, 51, 51));
         menuSair.setMnemonic('h');
@@ -129,31 +104,9 @@ public class PrincipalVIEW extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_menuSairMouseClicked
 
-    private void menuLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoginActionPerformed
-                    
-    }//GEN-LAST:event_menuLoginActionPerformed
-
-    private void menuCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadastroActionPerformed
-        
-    }//GEN-LAST:event_menuCadastroActionPerformed
-
     private void menuRequerimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRequerimentosActionPerformed
         
     }//GEN-LAST:event_menuRequerimentosActionPerformed
-
-    private void menuLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLoginMouseClicked
-        LoginVIEW loginVIEW = new LoginVIEW();
-        this.desktopPane.add(loginVIEW);
-        loginVIEW.setVisible(true);
-        loginVIEW.setPosicao();
-    }//GEN-LAST:event_menuLoginMouseClicked
-
-    private void menuCadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuCadastroMouseClicked
-        CadastroVIEW cadastroVIEW = new CadastroVIEW();
-        this.desktopPane.add(cadastroVIEW);
-        cadastroVIEW.setVisible(true);
-        cadastroVIEW.setPosicao();
-    }//GEN-LAST:event_menuCadastroMouseClicked
 
     private void menuRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuRequerimentosMouseClicked
         RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW();
@@ -168,51 +121,13 @@ public class PrincipalVIEW extends javax.swing.JFrame {
          usuariosVIEW.setVisible(true);
          usuariosVIEW.setPosicao();
     }//GEN-LAST:event_menuUsuariosMouseClicked
-
  
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PrincipalVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PrincipalVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PrincipalVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PrincipalVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PrincipalVIEW().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenu menuCadastro;
-    private javax.swing.JMenu menuLogin;
     private javax.swing.JMenu menuRequerimentos;
     private javax.swing.JMenu menuSair;
     private javax.swing.JMenu menuUsuarios;
