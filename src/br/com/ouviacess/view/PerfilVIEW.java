@@ -13,7 +13,8 @@ import java.sql.ResultSet;
 import br.com.ouviacess.dto.AdministradorDTO;
 import br.com.ouviacess.ctr.AdministradorCTR;
 
-public class CadastroVIEW extends javax.swing.JFrame {
+public class PerfilVIEW extends javax.swing.JInternalFrame {
+        private int id_administrador = 1;
      
         AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto cadastroDTO
         AdministradorCTR administradorCTR = new AdministradorCTR(); //Cria um objeto cadastrorCTR
@@ -25,14 +26,36 @@ public class CadastroVIEW extends javax.swing.JFrame {
     /**
      * Creates new form CadastroVIEW
      */
-    public CadastroVIEW() {     
+    public PerfilVIEW() {     
         initComponents();
+        //Chama todos os métodos liberaCampos
+        liberaCampos(false);
+        
+        try{
+            administradorDTO.setId_administrador(id_administrador);
+            rs = administradorCTR.consultarAdministrador(administradorDTO, 1); //1 = é a pesquisa no id na classe DAO
+            if(rs.next()){
+                //limpaCampos();
+                
+                inputNome.setText(rs.getString("nome"));
+                inputDdd.setText(rs.getString("ddd"));
+                inputTelefone.setText(rs.getString("telefone"));
+                inputEmail.setText(rs.getString("email"));
+                inputSenha.setText(rs.getString("senha"));
+            }
+        }
+        catch(Exception erTab){
+            System.out.println("Erro SQL: "+erTab);
+        }  
     }
   
-//    public void setPosicao() {
-//        //Dimension d = this.getDesktopPane().getSize();
-//        //this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
-//    }//Fecha método setPosicao()
+    /**
+     * Método para centralizar o internalFrame.
+     */
+    public void setPosicao() {
+        Dimension d = this.getDesktopPane().getSize();
+        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
+    }//Fecha método setPosicao()
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -44,9 +67,9 @@ public class CadastroVIEW extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        btnLimpar = new javax.swing.JButton();
-        btnCadastrar = new javax.swing.JButton();
+        btnExcluirRequerimento = new javax.swing.JButton();
         btnAlterarRequerimento1 = new javax.swing.JButton();
+        btnAlterarRequerimento2 = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         inputDdd = new javax.swing.JFormattedTextField();
         inputTelefone = new javax.swing.JFormattedTextField();
@@ -57,6 +80,8 @@ public class CadastroVIEW extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+
+        setClosable(true);
 
         inputNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -70,26 +95,16 @@ public class CadastroVIEW extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setText("Telefone:");
 
-        btnLimpar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/cancelar.png"))); // NOI18N
-        btnLimpar.setText("Limpar");
-        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+        btnExcluirRequerimento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnExcluirRequerimento.setText("Atualizar");
+        btnExcluirRequerimento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimparActionPerformed(evt);
-            }
-        });
-
-        btnCadastrar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnCadastrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/novo.png"))); // NOI18N
-        btnCadastrar.setText("Cadastrar-se");
-        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastrarActionPerformed(evt);
+                btnExcluirRequerimentoActionPerformed(evt);
             }
         });
 
         btnAlterarRequerimento1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnAlterarRequerimento1.setText("Login");
+        btnAlterarRequerimento1.setText("Cancelar");
         btnAlterarRequerimento1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAlterarRequerimento1MouseClicked(evt);
@@ -101,35 +116,47 @@ public class CadastroVIEW extends javax.swing.JFrame {
             }
         });
 
+        btnAlterarRequerimento2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAlterarRequerimento2.setText("Editar");
+        btnAlterarRequerimento2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAlterarRequerimento2MouseClicked(evt);
+            }
+        });
+        btnAlterarRequerimento2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarRequerimento2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAlterarRequerimento2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAlterarRequerimento1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAlterarRequerimento1, btnCadastrar, btnLimpar});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAlterarRequerimento1, btnAlterarRequerimento2, btnExcluirRequerimento});
 
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnLimpar)
-                        .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnAlterarRequerimento1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAlterarRequerimento1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAlterarRequerimento2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAlterarRequerimento1, btnCadastrar, btnLimpar});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAlterarRequerimento1, btnAlterarRequerimento2, btnExcluirRequerimento});
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel17.setText("Nome completo: ");
@@ -152,7 +179,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
         });
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel18.setText("Senha: (para efetuar login)  ");
+        jLabel18.setText("Senha:");
 
         inputEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,10 +188,10 @@ public class CadastroVIEW extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("Email: (para efetuar login)  ");
+        jLabel4.setText("Email:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel2.setText("Faça seu cadastro no sistema");
+        jLabel2.setText("Perfil");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -191,9 +218,9 @@ public class CadastroVIEW extends javax.swing.JFrame {
                             .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(inputEmail, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -203,9 +230,9 @@ public class CadastroVIEW extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addGap(70, 70, 70)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel17)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputNome, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -284,66 +311,104 @@ public class CadastroVIEW extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputTelefoneActionPerformed
 
-    private void btnAlterarRequerimento1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarRequerimento1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAlterarRequerimento1ActionPerformed
-
-    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        gravar();
-//        if (gravar_alterar == 1) {
-//            gravar();
-//            gravar_alterar = 0;
-//        }
-//        else{
-//            if(gravar_alterar == 2){
-//                alterar();
-//                gravar_alterar=0;
-//            }
-//            else{
-//                JOptionPane.showMessageDialog(null, "Erro no Sistema!!!");
-//            }
-//        }
-    }//GEN-LAST:event_btnCadastrarActionPerformed
-
-    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLimparActionPerformed
+    private void btnExcluirRequerimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirRequerimentoActionPerformed
+        //alterar(); 
+        
+         if(gravar_alterar == 2){
+                alterar();
+                gravar_alterar = 0;
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Erro no Sistema!!!");
+            }
+    }//GEN-LAST:event_btnExcluirRequerimentoActionPerformed
 
     private void inputNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_inputNomeActionPerformed
 
+    private void btnAlterarRequerimento1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarRequerimento1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlterarRequerimento1ActionPerformed
+
     private void btnAlterarRequerimento1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAlterarRequerimento1MouseClicked
-        this.dispose();
-        new LoginVIEW().setVisible(true);
+
     }//GEN-LAST:event_btnAlterarRequerimento1MouseClicked
 
-    /**
-     * Método utilizado para gravar os dados do administrador.
+    private void btnAlterarRequerimento2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAlterarRequerimento2MouseClicked
+        //possibilitarEdicao(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
+        //liberaBotoes(false, true, true, true, true);
+        possibilitarEdicao(1);
+    }//GEN-LAST:event_btnAlterarRequerimento2MouseClicked
+
+    private void btnAlterarRequerimento2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarRequerimento2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlterarRequerimento2ActionPerformed
+  
+      /**
+     * Método utilizado para alterar os dados do carro.
      */
-    private void gravar(){
+    private void alterar(){
         try{
             administradorDTO.setNome(inputNome.getText());
             administradorDTO.setDdd(inputDdd.getText());
             administradorDTO.setTelefone(inputTelefone.getText());
             administradorDTO.setEmail(inputEmail.getText());
             administradorDTO.setSenha(inputSenha.getText());
-            
-            
+     
             JOptionPane.showMessageDialog(null,
-                    administradorCTR.inserirAdministrador(administradorDTO)
+                    administradorCTR.alterarAdministrador(administradorDTO)
             );
         }
-        catch(Exception e){
-            System.out.println("Erro ao Gravar os dados" + e.getMessage());
-        }
-    }//Fecha método gravar()    
+        catch(Exception e){}
+    }//Fecha método alterar()
+    
+     /**
+     * Método utilizado para preencher os campos da tela com 
+     * valores do carro.
+     * @param id_car, int com o id do carro.
+     */
+    private void possibilitarEdicao(int id_administrador){
+        liberaCampos(true);
+        gravar_alterar = 2;
+//        try{
+//            administradorDTO.setId_administrador(id_administrador);
+//            rs = administradorCTR.consultarAdministrador(administradorDTO, 1); //1 = é a pesquisa no id na classe DAO
+//            if(rs.next()){
+//                //limpaCampos();
+//                
+//                inputNome.setText(rs.getString("nome"));
+//                inputDdd.setText(rs.getString("ddd"));
+//                inputTelefone.setText(rs.getString("telefone"));
+//                inputEmail.setText(rs.getString("email"));
+//                inputSenha.setText(rs.getString("senha"));
+//                
+//                gravar_alterar = 2;
+//                liberaCampos(true);
+//            }
+//        }
+//        catch(Exception erTab){
+//            System.out.println("Erro SQL: "+erTab);
+//        }  
+    }//Fecha método possibilitarEdicao(int id_requerimento)
+    
+    /**
+     * Método utilizado para liberar/bloquear os campos da tela.
+     * @param a, boolean com true(libera) false(bloqueia).
+     */
+    private void liberaCampos(boolean a){
+        inputNome.setEnabled(a);
+        inputDdd.setEnabled(a);
+        inputTelefone.setEnabled(a);
+        inputEmail.setEnabled(a);
+        inputSenha.setEnabled(a);
+    }//Fecha método liberaCampos(boolean a)
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterarRequerimento1;
-    private javax.swing.JButton btnCadastrar;
-    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnAlterarRequerimento2;
+    private javax.swing.JButton btnExcluirRequerimento;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JFormattedTextField inputDdd;
     private javax.swing.JTextField inputEmail;

@@ -70,6 +70,11 @@ public class PrincipalVIEW extends javax.swing.JFrame {
         menuBar.add(menuUsuarios);
 
         jMenu1.setText("Perfil");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
         menuBar.add(jMenu1);
 
         menuSair.setBackground(new java.awt.Color(255, 51, 51));
@@ -121,6 +126,13 @@ public class PrincipalVIEW extends javax.swing.JFrame {
          usuariosVIEW.setVisible(true);
          usuariosVIEW.setPosicao();
     }//GEN-LAST:event_menuUsuariosMouseClicked
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        PerfilVIEW perfilVIEW = new PerfilVIEW();
+         this.desktopPane.add(perfilVIEW);
+         perfilVIEW.setVisible(true);
+         perfilVIEW.setPosicao();
+    }//GEN-LAST:event_jMenu1MouseClicked
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

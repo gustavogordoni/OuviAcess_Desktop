@@ -139,19 +139,19 @@ public class RequerimentosDAO {
             switch (opcao){
                 case 1:
                     comando = "SELECT r.* "+
-                        "FROM requerimentos r "+
-                        "WHERE id_requerimentos LIKE '" + requerimentosDTO.getId_requerimento() + "%' " +
-                        "ORDER BY r.id_requerimento";
+                        "FROM requerimento r "+
+                        "WHERE titulo LIKE '%" + requerimentosDTO.getTitulo() + "%' " +
+                        "ORDER BY r.titulo";
                     
                 break;
                 case 2:
                     comando = "SELECT r.* "+
-                        "FROM requerimentos r " +
+                        "FROM requerimento r " +
                         "WHERE r.id_requerimento = " + requerimentosDTO.getId_requerimento();
                 break;                
             }
             //Executa o comando SQL no banco de Dados
-            rs = stmt.executeQuery(comando.toUpperCase());
+            rs = stmt.executeQuery(comando);
             return rs;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {

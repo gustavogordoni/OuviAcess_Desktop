@@ -100,15 +100,16 @@ public class AdministradorDAO {
             //Cria o Statement que responsavel por executar alguma coisa no banco de dados
             stmt = ConexaoDAO.con.createStatement();
             //Comando SQL que sera executado no banco de dados
-            String comando = "UPDTATE administrador set "
+            String comando = "UPDATE administrador set "
                 + "nome = '" + administradorDTO.getNome() + "', "
                 + "email = '" + administradorDTO.getEmail() + "', "
                 + "senha = '" + administradorDTO.getSenha() + "', "
                 + "ddd = '" + administradorDTO.getDdd() + "', "                   
-                + "telefone = '" + administradorDTO.getTelefone() + "') ";
+                + "telefone = '" + administradorDTO.getTelefone() + "' "
+                + "WHERE id_administrador = " + administradorDTO.getId_administrador();
             
             //Executa o comando SQL no banco de Dados
-            stmt.execute(comando.toUpperCase());
+            stmt.execute(comando);
             //Da um commit no banco de dados
             ConexaoDAO.con.commit();
             //Fecha o statement
@@ -144,8 +145,7 @@ public class AdministradorDAO {
                 case 1:
                     comando = "SELECT a.* "+
                         "FROM administrador a "+
-                        "WHERE id_administrador LIKE '" + administradorDTO.getId_administrador() + "%' " +
-                        "ORDER BY a.id_administrador";
+                        "WHERE a.id_administrador = " + administradorDTO.getId_administrador();
                     
                 break;
                 case 2:

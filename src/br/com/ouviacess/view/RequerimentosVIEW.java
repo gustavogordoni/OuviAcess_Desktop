@@ -4,24 +4,36 @@
  * and open the template in the editor.
  */
 package br.com.ouviacess.view;
+import javax.swing.table.DefaultTableModel;
+import br.com.ouviacess.dto.RequerimentosDTO;
+import br.com.ouviacess.ctr.RequerimentosCTR;
 
 import java.awt.Dimension;
+import java.sql.ResultSet;
 
 /**
  *
  * @author Aluno
  */
 public class RequerimentosVIEW extends javax.swing.JInternalFrame {
+    
+    ResultSet rs; //Variavel usada para preenchimeto da tabela e dos campos
+    RequerimentosDTO requerimentosDTO = new RequerimentosDTO(); //Cria um objeto carroDTO
+    RequerimentosCTR requerimentosCTR = new RequerimentosCTR(); //Cria um objeto carrorCTR
+    
+    DefaultTableModel modelo_tableRequerimentos; //Variavel para guardar o modelo da tabela
 
     /**
      * Creates new form RequerimentosVIEW
      */
     public RequerimentosVIEW() {
        initComponents();
+       //Chama todos os métodos liberaCampos
+       liberaCampos(false);
       // this.setExtendedState(this.MAXIMIZED_BOTH);
+      modelo_tableRequerimentos = (DefaultTableModel) tableRequerimentos.getModel();
         
     }
-
     
     /**
      * Método para centralizar o internalFrame.
@@ -30,7 +42,8 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
     }//Fecha método setPosicao()
-    
+     
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -78,15 +91,13 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         inputSituacao = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        inputData = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        inputCep = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         inputCidade = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         inputBairro = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        inputRua = new javax.swing.JTextField();
+        inputLogradouro = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         textareaDescricao = new javax.swing.JTextArea();
@@ -94,6 +105,11 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         btnExcluirRequerimento = new javax.swing.JButton();
         btnExcluirRequerimento2 = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        textareaResposta = new javax.swing.JTextArea();
+        jLabel21 = new javax.swing.JLabel();
+        inputData = new javax.swing.JFormattedTextField();
+        inputCep = new javax.swing.JFormattedTextField();
         jLabel19 = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
@@ -357,6 +373,11 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         ));
         tableRequerimentos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tableRequerimentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableRequerimentosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableRequerimentos);
 
         btnExcluirRequerimento1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -432,20 +453,8 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Situação:");
 
-        inputData.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputDataActionPerformed(evt);
-            }
-        });
-
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Data:");
-
-        inputCep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputCepActionPerformed(evt);
-            }
-        });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("CEP: ");
@@ -468,14 +477,14 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setText("Bairro: ");
 
-        inputRua.addActionListener(new java.awt.event.ActionListener() {
+        inputLogradouro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputRuaActionPerformed(evt);
+                inputLogradouroActionPerformed(evt);
             }
         });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel9.setText("Rua:");
+        jLabel9.setText("Logradouro:");
 
         textareaDescricao.setColumns(20);
         textareaDescricao.setRows(5);
@@ -501,9 +510,9 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(btnExcluirRequerimento2)
+                .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59)
+                .addComponent(btnExcluirRequerimento2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -511,14 +520,43 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 11, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnExcluirRequerimento2, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)))
+                    .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcluirRequerimento2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnExcluirRequerimento, btnExcluirRequerimento2});
+
+        textareaResposta.setColumns(20);
+        textareaResposta.setRows(5);
+        jScrollPane5.setViewportView(textareaResposta);
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel21.setText("Resposta:");
+
+        try {
+            inputData.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        inputData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputDataActionPerformed(evt);
+            }
+        });
+
+        try {
+            inputCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##.###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        inputCep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputCepActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -527,56 +565,58 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(48, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jLabel10)
+                    .addComponent(jLabel21)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(inputTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(inputCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(inputSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(inputBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(inputTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(inputCidade, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(inputSituacao, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(inputBairro, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                            .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(inputRua, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(inputTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(inputCep, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(inputData, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(inputLogradouro, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(inputTipo, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                            .addComponent(inputData)
+                            .addComponent(inputCep)))
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane5))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputBairro, inputCep, inputCidade, inputData, inputRua, inputSituacao, inputTipo, inputTitulo, jLabel1, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel9});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputBairro, inputCidade, inputData, inputLogradouro, inputSituacao, inputTipo, inputTitulo, jLabel1, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel9});
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(inputSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputData, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                        .addComponent(inputData, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel7)
@@ -585,25 +625,29 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputCep, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                        .addComponent(inputCep, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)))
+                .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                    .addComponent(inputLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputBairro, inputCep, inputCidade, inputData, inputRua, inputTipo, inputTitulo, jLabel1, jLabel3});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputBairro, inputCidade, inputData, inputLogradouro, inputSituacao, inputTipo, inputTitulo});
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel19.setText("Requerimentos");
@@ -621,21 +665,22 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel19)
-                        .addGap(205, 205, 205)))
+                        .addGap(215, 215, 215)))
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
+                        .addGap(0, 34, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(20, 20, 20))
         );
 
@@ -645,7 +690,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
-        // TODO add your handling code here:
+        preencheTabela(inputPesquisa.getText());
     }//GEN-LAST:event_btnPesquisaActionPerformed
 
     private void inputPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPesquisaActionPerformed
@@ -688,9 +733,9 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputRua1ActionPerformed
 
-    private void inputRuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputRuaActionPerformed
+    private void inputLogradouroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputLogradouroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputRuaActionPerformed
+    }//GEN-LAST:event_inputLogradouroActionPerformed
 
     private void inputBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputBairroActionPerformed
         // TODO add your handling code here:
@@ -699,14 +744,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private void inputCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCidadeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_inputCidadeActionPerformed
-
-    private void inputCepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCepActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputCepActionPerformed
-
-    private void inputDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputDataActionPerformed
 
     private void inputSituacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputSituacaoActionPerformed
         // TODO add your handling code here:
@@ -725,7 +762,113 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
        //gravar = 1;
     }//GEN-LAST:event_btnExcluirRequerimentoActionPerformed
 
+    private void inputDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputDataActionPerformed
 
+    private void inputCepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputCepActionPerformed
+
+    private void tableRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRequerimentosMouseClicked
+        //Pega a Pessoa selecionada e chama preencheCampos
+        preencheCampos(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
+        //liberaBotoes(false, true, true, true, true);
+    }//GEN-LAST:event_tableRequerimentosMouseClicked
+
+    /**
+     * Método utilizado para preencher/contruir a Jtable.
+     * @param mar_car, String com a marca do carro
+     */
+    private void preencheTabela(String titulo){
+        try{
+            //Limpa todas as linhas
+            modelo_tableRequerimentos.setNumRows(0);
+
+            //Enquanto tiver linhas - faça
+            requerimentosDTO.setTitulo(titulo);
+            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, 1); //1 = é a pesquisa por marca na classe DAO
+            while(rs.next()){
+                modelo_tableRequerimentos.addRow(new Object[]{
+                  rs.getString("id_requerimento"),
+                  rs.getString("titulo"),
+                  rs.getString("tipo"),
+                  rs.getString("situacao"),
+                });
+            }        
+        }
+        catch(Exception erTab){
+            System.out.println("Erro SQL: "+erTab);
+        }  
+    }//Fecha método preencheTabela(String titulo)
+    
+     /**
+     * Método utilizado para preencher os campos da tela com 
+     * valores do carro.
+     * @param id_car, int com o id do carro.
+     */
+    private void preencheCampos(int id_requerimento){
+        try{
+            requerimentosDTO.setId_requerimento(id_requerimento);
+            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, 2); //2 = é a pesquisa no id na classe DAO
+            if(rs.next()){
+                limpaCampos();
+                
+                inputTitulo.setText(rs.getString("titulo"));
+                inputTipo.setText(rs.getString("tipo"));
+                inputSituacao.setText(rs.getString("situacao"));
+                inputData.setText(rs.getString("data"));
+                inputCidade.setText(rs.getString("cidade"));
+                inputCep.setText(rs.getString("cep"));
+                inputBairro.setText(rs.getString("bairro"));
+                inputLogradouro.setText(rs.getString("logradouro"));
+                textareaDescricao.setText(rs.getString("descricao"));
+                textareaResposta.setText(rs.getString("resposta"));
+                
+                //gravar_alterar = 2;
+                liberaCampos(true);
+            }
+        }
+        catch(Exception erTab){
+            System.out.println("Erro SQL: "+erTab);
+        }  
+    }//Fecha método preencheCampos(int id_requerimento)
+    
+    /**
+     * Método utilizado para limpar os campos da tela.
+     */
+    private void limpaCampos(){
+        inputTitulo.setText("");
+        inputTipo.setText("");
+        inputSituacao.setText("");
+        inputData.setText("");
+        inputCidade.setText("");
+        inputCep.setText("");
+        inputBairro.setText("");
+        inputLogradouro.setText("");
+        textareaDescricao.setText("");
+        textareaResposta.setText("");
+    }//Fecha método limpaCampos()
+    
+    /**
+     * Método utilizado para liberar/bloquear os campos da tela.
+     * @param a, boolean com true(libera) false(bloqueia).
+     */
+    private void liberaCampos(boolean a){
+        inputTitulo.setEnabled(a);
+        inputTipo.setEnabled(a);
+        inputSituacao.setEnabled(a);
+        inputData.setEnabled(a);
+        inputCidade.setEnabled(a);
+        inputCep.setEnabled(a);
+        inputBairro.setEnabled(a);
+        inputLogradouro.setEnabled(a);
+        textareaDescricao.setEnabled(a);
+        textareaResposta.setEnabled(a);
+    }//Fecha método liberaCampos(boolean a)
+    
+   
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExcluirRequerimento;
     private javax.swing.JButton btnExcluirRequerimento1;
@@ -733,14 +876,14 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnPesquisa;
     private javax.swing.JTextField inputBairro;
     private javax.swing.JTextField inputBairro1;
-    private javax.swing.JTextField inputCep;
+    private javax.swing.JFormattedTextField inputCep;
     private javax.swing.JTextField inputCep1;
     private javax.swing.JTextField inputCidade;
     private javax.swing.JTextField inputCidade1;
-    private javax.swing.JTextField inputData;
+    private javax.swing.JFormattedTextField inputData;
     private javax.swing.JTextField inputData1;
+    private javax.swing.JTextField inputLogradouro;
     private javax.swing.JTextField inputPesquisa;
-    private javax.swing.JTextField inputRua;
     private javax.swing.JTextField inputRua1;
     private javax.swing.JTextField inputSituacao;
     private javax.swing.JTextField inputSituacao1;
@@ -760,6 +903,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -776,11 +920,13 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel labelPesquisa;
     private javax.swing.JComboBox<String> selectPesquisa;
     private javax.swing.JTable tableRequerimentos;
     private javax.swing.JTextArea textareaDescricao;
     private javax.swing.JTextArea textareaDescricao1;
+    private javax.swing.JTextArea textareaResposta;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
