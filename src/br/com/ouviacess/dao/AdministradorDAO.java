@@ -29,8 +29,8 @@ public class AdministradorDAO {
             //Comando SQL que sera executado no banco de dados
             String comando = "INSERT INTO administrador (nome, email, senha, ddd, telefone)" + "VALUES ( "
                 + "'" + administradorDTO.getNome() + "', "
-                + "'" + administradorDTO.getEmail() + "', "
-                + "'" + administradorDTO.getSenha() + "', "
+                + "'" + administradorDTO.getEmail() + "', "                    
+                + "md5('" + administradorDTO.getSenha() + "'),"                    
                 + "'" + administradorDTO.getDdd() + "', "                   
                 + "'" + administradorDTO.getTelefone() 
                 + "') ";           
@@ -103,7 +103,7 @@ public class AdministradorDAO {
             String comando = "UPDATE administrador set "
                 + "nome = '" + administradorDTO.getNome() + "', "
                 + "email = '" + administradorDTO.getEmail() + "', "
-                + "senha = '" + administradorDTO.getSenha() + "', "
+                + "senha = md5('" + administradorDTO.getSenha() + "'),"
                 + "ddd = '" + administradorDTO.getDdd() + "', "                   
                 + "telefone = '" + administradorDTO.getTelefone() + "' "
                 + "WHERE id_administrador = " + administradorDTO.getId_administrador();
@@ -163,5 +163,32 @@ public class AdministradorDAO {
             return rs;
         }
     }//Fecha o método consultarAdministrador
+    
+    public int logarAdministrador(AdministradorDTO administradorDTO) {
+        try {
+            ConexaoDAO.ConectDB();
+            stmt = ConexaoDAO.con.createStatement();
+            String comando = "SELECT a.id_administrador " +
+                             "FROM administrador a " + 
+                             "WHERE a.email = '" + administradorDTO.getEmail()+ "'" +
+                             " AND a.senha = md5('" + administradorDTO.getSenha() + "')";
+
+            rs = null;
+            rs = stmt.executeQuery(comando);
+            if(rs.next()){
+                return rs.getInt("id_administrador");
+            }
+            else{
+                return 0;
+            }                
+        } 
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return 0;
+        }
+        finally{
+            ConexaoDAO.CloseDB();
+        }
+    }//Fecha o método logarUsuario
     
 }//Fecha a classe AdministradorDAO

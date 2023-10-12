@@ -10,6 +10,7 @@ import br.com.ouviacess.dao.ConexaoDAO;
 
 public class AdministradorCTR {    
     AdministradorDAO administradorDAO = new AdministradorDAO();
+    AdministradorDTO administradorDTO = new AdministradorDTO();
     
     /**
      * Método construtor da classe
@@ -103,6 +104,10 @@ public class AdministradorCTR {
 
         return rs;
     }//Fecha o método consultarAdministrador
+    
+     public int logarAdministrador(AdministradorDTO administradorDTO) {
+        return administradorDAO.logarAdministrador(administradorDTO);
+    }//Fecha o método logarUsuario
 
     
     /**

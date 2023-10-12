@@ -5,17 +5,31 @@
  */
 package br.com.ouviacess.view;
 
+import javax.swing.JOptionPane;
+import br.com.ouviacess.dto.AdministradorDTO;
+import br.com.ouviacess.ctr.AdministradorCTR;
+
 /**
  *
  * @author claud
  */
 public class LoginVIEW extends javax.swing.JFrame {
+    
+    AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto carroDTO
+    AdministradorCTR administradorCTR = new AdministradorCTR(); //Cria um objeto carrorCTR
 
     /**
      * Creates new form Teste
      */
     public LoginVIEW() {
         initComponents();
+        // Centralizar o JFrame na tela
+        setLocationRelativeTo(null);
+        // Impedir que a janela seja maximizada
+        setResizable(false);
+        
+        inputEmailLogin.setText("a@a.com");
+        inputSenhaLogin.setText("123");
     }
 
     /**
@@ -150,19 +164,64 @@ public class LoginVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAcionarCadastroActionPerformed
 
     private void btnAcessarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAcessarMouseClicked
-        this.dispose();
-        new PrincipalVIEW().setVisible(true);
+//        this.dispose();
+//        new PrincipalVIEW().setVisible(true);
     }//GEN-LAST:event_btnAcessarMouseClicked
 
     private void btnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessarActionPerformed
-        // TODO add your handling code here:
+        if(verificaPreenchimento()){
+            logar();
+        }
     }//GEN-LAST:event_btnAcessarActionPerformed
 
     private void btnAcionarCadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAcionarCadastroMouseClicked
         this.dispose();
         new CadastroVIEW().setVisible(true);
     }//GEN-LAST:event_btnAcionarCadastroMouseClicked
+                                     
 
+    /**
+     * Método utilizado para logar o administrador.
+     * @param Não recebe parametro.
+     */
+    private void logar(){
+        administradorDTO.setEmail(inputEmailLogin.getText());
+        administradorDTO.setSenha(String.valueOf(inputSenhaLogin.getPassword()));
+        administradorDTO.setId_administrador(administradorCTR.logarAdministrador(administradorDTO));
+        if(administradorDTO.getId_administrador() > 0){
+//            JOptionPane.showMessageDialog(null, administradorDTO.getId_administrador());
+            this.dispose();
+            new PrincipalVIEW(administradorDTO).setVisible(true);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Login ou senha\nIncorreto!!!");
+        }
+    }//Fecha método logar()
+    
+    
+    /**
+     * Método utilizado para verificar se os campos estão preenchidos.
+     * @param não recebe parametro.
+     * @return boolean false(campo não preenchido) true(campo preenchido).
+     */
+    private boolean verificaPreenchimento() {                            
+        if(inputEmailLogin.getText().equalsIgnoreCase("")){
+              JOptionPane.showMessageDialog(null, "O campo Login deve ser preenchido");
+              inputEmailLogin.requestFocus();
+              return false;
+        }
+        else{
+            if((inputSenhaLogin.getPassword().equals(""))){
+                JOptionPane.showMessageDialog(null, "O campo Senha deve ser preenchido");
+                inputSenhaLogin.requestFocus();
+                return false;
+            }
+            else{
+                return true;
+            }//Fecha else sen_fun
+        }//Fecha else log_fun
+    }//Fecha método verificaPreenchimento()
+    
     /**
      * @param args the command line arguments
      */

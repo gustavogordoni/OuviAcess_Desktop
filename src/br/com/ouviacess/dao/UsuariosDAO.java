@@ -67,15 +67,15 @@ public class UsuariosDAO {
             switch (opcao){
                 case 1:
                     comando = "SELECT u.* "+
-                        "FROM usuarios u "+
-                        "WHERE id_usuario LIKE '" + usuariosDTO.getId_usuario() + "%' " +
-                        "ORDER BY a.id_usuarios";
+                        "FROM usuario u "+
+                        "WHERE nome ILIKE '%" + usuariosDTO.getNome() + "%' " +
+                        "ORDER BY u.id_usuario";
                     
                 break;
                 case 2:
-                    comando = "SELECT a.* "+
-                        "FROM usuarios a " +
-                        "WHERE a.id_usuarios = " + usuariosDTO.getId_usuario();
+                    comando = "SELECT u.* "+
+                        "FROM usuario u "+
+                        "WHERE id_usuario = " + usuariosDTO.getId_usuario();
                 break;                
             }
             //Executa o comando SQL no banco de Dados

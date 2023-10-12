@@ -6,9 +6,13 @@ import br.com.ouviacess.dto.AdministradorDTO;
 import java.sql.*;
 
 public class RequerimentosDAO {
+    private int id_administrador;
+    
+    //AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto carroDTO
     /**
      * Método construtor da classe RequerimentosDAO
      */    
+    
     public RequerimentosDAO() {
     }    
     //Atributo do tipo ResultSet utilizado para realizar consultas
@@ -58,7 +62,7 @@ public class RequerimentosDAO {
      *
      * @param requerimentosDTO que vem da classe RequerimentosCTR
      * @return Um boolean
-     
+     **/
     public boolean excluirRequerimentos(RequerimentosDTO requerimentosDTO) {
         try {
             //Chama o metodo que esta na classe ConexaoDAO para abrir o banco de dados
@@ -66,7 +70,7 @@ public class RequerimentosDAO {
             //Cria o Statement que responsavel por executar alguma coisa no banco de dados
             stmt = ConexaoDAO.con.createStatement();
             //Comando SQL que sera executado no banco de dados
-            String comando = "DELETE FROM requerimentos WHERE id_requerimentos = " + requerimentosDTO.getId_requerimento();
+            String comando = "DELETE FROM requerimento WHERE id_requerimento = " + requerimentosDTO.getId_requerimento();
 
             //Executa o comando SQL no banco de Dados
             stmt.execute(comando);
@@ -84,8 +88,7 @@ public class RequerimentosDAO {
             //Chama o metodo da classe ConexaoDAO para fechar o banco de dados
             ConexaoDAO.CloseDB();
         }
-    }//Fecha o método excluirRequerimentos
-    */
+    }//Fecha o método excluirRequerimento
     
     /**
      * Método utilizado para alterar um objeto requerimentosDTO no banco de dados
@@ -93,18 +96,21 @@ public class RequerimentosDAO {
      * @param requerimentosDTO, que vem da classe RequerimentosCTR
      * @return Um boolean
      */
-    public boolean alterarRequerimentos(RequerimentosDTO requerimentosDTO) {
+    public boolean alterarRequerimentos(RequerimentosDTO requerimentosDTO, int id_administrador) {
         try {
             //Chama o metodo que esta na classe ConexaoDAO para abrir o banco de dados
             ConexaoDAO.ConectDB();
             //Cria o Statement que responsavel por executar alguma coisa no banco de dados
             stmt = ConexaoDAO.con.createStatement();
             //Comando SQL que sera executado no banco de dados
-            String comando = "UPDTATE requerimentos set "
-                + "situacao = '" + requerimentosDTO.getSituacao() + "') ";
+            String comando = "UPDATE requerimento SET " + 
+                "situacao = '" + requerimentosDTO.getSituacao() + "'," +
+                "resposta = '" + requerimentosDTO.getResposta() + "'," + 
+                "id_administrador = '" + id_administrador + "'" + 
+                "WHERE id_requerimento = '" + requerimentosDTO.getId_requerimento() + "'";
             
             //Executa o comando SQL no banco de Dados
-            stmt.execute(comando.toUpperCase());
+            stmt.execute(comando);
             //Da um commit no banco de dados
             ConexaoDAO.con.commit();
             //Fecha o statement

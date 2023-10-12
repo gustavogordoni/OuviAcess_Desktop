@@ -5,20 +5,33 @@
  */
 package br.com.ouviacess.view;
 
+import javax.swing.table.DefaultTableModel;
+import br.com.ouviacess.dto.UsuariosDTO;
+import br.com.ouviacess.ctr.UsuariosCTR;
 import java.awt.Dimension;
+import java.sql.ResultSet;
 
 /**
  *
  * @author Aluno
  */
 public class UsuariosVIEW extends javax.swing.JInternalFrame {
+    
+    ResultSet rs; //Variavel usada para preenchimeto da tabela e dos campos
+    UsuariosDTO usuariosDTO = new UsuariosDTO(); //Cria um objeto carroDTO
+    UsuariosCTR usuariosCTR = new UsuariosCTR(); //Cria um objeto carrorCTR
+    
+    DefaultTableModel modelo_tableUsuarios; //Variavel para guardar o modelo da tabela
 
     /**
-     * Creates new form RequerimentosVIEW
+     * Creates new form UsuariosVIEW
      */
     public UsuariosVIEW() {
        initComponents();
+       liberaCampos(false);
       // this.setExtendedState(this.MAXIMIZED_BOTH);
+      
+      modelo_tableUsuarios = (DefaultTableModel) tableUsuarios.getModel();
         
     }
 
@@ -69,17 +82,17 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         inputPesquisa = new javax.swing.JTextField();
         btnPesquisa = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableRequerimentos = new javax.swing.JTable();
+        tableUsuarios = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        inputTitulo = new javax.swing.JTextField();
-        inputTipo = new javax.swing.JTextField();
+        inputId_usuario = new javax.swing.JTextField();
+        inputNome = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        inputSituacao = new javax.swing.JTextField();
+        inputDdd = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        inputData = new javax.swing.JTextField();
+        inputTelefone = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        inputCidade = new javax.swing.JTextField();
+        inputEmail = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnExcluirRequerimento = new javax.swing.JButton();
@@ -288,7 +301,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
-        tableRequerimentos.setModel(new javax.swing.table.DefaultTableModel(
+        tableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -345,8 +358,13 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                 "ID", "Nome", "Email"
             }
         ));
-        tableRequerimentos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane1.setViewportView(tableRequerimentos);
+        tableUsuarios.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tableUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableUsuariosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableUsuarios);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -384,42 +402,42 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("ID:");
 
-        inputTitulo.addActionListener(new java.awt.event.ActionListener() {
+        inputId_usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputTituloActionPerformed(evt);
+                inputId_usuarioActionPerformed(evt);
             }
         });
 
-        inputTipo.addActionListener(new java.awt.event.ActionListener() {
+        inputNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputTipoActionPerformed(evt);
+                inputNomeActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Nome completo:  ");
 
-        inputSituacao.addActionListener(new java.awt.event.ActionListener() {
+        inputDdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputSituacaoActionPerformed(evt);
+                inputDddActionPerformed(evt);
             }
         });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("DDD:");
 
-        inputData.addActionListener(new java.awt.event.ActionListener() {
+        inputTelefone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputDataActionPerformed(evt);
+                inputTelefoneActionPerformed(evt);
             }
         });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Telefone:");
 
-        inputCidade.addActionListener(new java.awt.event.ActionListener() {
+        inputEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputCidadeActionPerformed(evt);
+                inputEmailActionPerformed(evt);
             }
         });
 
@@ -469,22 +487,22 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(inputTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(inputId_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(inputSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(inputDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(inputTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(inputNome, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(inputData, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(inputTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(inputCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(inputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(36, 36, 36))))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputData, inputSituacao, inputTipo, inputTitulo});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputDdd, inputId_usuario, inputNome, inputTelefone});
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -497,28 +515,28 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputId_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputNome, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(60, 60, 60)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputData, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(inputTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inputDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(60, 60, 60)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inputCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(inputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(63, 63, 63)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputCidade, inputData, inputTipo, inputTitulo});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputEmail, inputId_usuario, inputNome, inputTelefone});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -547,7 +565,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
-        // TODO add your handling code here:
+        preencheTabela(inputPesquisa.getText());
     }//GEN-LAST:event_btnPesquisaActionPerformed
 
     private void inputPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPesquisaActionPerformed
@@ -590,47 +608,124 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputRua1ActionPerformed
 
-    private void inputCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCidadeActionPerformed
+    private void inputEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputCidadeActionPerformed
+    }//GEN-LAST:event_inputEmailActionPerformed
 
-    private void inputTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTipoActionPerformed
+    private void inputNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNomeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputTipoActionPerformed
+    }//GEN-LAST:event_inputNomeActionPerformed
 
-    private void inputTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTituloActionPerformed
+    private void inputId_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputId_usuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputTituloActionPerformed
+    }//GEN-LAST:event_inputId_usuarioActionPerformed
 
     private void btnExcluirRequerimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirRequerimentoActionPerformed
         //gravar = 1;
     }//GEN-LAST:event_btnExcluirRequerimentoActionPerformed
 
-    private void inputSituacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputSituacaoActionPerformed
+    private void inputDddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDddActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputSituacaoActionPerformed
+    }//GEN-LAST:event_inputDddActionPerformed
 
-    private void inputDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataActionPerformed
+    private void inputTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTelefoneActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputDataActionPerformed
+    }//GEN-LAST:event_inputTelefoneActionPerformed
 
+    private void tableUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableUsuariosMouseClicked
+        preencheCampos(Integer.parseInt(String.valueOf(tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(), 0))));
+    }//GEN-LAST:event_tableUsuariosMouseClicked
+
+    /**
+     * Método utilizado para preencher/contruir a Jtable.
+     * @param mar_car, String com a marca do carro
+     */
+    private void preencheTabela(String nome){
+        try{
+            //Limpa todas as linhas
+            modelo_tableUsuarios.setNumRows(0);
+
+            //Enquanto tiver linhas - faça
+            usuariosDTO.setNome(nome);
+            rs = usuariosCTR.consultarUsuarios(usuariosDTO, 1); //1 = é a pesquisa por marca na classe DAO
+            while(rs.next()){
+                modelo_tableUsuarios.addRow(new Object[]{
+                  rs.getString("id_usuario"),
+                  rs.getString("nome"),
+                  rs.getString("email"),
+                });
+            }        
+        }
+        catch(Exception erTab){
+            System.out.println("Erro SQL: "+erTab);
+        }  
+    }//Fecha método preencheTabela(String titulo)
+    
+     /**
+     * Método utilizado para preencher os campos da tela com 
+     * valores do carro.
+     * @param id_car, int com o id do carro.
+     */
+    private void preencheCampos(int id_usuario){
+        try{
+            usuariosDTO.setId_usuario(id_usuario);
+            rs = usuariosCTR.consultarUsuarios(usuariosDTO, 2); //2 = é a pesquisa no id na classe DAO
+            if(rs.next()){
+                limpaCampos();
+                
+                inputId_usuario.setText(rs.getString("id_usuario"));
+                inputNome.setText(rs.getString("nome"));
+                inputDdd.setText(rs.getString("ddd"));
+                inputTelefone.setText(rs.getString("telefone"));
+                inputEmail.setText(rs.getString("email"));
+                //gravar_alterar = 2;
+                liberaCampos(true);
+            }
+        }
+        catch(Exception erTab){
+            System.out.println("Erro SQL: "+erTab);
+        }  
+    }//Fecha método preencheCampos(int id_requerimento)
+    
+     /**
+     * Método utilizado para limpar os campos da tela.
+     */
+    private void limpaCampos(){
+        inputId_usuario.setText("");
+        inputNome.setText("");
+        inputDdd.setText("");
+        inputTelefone.setText("");
+        inputEmail.setText("");
+    }//Fecha método limpaCampos()
+    
+     /**
+     * Método utilizado para liberar/bloquear os campos da tela.
+     * @param a, boolean com true(libera) false(bloqueia).
+     */
+    private void liberaCampos(boolean a){
+        inputId_usuario.setEnabled(a);
+        inputNome.setEnabled(a);
+        inputDdd.setEnabled(a);
+        inputTelefone.setEnabled(a);
+        inputEmail.setEnabled(a);
+    }//Fecha método liberaCampos(boolean a)
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExcluirRequerimento;
     private javax.swing.JButton btnPesquisa;
     private javax.swing.JTextField inputBairro1;
     private javax.swing.JTextField inputCep1;
-    private javax.swing.JTextField inputCidade;
     private javax.swing.JTextField inputCidade1;
-    private javax.swing.JTextField inputData;
     private javax.swing.JTextField inputData1;
+    private javax.swing.JTextField inputDdd;
+    private javax.swing.JTextField inputEmail;
+    private javax.swing.JTextField inputId_usuario;
+    private javax.swing.JTextField inputNome;
     private javax.swing.JTextField inputPesquisa;
     private javax.swing.JTextField inputRua1;
-    private javax.swing.JTextField inputSituacao;
     private javax.swing.JTextField inputSituacao1;
-    private javax.swing.JTextField inputTipo;
+    private javax.swing.JTextField inputTelefone;
     private javax.swing.JTextField inputTipo1;
-    private javax.swing.JTextField inputTitulo;
     private javax.swing.JTextField inputTitulo1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -657,7 +752,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel labelPesquisa;
     private javax.swing.JComboBox<String> selectPesquisa;
-    private javax.swing.JTable tableRequerimentos;
+    private javax.swing.JTable tableUsuarios;
     private javax.swing.JTextArea textareaDescricao1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

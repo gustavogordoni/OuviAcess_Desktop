@@ -21,10 +21,10 @@ public class RequerimentosCTR {
      * @param requerimentosDTO, que vem da classe da página (VIEW) 
      * @return String contendo a mensagem
      */
-    public String alterarRequerimentos(RequerimentosDTO requerimentosDTO) {
+    public String alterarRequerimentos(RequerimentosDTO requerimentosDTO, int id_requerimentos) {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
-            if (requerimentosDAO.alterarRequerimentos(requerimentosDTO)) {
+            if (requerimentosDAO.alterarRequerimentos(requerimentosDTO, id_requerimentos)) {
                 return "Requerimentos Alterado com Sucesso!!!";
             } else {
                 return "Requerimentos NÃO Alterado!!!";
@@ -35,6 +35,28 @@ public class RequerimentosCTR {
             return "Requerimentos NÃO Alterado!!!";
         }
     }//Fecha o método alterarRequerimentos
+    
+    /**
+     * Método utilizado para controlar o acesso ao método excluirRequerimentos da
+     * classe RequerimentosDAO
+     *
+     * @param requerimentosDTO que vem da classe da página (VIEW)
+     * @return String contendo a mensagem
+     */
+    public String excluirRequerimentos(RequerimentosDTO requerimentosDTO) {
+        try {
+            //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
+            if (requerimentosDAO.excluirRequerimentos(requerimentosDTO)) {
+                return "Requerimento Excluído com Sucesso!!!";
+            } else {
+                return "Requerimento NÃO Excluído!!!";
+            }
+        } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "Requerimentos NÃO Excluído!!!";
+        }
+    }//Fecha o método excluirRequerimentos
 
     
     /**

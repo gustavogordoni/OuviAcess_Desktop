@@ -418,7 +418,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="tableRequerimentos">
+            <Component class="javax.swing.JTable" name="tableUsuarios">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="3" rowCount="50">
@@ -453,6 +453,9 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableUsuariosMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -475,21 +478,21 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel1" alignment="0" min="-2" pref="229" max="-2" attributes="0"/>
-                                      <Component id="inputTitulo" linkSize="8" alignment="0" min="-2" pref="229" max="-2" attributes="0"/>
+                                      <Component id="inputId_usuario" linkSize="8" alignment="0" min="-2" pref="229" max="-2" attributes="0"/>
                                       <Component id="jLabel7" alignment="0" min="-2" pref="229" max="-2" attributes="0"/>
-                                      <Component id="inputSituacao" linkSize="8" min="-2" pref="229" max="-2" attributes="0"/>
+                                      <Component id="inputDdd" linkSize="8" min="-2" pref="229" max="-2" attributes="0"/>
                                       <Component id="jLabel4" alignment="0" min="-2" pref="229" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="inputTipo" linkSize="8" min="-2" pref="211" max="-2" attributes="0"/>
+                                      <Component id="inputNome" linkSize="8" min="-2" pref="211" max="-2" attributes="0"/>
                                       <Component id="jLabel3" alignment="0" min="-2" pref="211" max="-2" attributes="0"/>
-                                      <Component id="inputData" linkSize="8" min="-2" pref="211" max="-2" attributes="0"/>
+                                      <Component id="inputTelefone" linkSize="8" min="-2" pref="211" max="-2" attributes="0"/>
                                       <Component id="jLabel5" alignment="0" min="-2" pref="211" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Component id="jPanel3" max="32767" attributes="0"/>
-                              <Component id="inputCidade" alignment="0" min="-2" pref="517" max="-2" attributes="0"/>
+                              <Component id="inputEmail" alignment="0" min="-2" pref="517" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
@@ -509,26 +512,26 @@
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="inputTitulo" linkSize="9" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
-                      <Component id="inputTipo" linkSize="9" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="inputId_usuario" linkSize="9" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="inputNome" linkSize="9" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel5" min="-2" pref="15" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="inputData" linkSize="9" min="-2" pref="32" max="-2" attributes="0"/>
+                          <Component id="inputTelefone" linkSize="9" min="-2" pref="32" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="inputSituacao" min="-2" pref="32" max="-2" attributes="0"/>
+                          <Component id="inputDdd" min="-2" pref="32" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                   <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="inputCidade" linkSize="9" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="inputEmail" linkSize="9" min="-2" pref="32" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                   <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
@@ -545,14 +548,14 @@
             <Property name="text" type="java.lang.String" value="ID:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="inputTitulo">
+        <Component class="javax.swing.JTextField" name="inputId_usuario">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputTituloActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputId_usuarioActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="inputTipo">
+        <Component class="javax.swing.JTextField" name="inputNome">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputTipoActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputNomeActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
@@ -563,9 +566,9 @@
             <Property name="text" type="java.lang.String" value="Nome completo:  "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="inputSituacao">
+        <Component class="javax.swing.JTextField" name="inputDdd">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputSituacaoActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputDddActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
@@ -576,9 +579,9 @@
             <Property name="text" type="java.lang.String" value="DDD:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="inputData">
+        <Component class="javax.swing.JTextField" name="inputTelefone">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputDataActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputTelefoneActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
@@ -589,9 +592,9 @@
             <Property name="text" type="java.lang.String" value="Telefone:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="inputCidade">
+        <Component class="javax.swing.JTextField" name="inputEmail">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputCidadeActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputEmailActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">

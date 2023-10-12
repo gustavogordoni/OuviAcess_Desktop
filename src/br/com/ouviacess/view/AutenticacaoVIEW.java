@@ -381,7 +381,7 @@ public class AutenticacaoVIEW extends javax.swing.JFrame {
 
     private void btnAcessarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAcessarMouseClicked
         this.dispose();
-        new PrincipalVIEW().setVisible(true);
+        new PrincipalVIEW(administradorDTO).setVisible(true);
     }//GEN-LAST:event_btnAcessarMouseClicked
 
     private void btnAcionarCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcionarCadastroActionPerformed

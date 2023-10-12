@@ -9,18 +9,29 @@ import javax.swing.JFrame;
 import java.awt.Image;
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
+
+import javax.swing.JOptionPane;
+
+import br.com.ouviacess.dto.AdministradorDTO;
+import br.com.ouviacess.ctr.AdministradorCTR;
 /**
  *
  * @author Aluno
  */
 public class PrincipalVIEW extends javax.swing.JFrame {
+    
+    AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto carroDTO
 
     /**
      * Creates new form Principal
      */
-    public PrincipalVIEW() {
+    public PrincipalVIEW(AdministradorDTO administradorDTO) {
       initComponents();
       this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+      
+      this.administradorDTO = administradorDTO;
+//      JOptionPane.showMessageDialog(null, this.administradorDTO.getId_administrador());
+      
     }
 
     /**
@@ -114,7 +125,7 @@ public class PrincipalVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_menuRequerimentosActionPerformed
 
     private void menuRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuRequerimentosMouseClicked
-        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW();
+        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO);
          this.desktopPane.add(requerimentosVIEW);
          requerimentosVIEW.setVisible(true);
          requerimentosVIEW.setPosicao();
@@ -128,7 +139,7 @@ public class PrincipalVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_menuUsuariosMouseClicked
 
     private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
-        PerfilVIEW perfilVIEW = new PerfilVIEW();
+        PerfilVIEW perfilVIEW = new PerfilVIEW(administradorDTO);
          this.desktopPane.add(perfilVIEW);
          perfilVIEW.setVisible(true);
          perfilVIEW.setPosicao();

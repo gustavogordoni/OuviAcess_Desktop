@@ -166,11 +166,11 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnAlterarRequerimento2" linkSize="23" min="-2" pref="131" max="-2" attributes="0"/>
+                      <Component id="btnEditar" linkSize="23" min="-2" pref="131" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnAlterarRequerimento1" linkSize="23" min="-2" pref="131" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnExcluirRequerimento" linkSize="23" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Component id="btnAtualizar" linkSize="23" min="-2" pref="150" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -180,9 +180,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnExcluirRequerimento" linkSize="22" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="btnAtualizar" linkSize="22" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           <Component id="btnAlterarRequerimento1" linkSize="22" alignment="3" max="32767" attributes="0"/>
-                          <Component id="btnAlterarRequerimento2" linkSize="22" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnEditar" linkSize="22" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -190,7 +190,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="btnExcluirRequerimento">
+            <Component class="javax.swing.JButton" name="btnAtualizar">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="14" style="0"/>
@@ -198,7 +198,7 @@
                 <Property name="text" type="java.lang.String" value="Atualizar"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExcluirRequerimentoActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAtualizarActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnAlterarRequerimento1">
@@ -213,7 +213,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlterarRequerimento1ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnAlterarRequerimento2">
+            <Component class="javax.swing.JButton" name="btnEditar">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="14" style="0"/>
@@ -221,8 +221,8 @@
                 <Property name="text" type="java.lang.String" value="Editar"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnAlterarRequerimento2MouseClicked"/>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlterarRequerimento2ActionPerformed"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnEditarMouseClicked"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

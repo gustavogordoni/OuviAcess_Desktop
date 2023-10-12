@@ -4,9 +4,11 @@
  * and open the template in the editor.
  */
 package br.com.ouviacess.view;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.ouviacess.dto.RequerimentosDTO;
 import br.com.ouviacess.ctr.RequerimentosCTR;
+import br.com.ouviacess.dto.AdministradorDTO;
 
 import java.awt.Dimension;
 import java.sql.ResultSet;
@@ -18,21 +20,26 @@ import java.sql.ResultSet;
 public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     
     ResultSet rs; //Variavel usada para preenchimeto da tabela e dos campos
-    RequerimentosDTO requerimentosDTO = new RequerimentosDTO(); //Cria um objeto carroDTO
-    RequerimentosCTR requerimentosCTR = new RequerimentosCTR(); //Cria um objeto carrorCTR
+    RequerimentosDTO requerimentosDTO = new RequerimentosDTO(); //Cria um objeto requerimentosDTO
+    RequerimentosCTR requerimentosCTR = new RequerimentosCTR(); //Cria um objeto requerimentosrCTR
+    AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto requerimentosrCTR
     
     DefaultTableModel modelo_tableRequerimentos; //Variavel para guardar o modelo da tabela
 
     /**
      * Creates new form RequerimentosVIEW
      */
-    public RequerimentosVIEW() {
+    public RequerimentosVIEW(AdministradorDTO administradorDTO) {
        initComponents();
+       
+       this.administradorDTO = administradorDTO;
+       
        //Chama todos os métodos liberaCampos
-       liberaCampos(false);
+       liberaCampos(false, false);
+       //Chama o método liberaBotoes
+       liberaBotoes(false, false, false);
       // this.setExtendedState(this.MAXIMIZED_BOTH);
-      modelo_tableRequerimentos = (DefaultTableModel) tableRequerimentos.getModel();
-        
+      modelo_tableRequerimentos = (DefaultTableModel) tableRequerimentos.getModel();        
     }
     
     /**
@@ -103,8 +110,9 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         textareaDescricao = new javax.swing.JTextArea();
         jLabel10 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        btnExcluirRequerimento = new javax.swing.JButton();
-        btnExcluirRequerimento2 = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        btnAtualizar = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         textareaResposta = new javax.swing.JTextArea();
         jLabel21 = new javax.swing.JLabel();
@@ -493,41 +501,62 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("Descrição:");
 
-        btnExcluirRequerimento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnExcluirRequerimento.setText("Excluir");
-        btnExcluirRequerimento.addActionListener(new java.awt.event.ActionListener() {
+        btnExcluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirRequerimentoActionPerformed(evt);
+                btnExcluirActionPerformed(evt);
             }
         });
 
-        btnExcluirRequerimento2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnExcluirRequerimento2.setText("Atualizar situação");
+        btnAtualizar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAtualizar.setText("Atualizar situação");
+        btnAtualizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAtualizarMouseClicked(evt);
+            }
+        });
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarActionPerformed(evt);
+            }
+        });
+
+        btnSalvar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnSalvar.setText("Salvar alterações");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
-                .addComponent(btnExcluirRequerimento2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSalvar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnExcluirRequerimento, btnExcluirRequerimento2});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnSalvar});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExcluirRequerimento2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalvar))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(btnAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnExcluirRequerimento, btnExcluirRequerimento2});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnExcluir, btnSalvar});
 
         textareaResposta.setColumns(20);
         textareaResposta.setRows(5);
@@ -675,7 +704,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 34, Short.MAX_VALUE)
+                        .addGap(0, 38, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -757,10 +786,13 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputTituloActionPerformed
 
-    ///////// CASO ADMINISTRASDOR FOR ADICIONAR UMA RESPOSTA
-    private void btnExcluirRequerimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirRequerimentoActionPerformed
-       //gravar = 1;
-    }//GEN-LAST:event_btnExcluirRequerimentoActionPerformed
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        excluir();
+        limpaCampos();
+        liberaCampos(false, false);
+        liberaBotoes(false, false, false);
+        preencheTabela(inputPesquisa.getText());
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void inputDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataActionPerformed
         // TODO add your handling code here:
@@ -776,9 +808,25 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         //liberaBotoes(false, true, true, true, true);
     }//GEN-LAST:event_tableRequerimentosMouseClicked
 
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+   
+    }//GEN-LAST:event_btnAtualizarActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        if(verificaPreenchimento()){
+            alterar();
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
+        liberaCampos(false, true);
+        editarCampos(false, true);
+        liberaBotoes(false, false, true);
+    }//GEN-LAST:event_btnAtualizarMouseClicked
+
     /**
      * Método utilizado para preencher/contruir a Jtable.
-     * @param mar_car, String com a marca do carro
+     * @param mar_car, String com a marca do requerimentos
      */
     private void preencheTabela(String titulo){
         try{
@@ -804,8 +852,8 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     
      /**
      * Método utilizado para preencher os campos da tela com 
-     * valores do carro.
-     * @param id_car, int com o id do carro.
+     * valores do requerimentos.
+     * @param id_car, int com o id do requerimentos.
      */
     private void preencheCampos(int id_requerimento){
         try{
@@ -826,13 +874,69 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 textareaResposta.setText(rs.getString("resposta"));
                 
                 //gravar_alterar = 2;
-                liberaCampos(true);
+                liberaCampos(true, true);
+                editarCampos(false, false);
+                
+                liberaBotoes(true, true, false);
             }
         }
         catch(Exception erTab){
             System.out.println("Erro SQL: "+erTab);
         }  
     }//Fecha método preencheCampos(int id_requerimento)
+    
+    /**
+     * Método utilizado para alterar os dados do requerimentos.
+     */
+    private void alterar(){
+        try{
+            requerimentosDTO.setSituacao(inputSituacao.getText());
+            requerimentosDTO.setResposta(textareaResposta.getText());
+     
+            JOptionPane.showMessageDialog(null,
+                    requerimentosCTR.alterarRequerimentos(requerimentosDTO, this.administradorDTO.getId_administrador())
+            );
+            
+            liberaCampos(true, true);
+            editarCampos(false, false);
+            liberaBotoes(true, true, false);
+        }
+        catch(Exception e){}
+    }//Fecha método alterar()
+    
+    /**
+     * Método utilizado para excluir os dados do carro.
+     */
+    private void excluir(){
+       if(JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir o Requerimento?","Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null,
+                    requerimentosCTR.excluirRequerimentos(requerimentosDTO)
+            );
+       }
+    }//Fecha método excluir()
+    
+    /**
+     * Método utilizado para verificar se os campos estão preenchidos.
+     * @param não recebe parametro.
+     * @return boolean false(campo não preenchido) true(campo preenchido).
+     */
+    private boolean verificaPreenchimento() {                            
+        if(inputSituacao.getText().equalsIgnoreCase("")){
+              JOptionPane.showMessageDialog(null, "O campo Situação deve ser preenchido");
+              inputSituacao.requestFocus();
+              return false;
+        }
+        else{
+            if((textareaResposta.getText().equals(""))){
+                JOptionPane.showMessageDialog(null, "O campo Resposta deve ser preenchido");
+                textareaResposta.requestFocus();
+                return false;
+            }
+            else{
+                return true;
+            }//Fecha else sen_fun
+        }//Fecha else log_fun
+    }//Fecha método verificaPreenchimento()
     
     /**
      * Método utilizado para limpar os campos da tela.
@@ -854,26 +958,55 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
      * Método utilizado para liberar/bloquear os campos da tela.
      * @param a, boolean com true(libera) false(bloqueia).
      */
-    private void liberaCampos(boolean a){
+    private void liberaCampos(boolean a, boolean b){
         inputTitulo.setEnabled(a);
         inputTipo.setEnabled(a);
-        inputSituacao.setEnabled(a);
+        inputSituacao.setEnabled(b);
         inputData.setEnabled(a);
         inputCidade.setEnabled(a);
         inputCep.setEnabled(a);
         inputBairro.setEnabled(a);
         inputLogradouro.setEnabled(a);
         textareaDescricao.setEnabled(a);
-        textareaResposta.setEnabled(a);
+        textareaResposta.setEnabled(b);
     }//Fecha método liberaCampos(boolean a)
+    
+    /**
+     * Método utilizado para liberar/bloquear os campos da tela.
+     * @param a, boolean com true(libera) false(bloqueia).
+     */
+    private void editarCampos(boolean a, boolean b){
+        inputTitulo.setEditable(a);
+        inputTipo.setEditable(a);
+        inputSituacao.setEditable(b);
+        inputData.setEditable(a);
+        inputCidade.setEditable(a);
+        inputCep.setEditable(a);
+        inputBairro.setEditable(a);
+        inputLogradouro.setEditable(a);
+        textareaDescricao.setEditable(a);
+        textareaResposta.setEditable(b);
+    }//Fecha método liberaCampos(boolean a)
+    
+    /**
+     * Método utilizado para liberar os botões da tela.
+     * @param a, boolean com true(libera) false(bloqueia) para o btnExcluir.
+     * @param b, boolean com true(libera) false(bloqueia) para o btnAtualizar.
+     */
+    private void liberaBotoes(boolean a, boolean b, boolean c){
+        btnExcluir.setEnabled(a);
+        btnAtualizar.setEnabled(b);
+        btnSalvar.setEnabled(c);
+    }//Fecha método liberaBotoes(boolean a, boolean b)
     
    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExcluirRequerimento;
+    private javax.swing.JButton btnAtualizar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnExcluirRequerimento1;
-    private javax.swing.JButton btnExcluirRequerimento2;
     private javax.swing.JButton btnPesquisa;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField inputBairro;
     private javax.swing.JTextField inputBairro1;
     private javax.swing.JFormattedTextField inputCep;
