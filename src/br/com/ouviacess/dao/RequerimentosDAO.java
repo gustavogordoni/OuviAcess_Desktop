@@ -146,17 +146,72 @@ public class RequerimentosDAO {
                 case 1:
                     comando = "SELECT r.* "+
                         "FROM requerimento r "+
-                        "WHERE titulo LIKE '%" + requerimentosDTO.getTitulo() + "%' " +
-                        "ORDER BY r.titulo";
-                    
+                        "WHERE titulo ILIKE '%" + requerimentosDTO.getPesquisa() + "%' " +
+                        "ORDER BY r.titulo";                    
                 break;
                 case 2:
                     comando = "SELECT r.* "+
                         "FROM requerimento r " +
                         "WHERE r.id_requerimento = " + requerimentosDTO.getId_requerimento();
-                break;                
+                break;
+                
+                // FILTRO POR TITULO
+                case 3:
+                    comando = "SELECT r.* "+
+                        "FROM requerimento r "+
+                        "WHERE r.titulo ILIKE '%" + requerimentosDTO.getPesquisa() + "%' " +
+                        "ORDER BY r.titulo";  
+                break;
+                
+                // FILTRO POR NOME USUARIO
+                case 4:
+                    comando = "SELECT r.* "+
+                        "FROM requerimento r INNER JOIN usuario u " +
+                        "ON r.id_usuario =  u.id_usuario " +
+                        "WHERE u.nome ILIKE '%" +  requerimentosDTO.getPesquisa() + "%' " + 
+                        "ORDER BY TO_DATE(data, 'DD/MM/YYYY') ASC;";                    
+                break;
+                
+                // FILTRO POR ID REQUERIMENTO
+                case 5:
+                     comando = "SELECT r.* "+
+                        "FROM requerimento r "+
+                        "WHERE r.id_requerimento = " + requerimentosDTO.getPesquisa();  
+                break;              
+                
+                // FILTRO POR ID USUARIO
+                case 6:
+                    comando = "SELECT r.* "+
+                        "FROM requerimento r INNER JOIN usuario u " +
+                        "ON r.id_usuario =  u.id_usuario " +
+                        "WHERE r.id_usuario = " +  requerimentosDTO.getPesquisa() + 
+                        " ORDER BY TO_DATE(data, 'DD/MM/YYYY') ASC;"; 
+                break;      
+                
+                // NENHUM FILTRO
+                case 7:                    
+                    String pesquisa = requerimentosDTO.getPesquisa();
+                    comando = "SELECT r.* " +
+                                    "FROM requerimento r " +
+                                    "INNER JOIN usuario u ON r.id_usuario = u.id_usuario ";                                 
+                    // Verifique se a pesquisa é um número
+                    if (pesquisa.matches("\\d+")) {
+                        comando += "WHERE r.id_requerimento = " + pesquisa +
+                                   " OR r.id_usuario = " + pesquisa;
+                    }else{
+                        comando += "WHERE r.titulo ILIKE '%" + pesquisa + "%' " +
+                                    " OR u.nome ILIKE '%" + pesquisa + "%' ";
+                    }
+                    comando += " ORDER BY r.titulo";
+                break;
+                
+                // NENHUM FILTRO
+                case 8:
+                    comando = "SELECT r.* FROM requerimento r ORDER BY r.titulo";
+                break;
             }
             //Executa o comando SQL no banco de Dados
+            System.out.println(comando);
             rs = stmt.executeQuery(comando);
             return rs;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.

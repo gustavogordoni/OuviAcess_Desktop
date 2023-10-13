@@ -1,11 +1,19 @@
 package br.com.ouviacess.dto;
 
 public class RequerimentosDTO {
-    private String resposta, titulo, tipo, situacao, data, descricao, cep, cidade, bairro, rua;
+    private String resposta, titulo, tipo, situacao, data, descricao, cep, cidade, bairro, rua, pesquisa;
     private int id_requerimento, id_usuario;
     
     //private String resposta, situacao;
     //private int id_requerimento;    
+
+    public String getPesquisa() {
+        return pesquisa;
+    }
+
+    public void setPesquisa(String pesquisa) {
+        this.pesquisa = pesquisa;
+    }  
 
     public String getResposta() {
         return resposta;

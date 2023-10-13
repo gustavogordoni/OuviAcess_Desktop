@@ -12,6 +12,7 @@ import br.com.ouviacess.dao.ConexaoDAO;
 public class UsuariosCTR {
     
     UsuariosDAO usuariosDAO = new UsuariosDAO();
+    UsuariosDTO usuariosDTO = new UsuariosDTO();
     
     /**
      * Método construtor da classe
@@ -25,7 +26,7 @@ public class UsuariosCTR {
      *
      * @param usuariosDTO que vem da classe da página (VIEW)
      * @return String contendo a mensagem
-     *
+     */
     public String excluirUsuarios(UsuariosDTO usuariosDTO) {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)

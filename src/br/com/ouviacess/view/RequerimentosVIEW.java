@@ -5,6 +5,7 @@
  */
 package br.com.ouviacess.view;
 import javax.swing.JOptionPane;
+
 import javax.swing.table.DefaultTableModel;
 import br.com.ouviacess.dto.RequerimentosDTO;
 import br.com.ouviacess.ctr.RequerimentosCTR;
@@ -24,22 +25,31 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     RequerimentosCTR requerimentosCTR = new RequerimentosCTR(); //Cria um objeto requerimentosrCTR
     AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto requerimentosrCTR
     
-    DefaultTableModel modelo_tableRequerimentos; //Variavel para guardar o modelo da tabela
+    private int opcao, id_usuario,id_requerimento;
+    
+    DefaultTableModel modelo_tableRequerimentos; //Variavel para guardar o modelo da tabela   
 
     /**
      * Creates new form RequerimentosVIEW
      */
-    public RequerimentosVIEW(AdministradorDTO administradorDTO) {
+    public RequerimentosVIEW(AdministradorDTO administradorDTO, int id_requerimento) {
        initComponents();
        
        this.administradorDTO = administradorDTO;
+       this.id_requerimento = id_requerimento;
        
        //Chama todos os métodos liberaCampos
        liberaCampos(false, false);
        //Chama o método liberaBotoes
-       liberaBotoes(false, false, false);
+       liberaBotoes(false, false, false, false, false);
       // this.setExtendedState(this.MAXIMIZED_BOTH);
-      modelo_tableRequerimentos = (DefaultTableModel) tableRequerimentos.getModel();        
+      
+      if (this.id_requerimento != 0) {
+            preencheCampos(this.id_requerimento);
+        }
+      
+      modelo_tableRequerimentos = (DefaultTableModel) tableRequerimentos.getModel();      
+      comboSituacao.setEditable(false);
     }
     
     /**
@@ -49,8 +59,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         Dimension d = this.getDesktopPane().getSize();
         this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
     }//Fecha método setPosicao()
-     
-   
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,6 +92,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         textareaDescricao1 = new javax.swing.JTextArea();
         jLabel18 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         labelPesquisa = new javax.swing.JLabel();
         selectPesquisa = new javax.swing.JComboBox<>();
@@ -90,13 +100,11 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         btnPesquisa = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRequerimentos = new javax.swing.JTable();
-        btnExcluirRequerimento1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         inputTitulo = new javax.swing.JTextField();
         inputTipo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        inputSituacao = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -113,12 +121,15 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         btnExcluir = new javax.swing.JButton();
         btnAtualizar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         textareaResposta = new javax.swing.JTextArea();
         jLabel21 = new javax.swing.JLabel();
         inputData = new javax.swing.JFormattedTextField();
         inputCep = new javax.swing.JFormattedTextField();
-        jLabel19 = new javax.swing.JLabel();
+        comboSituacao = new javax.swing.JComboBox<>();
+        btnUsuario = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
 
@@ -291,13 +302,18 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel20.setText("Requerimentos");
+
         setClosable(true);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         labelPesquisa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         labelPesquisa.setLabelFor(inputPesquisa);
         labelPesquisa.setText("Pesquisa:");
 
-        selectPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Título", "Tipo", "Situação", "CEP", "Cidade", "Bairro", "Rua" }));
+        selectPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nenhum filtro", "Título", "Usuário", "ID Requerimento", "ID Usuário" }));
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, selectPesquisa, org.jdesktop.beansbinding.ObjectProperty.create(), selectPesquisa, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "ITEM2");
         bindingGroup.addBinding(binding);
@@ -323,6 +339,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
+        tableRequerimentos.setAutoCreateRowSorter(true);
         tableRequerimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -381,6 +398,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         ));
         tableRequerimentos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tableRequerimentos.getTableHeader().setReorderingAllowed(false);
         tableRequerimentos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableRequerimentosMouseClicked(evt);
@@ -388,51 +406,40 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tableRequerimentos);
 
-        btnExcluirRequerimento1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnExcluirRequerimento1.setText("Atualizar situação");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(47, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(labelPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(labelPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(btnExcluirRequerimento1)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPesquisa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(labelPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(labelPesquisa)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(btnExcluirRequerimento1)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Título: ");
@@ -451,12 +458,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Tipo:  ");
-
-        inputSituacao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputSituacaoActionPerformed(evt);
-            }
-        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Situação:");
@@ -530,33 +531,43 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
+        btnVoltar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnVoltar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnExcluir)
+                .addGap(10, 10, 10)
+                .addComponent(btnAtualizar)
+                .addGap(8, 8, 8)
                 .addComponent(btnSalvar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnSalvar});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnVoltar});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAtualizar)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalvar))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(btnAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnExcluir, btnSalvar});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnSalvar, btnVoltar});
 
         textareaResposta.setColumns(20);
         textareaResposta.setRows(5);
@@ -587,27 +598,54 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
+        comboSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-", "Em andamento", "Aceito" }));
+        comboSituacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSituacaoActionPerformed(evt);
+            }
+        });
+
+        btnUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnUsuario.setText("Informações do Usuário");
+        btnUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUsuarioMouseClicked(evt);
+            }
+        });
+        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioActionPerformed(evt);
+            }
+        });
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("Requerimento");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(48, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel21)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                             .addComponent(inputTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                             .addComponent(inputCidade, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                            .addComponent(inputSituacao, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(inputBairro, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(jLabel10))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(comboSituacao, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(inputLogradouro, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -616,36 +654,39 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                             .addComponent(inputData)
-                            .addComponent(inputCep)))
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane5))
-                .addContainerGap(28, Short.MAX_VALUE))
+                            .addComponent(inputCep)
+                            .addComponent(btnUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputBairro, inputCidade, inputData, inputLogradouro, inputSituacao, inputTipo, inputTitulo, jLabel1, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel9});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputBairro, inputCidade, inputData, inputLogradouro, inputTipo, inputTitulo, jLabel1, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel9});
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                    .addComponent(btnUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputData, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(24, 24, 24)
+                        .addComponent(inputData, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel7)
@@ -656,7 +697,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(inputCep, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)))
-                .addGap(24, 24, 24)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -664,53 +705,42 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                .addGap(20, 20, 20)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addGap(20, 20, 20)
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputBairro, inputCidade, inputData, inputLogradouro, inputSituacao, inputTipo, inputTitulo});
-
-        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel19.setText("Requerimentos");
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputBairro, inputCidade, inputData, inputLogradouro, inputTitulo});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel19)
-                        .addGap(215, 215, 215)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 38, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(20, 20, 20))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
 
         bindingGroup.bind();
@@ -719,7 +749,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
-        preencheTabela(inputPesquisa.getText());
+        preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString());
     }//GEN-LAST:event_btnPesquisaActionPerformed
 
     private void inputPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPesquisaActionPerformed
@@ -762,6 +792,43 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputRua1ActionPerformed
 
+    private void tableRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRequerimentosMouseClicked
+        //Pega a Pessoa selecionada e chama preencheCampos
+        preencheCampos(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
+    }//GEN-LAST:event_tableRequerimentosMouseClicked
+
+    private void inputCepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputCepActionPerformed
+
+    private void inputDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputDataActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        if(verificaPreenchimento()){
+            alterar();
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+
+    }//GEN-LAST:event_btnAtualizarActionPerformed
+
+    private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
+        liberaCampos(false, true);
+        editarCampos(false, true);
+        liberaBotoes(false, false, true, false, false);
+    }//GEN-LAST:event_btnAtualizarMouseClicked
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        excluir();
+        limpaCampos();
+        liberaCampos(false, false);
+        liberaBotoes(false, false, false, false, false);
+        preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString());
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
     private void inputLogradouroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputLogradouroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_inputLogradouroActionPerformed
@@ -774,10 +841,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputCidadeActionPerformed
 
-    private void inputSituacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputSituacaoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputSituacaoActionPerformed
-
     private void inputTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTipoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_inputTipoActionPerformed
@@ -786,56 +849,65 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputTituloActionPerformed
 
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        excluir();
-        limpaCampos();
-        liberaCampos(false, false);
-        liberaBotoes(false, false, false);
-        preencheTabela(inputPesquisa.getText());
-    }//GEN-LAST:event_btnExcluirActionPerformed
-
-    private void inputDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataActionPerformed
+    private void comboSituacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSituacaoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputDataActionPerformed
+    }//GEN-LAST:event_comboSituacaoActionPerformed
 
-    private void inputCepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCepActionPerformed
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputCepActionPerformed
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void tableRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRequerimentosMouseClicked
-        //Pega a Pessoa selecionada e chama preencheCampos
-        preencheCampos(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
-        //liberaBotoes(false, true, true, true, true);
-    }//GEN-LAST:event_tableRequerimentosMouseClicked
+    private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUsuarioActionPerformed
 
-    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-   
-    }//GEN-LAST:event_btnAtualizarActionPerformed
-
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if(verificaPreenchimento()){
-            alterar();
-        }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
-        liberaCampos(false, true);
-        editarCampos(false, true);
-        liberaBotoes(false, false, true);
-    }//GEN-LAST:event_btnAtualizarMouseClicked
+    private void btnUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMouseClicked
+        // Crie uma instância de UsuariosVIEW
+        UsuariosVIEW usuariosView = new UsuariosVIEW(this.id_usuario, this.id_requerimento);
+        // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
+        this.getDesktopPane().add(usuariosView);
+        // Defina a posição da janela interna (opcional)
+        usuariosView.setPosicao();
+        // Torne a janela visível
+        usuariosView.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnUsuarioMouseClicked
 
     /**
      * Método utilizado para preencher/contruir a Jtable.
      * @param mar_car, String com a marca do requerimentos
      */
-    private void preencheTabela(String titulo){
+    private void preencheTabela(String pesquisa, String filtro){
         try{
             //Limpa todas as linhas
             modelo_tableRequerimentos.setNumRows(0);
-
             //Enquanto tiver linhas - faça
-            requerimentosDTO.setTitulo(titulo);
-            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, 1); //1 = é a pesquisa por marca na classe DAO
+            requerimentosDTO.setPesquisa(pesquisa);
+            
+            this.opcao = opcao;            
+            switch (filtro){                
+                case "Título": this.opcao = 3;                    
+                break;
+                
+                case "Usuário": this.opcao = 4;                    
+                break; 
+                
+                case "ID Requerimento": this.opcao = 5;                    
+                break;               
+                  
+                case "ID Usuário": this.opcao = 6;                    
+                break;      
+                
+                case "Nenhum filtro": this.opcao = 7;                    
+                break;
+            }            
+            if(pesquisa.equals("") && filtro.equals("Nenhum filtro")){
+                this.opcao = 8;
+            }             
+//            JOptionPane.showMessageDialog(null, this.opcao);
+//            JOptionPane.showMessageDialog(null, requerimentosDTO.getPesquisa());
+//                   
+            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, this.opcao); // pesquisa por marca na classe DAO
             while(rs.next()){
                 modelo_tableRequerimentos.addRow(new Object[]{
                   rs.getString("id_requerimento"),
@@ -864,7 +936,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 
                 inputTitulo.setText(rs.getString("titulo"));
                 inputTipo.setText(rs.getString("tipo"));
-                inputSituacao.setText(rs.getString("situacao"));
+                comboSituacao.setSelectedItem(rs.getString("situacao"));
                 inputData.setText(rs.getString("data"));
                 inputCidade.setText(rs.getString("cidade"));
                 inputCep.setText(rs.getString("cep"));
@@ -873,24 +945,29 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 textareaDescricao.setText(rs.getString("descricao"));
                 textareaResposta.setText(rs.getString("resposta"));
                 
+                 int idUsuario = Integer.parseInt(rs.getString("id_usuario"));
+                 this.id_usuario = idUsuario;
+                 int idRequerimento = Integer.parseInt(rs.getString("id_requerimento"));
+                 this.id_requerimento = idRequerimento;
+                
                 //gravar_alterar = 2;
                 liberaCampos(true, true);
                 editarCampos(false, false);
                 
-                liberaBotoes(true, true, false);
+                liberaBotoes(true, true, false, false, true);
             }
         }
         catch(Exception erTab){
             System.out.println("Erro SQL: "+erTab);
         }  
-    }//Fecha método preencheCampos(int id_requerimento)
+    }//Fecha método preencheCampos()
     
     /**
      * Método utilizado para alterar os dados do requerimentos.
      */
     private void alterar(){
         try{
-            requerimentosDTO.setSituacao(inputSituacao.getText());
+            requerimentosDTO.setSituacao(comboSituacao.getSelectedItem().toString());
             requerimentosDTO.setResposta(textareaResposta.getText());
      
             JOptionPane.showMessageDialog(null,
@@ -899,7 +976,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             
             liberaCampos(true, true);
             editarCampos(false, false);
-            liberaBotoes(true, true, false);
+            liberaBotoes(true, true, false, false, true);
         }
         catch(Exception e){}
     }//Fecha método alterar()
@@ -921,9 +998,9 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
      * @return boolean false(campo não preenchido) true(campo preenchido).
      */
     private boolean verificaPreenchimento() {                            
-        if(inputSituacao.getText().equalsIgnoreCase("")){
+        if(comboSituacao.getSelectedItem().toString() == "-"){
               JOptionPane.showMessageDialog(null, "O campo Situação deve ser preenchido");
-              inputSituacao.requestFocus();
+              comboSituacao.requestFocus();
               return false;
         }
         else{
@@ -944,7 +1021,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private void limpaCampos(){
         inputTitulo.setText("");
         inputTipo.setText("");
-        inputSituacao.setText("");
+        comboSituacao.setSelectedItem("-");
         inputData.setText("");
         inputCidade.setText("");
         inputCep.setText("");
@@ -961,7 +1038,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private void liberaCampos(boolean a, boolean b){
         inputTitulo.setEnabled(a);
         inputTipo.setEnabled(a);
-        inputSituacao.setEnabled(b);
+        comboSituacao.setEnabled(b);
         inputData.setEnabled(a);
         inputCidade.setEnabled(a);
         inputCep.setEnabled(a);
@@ -978,7 +1055,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private void editarCampos(boolean a, boolean b){
         inputTitulo.setEditable(a);
         inputTipo.setEditable(a);
-        inputSituacao.setEditable(b);
+        comboSituacao.setFocusable(b);
         inputData.setEditable(a);
         inputCidade.setEditable(a);
         inputCep.setEditable(a);
@@ -990,23 +1067,23 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     
     /**
      * Método utilizado para liberar os botões da tela.
-     * @param a, boolean com true(libera) false(bloqueia) para o btnExcluir.
-     * @param b, boolean com true(libera) false(bloqueia) para o btnAtualizar.
      */
-    private void liberaBotoes(boolean a, boolean b, boolean c){
+    private void liberaBotoes(boolean a, boolean b, boolean c, boolean d, boolean e){
         btnExcluir.setEnabled(a);
         btnAtualizar.setEnabled(b);
         btnSalvar.setEnabled(c);
+        btnVoltar.setEnabled(d);
+        btnUsuario.setEnabled(e);
     }//Fecha método liberaBotoes(boolean a, boolean b)
-    
-   
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExcluir;
-    private javax.swing.JButton btnExcluirRequerimento1;
     private javax.swing.JButton btnPesquisa;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JButton btnUsuario;
+    private javax.swing.JButton btnVoltar;
+    private javax.swing.JComboBox<String> comboSituacao;
     private javax.swing.JTextField inputBairro;
     private javax.swing.JTextField inputBairro1;
     private javax.swing.JFormattedTextField inputCep;
@@ -1018,7 +1095,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JTextField inputLogradouro;
     private javax.swing.JTextField inputPesquisa;
     private javax.swing.JTextField inputRua1;
-    private javax.swing.JTextField inputSituacao;
     private javax.swing.JTextField inputSituacao1;
     private javax.swing.JTextField inputTipo;
     private javax.swing.JTextField inputTipo1;
@@ -1034,9 +1110,10 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

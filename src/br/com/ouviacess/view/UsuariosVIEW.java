@@ -5,6 +5,8 @@
  */
 package br.com.ouviacess.view;
 
+import javax.swing.JOptionPane;
+
 import javax.swing.table.DefaultTableModel;
 import br.com.ouviacess.dto.UsuariosDTO;
 import br.com.ouviacess.ctr.UsuariosCTR;
@@ -16,34 +18,45 @@ import java.sql.ResultSet;
  * @author Aluno
  */
 public class UsuariosVIEW extends javax.swing.JInternalFrame {
-    
+
     ResultSet rs; //Variavel usada para preenchimeto da tabela e dos campos
     UsuariosDTO usuariosDTO = new UsuariosDTO(); //Cria um objeto carroDTO
     UsuariosCTR usuariosCTR = new UsuariosCTR(); //Cria um objeto carrorCTR
-    
+
+    private int id_usuario, id_requerimento;
+
     DefaultTableModel modelo_tableUsuarios; //Variavel para guardar o modelo da tabela
 
     /**
      * Creates new form UsuariosVIEW
      */
-    public UsuariosVIEW() {
-       initComponents();
-       liberaCampos(false);
-      // this.setExtendedState(this.MAXIMIZED_BOTH);
-      
-      modelo_tableUsuarios = (DefaultTableModel) tableUsuarios.getModel();
+    public UsuariosVIEW(int id_usuario, int id_requerimento) {
+        initComponents();
+
+        this.id_usuario = id_usuario;
+        this.id_requerimento = id_requerimento;
         
+        liberaCampos(false);
+        editarCampos(false);
+        liberaBotoes(false, false, false);
+        // this.setExtendedState(this.MAXIMIZED_BOTH);
+        
+        if (this.id_usuario != 0) {
+            preencheCampos(this.id_usuario);
+        }
+
+        modelo_tableUsuarios = (DefaultTableModel) tableUsuarios.getModel();
+
     }
 
-    
     /**
      * Método para centralizar o internalFrame.
      */
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
-        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
+        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }//Fecha método setPosicao()
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,7 +108,9 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         inputEmail = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        btnExcluirRequerimento = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        btnRequerimentos = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
@@ -271,6 +286,8 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
 
         setClosable(true);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
         labelPesquisa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         labelPesquisa.setLabelFor(inputPesquisa);
         labelPesquisa.setText("Pesquisa:");
@@ -371,7 +388,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(47, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(labelPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -387,7 +404,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPesquisa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -395,9 +412,11 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                         .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(117, 117, 117))
         );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("ID:");
@@ -444,11 +463,32 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("Email:");
 
-        btnExcluirRequerimento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnExcluirRequerimento.setText("Excluir");
-        btnExcluirRequerimento.addActionListener(new java.awt.event.ActionListener() {
+        btnExcluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirRequerimentoActionPerformed(evt);
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
+        btnRequerimentos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnRequerimentos.setText("Requerimentos realizados");
+        btnRequerimentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRequerimentosActionPerformed(evt);
+            }
+        });
+
+        btnVoltar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnVoltar.setText("Voltar");
+        btnVoltar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVoltarMouseClicked(evt);
+            }
+        });
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
             }
         });
 
@@ -456,18 +496,30 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(btnRequerimentos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnExcluir, btnVoltar});
+
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(btnExcluirRequerimento, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRequerimentos)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
         );
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnExcluir, btnRequerimentos, btnVoltar});
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel19.setText("Informações dos Usuários");
@@ -477,29 +529,31 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(40, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addGap(134, 134, 134))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(inputId_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(inputDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(inputNome, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(inputTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(inputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(36, 36, 36))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel19)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputId_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputNome, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(inputEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE))
+                .addGap(40, 40, 40))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputDdd, inputId_usuario, inputNome, inputTelefone});
@@ -507,9 +561,9 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(58, Short.MAX_VALUE)
                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addGap(51, 51, 51)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel3))
@@ -517,7 +571,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputId_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputNome, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -527,13 +581,13 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(inputDdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(60, 60, 60)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
+                .addGap(60, 60, 60)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44))
+                .addGap(30, 30, 30))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputEmail, inputId_usuario, inputNome, inputTelefone});
@@ -543,20 +597,20 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(11, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(20, 20, 20))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -620,9 +674,13 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputId_usuarioActionPerformed
 
-    private void btnExcluirRequerimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirRequerimentoActionPerformed
-        //gravar = 1;
-    }//GEN-LAST:event_btnExcluirRequerimentoActionPerformed
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        excluir();
+        limpaCampos();
+        liberaCampos(false);
+        liberaBotoes(false, false, false);
+        preencheTabela(inputPesquisa.getText());
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void inputDddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDddActionPerformed
         // TODO add your handling code here:
@@ -636,43 +694,62 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         preencheCampos(Integer.parseInt(String.valueOf(tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(), 0))));
     }//GEN-LAST:event_tableUsuariosMouseClicked
 
+    private void btnRequerimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequerimentosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRequerimentosActionPerformed
+
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void btnVoltarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoltarMouseClicked
+         // Crie uma instância de UsuariosVIEW
+        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(null, this.id_requerimento);
+        // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
+        this.getDesktopPane().add(requerimentosVIEW);
+        // Defina a posição da janela interna (opcional)
+        requerimentosVIEW.setPosicao();
+        // Torne a janela visível
+        requerimentosVIEW.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnVoltarMouseClicked
+
     /**
      * Método utilizado para preencher/contruir a Jtable.
+     *
      * @param mar_car, String com a marca do carro
      */
-    private void preencheTabela(String nome){
-        try{
+    private void preencheTabela(String nome) {
+        try {
             //Limpa todas as linhas
             modelo_tableUsuarios.setNumRows(0);
 
             //Enquanto tiver linhas - faça
             usuariosDTO.setNome(nome);
             rs = usuariosCTR.consultarUsuarios(usuariosDTO, 1); //1 = é a pesquisa por marca na classe DAO
-            while(rs.next()){
+            while (rs.next()) {
                 modelo_tableUsuarios.addRow(new Object[]{
-                  rs.getString("id_usuario"),
-                  rs.getString("nome"),
-                  rs.getString("email"),
-                });
-            }        
+                    rs.getString("id_usuario"),
+                    rs.getString("nome"),
+                    rs.getString("email"),});
+            }
+        } catch (Exception erTab) {
+            System.out.println("Erro SQL: " + erTab);
         }
-        catch(Exception erTab){
-            System.out.println("Erro SQL: "+erTab);
-        }  
     }//Fecha método preencheTabela(String titulo)
-    
-     /**
-     * Método utilizado para preencher os campos da tela com 
-     * valores do carro.
+
+    /**
+     * Método utilizado para preencher os campos da tela com valores do carro.
+     *
      * @param id_car, int com o id do carro.
      */
-    private void preencheCampos(int id_usuario){
-        try{
+    private void preencheCampos(int id_usuario) {
+        try {
             usuariosDTO.setId_usuario(id_usuario);
             rs = usuariosCTR.consultarUsuarios(usuariosDTO, 2); //2 = é a pesquisa no id na classe DAO
-            if(rs.next()){
+            if (rs.next()) {
                 limpaCampos();
-                
+
                 inputId_usuario.setText(rs.getString("id_usuario"));
                 inputNome.setText(rs.getString("nome"));
                 inputDdd.setText(rs.getString("ddd"));
@@ -680,29 +757,46 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                 inputEmail.setText(rs.getString("email"));
                 //gravar_alterar = 2;
                 liberaCampos(true);
+
+                if (this.id_usuario != 0) {
+                    liberaBotoes(true, true, true);
+                }else{
+                    liberaBotoes(true, true, false);
+                }
             }
+        } catch (Exception erTab) {
+            System.out.println("Erro SQL: " + erTab);
         }
-        catch(Exception erTab){
-            System.out.println("Erro SQL: "+erTab);
-        }  
     }//Fecha método preencheCampos(int id_requerimento)
-    
-     /**
+
+    /**
+     * Método utilizado para excluir os dados do carro.
+     */
+    private void excluir() {
+        if (JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir o Usuário?", "Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(null,
+                    usuariosCTR.excluirUsuarios(usuariosDTO)
+            );
+        }
+    }//Fecha método excluir()
+
+    /**
      * Método utilizado para limpar os campos da tela.
      */
-    private void limpaCampos(){
+    private void limpaCampos() {
         inputId_usuario.setText("");
         inputNome.setText("");
         inputDdd.setText("");
         inputTelefone.setText("");
         inputEmail.setText("");
     }//Fecha método limpaCampos()
-    
-     /**
+
+    /**
      * Método utilizado para liberar/bloquear os campos da tela.
+     *
      * @param a, boolean com true(libera) false(bloqueia).
      */
-    private void liberaCampos(boolean a){
+    private void liberaCampos(boolean a) {
         inputId_usuario.setEnabled(a);
         inputNome.setEnabled(a);
         inputDdd.setEnabled(a);
@@ -710,9 +804,36 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         inputEmail.setEnabled(a);
     }//Fecha método liberaCampos(boolean a)
 
+    /**
+     * Método utilizado para liberar os botões da tela.
+     *
+     * @param a, boolean com true(libera) false(bloqueia) para o btnExcluir.
+     * @param b, boolean com true(libera) false(bloqueia) para o btnAtualizar.
+     */
+    private void liberaBotoes(boolean a, boolean b, boolean c) {
+        btnExcluir.setEnabled(a);
+        btnRequerimentos.setEnabled(b);
+        btnVoltar.setEnabled(c);
+    }//Fecha método liberaBotoes(boolean a, boolean b)
+
+    /**
+     * Método utilizado para liberar/bloquear os campos da tela.
+     *
+     * @param a, boolean com true(libera) false(bloqueia).
+     */
+    private void editarCampos(boolean a) {
+        inputId_usuario.setEditable(a);
+        inputNome.setEditable(a);
+        inputDdd.setFocusable(a);
+        inputTelefone.setEditable(a);
+        inputEmail.setEditable(a);
+    }//Fecha método liberaCampos(boolean a)
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExcluirRequerimento;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnPesquisa;
+    private javax.swing.JButton btnRequerimentos;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JTextField inputBairro1;
     private javax.swing.JTextField inputCep1;
     private javax.swing.JTextField inputCidade1;

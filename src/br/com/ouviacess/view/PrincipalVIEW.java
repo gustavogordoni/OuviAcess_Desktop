@@ -10,28 +10,30 @@ import java.awt.Image;
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
 
-import javax.swing.JOptionPane;
-
 import br.com.ouviacess.dto.AdministradorDTO;
-import br.com.ouviacess.ctr.AdministradorCTR;
+
 /**
  *
  * @author Aluno
  */
 public class PrincipalVIEW extends javax.swing.JFrame {
-    
+
     AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto carroDTO
+
+    RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0);
+    UsuariosVIEW usuariosVIEW = new UsuariosVIEW(0, 0);
+    PerfilVIEW perfilVIEW = new PerfilVIEW(administradorDTO);
 
     /**
      * Creates new form Principal
      */
     public PrincipalVIEW(AdministradorDTO administradorDTO) {
-      initComponents();
-      this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-      
-      this.administradorDTO = administradorDTO;
+        initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        this.administradorDTO = administradorDTO;
 //      JOptionPane.showMessageDialog(null, this.administradorDTO.getId_administrador());
-      
+
     }
 
     /**
@@ -114,37 +116,87 @@ public class PrincipalVIEW extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     // MENU DA PRINCIPAL - NAVBAR
     private void menuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSairMouseClicked
         System.exit(0);
     }//GEN-LAST:event_menuSairMouseClicked
 
     private void menuRequerimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRequerimentosActionPerformed
-        
+
     }//GEN-LAST:event_menuRequerimentosActionPerformed
 
     private void menuRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuRequerimentosMouseClicked
-        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO);
-         this.desktopPane.add(requerimentosVIEW);
-         requerimentosVIEW.setVisible(true);
-         requerimentosVIEW.setPosicao();
+//        //RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO);
+//         this.desktopPane.add(requerimentosVIEW);
+//         requerimentosVIEW.setVisible(true);
+//         requerimentosVIEW.setPosicao();
+
+        if (requerimentosVIEW != null) {
+            requerimentosVIEW.dispose();
+        }
+
+        requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0);
+        this.desktopPane.add(requerimentosVIEW);
+        requerimentosVIEW.setVisible(true);
+        requerimentosVIEW.setPosicao();
+
+        if (usuariosVIEW != null) {
+            usuariosVIEW.dispose();
+        }
+
+        if (perfilVIEW != null) {
+            perfilVIEW.dispose();
+        }
     }//GEN-LAST:event_menuRequerimentosMouseClicked
 
     private void menuUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsuariosMouseClicked
-        UsuariosVIEW usuariosVIEW = new UsuariosVIEW();
-         this.desktopPane.add(usuariosVIEW);
-         usuariosVIEW.setVisible(true);
-         usuariosVIEW.setPosicao();
+////        UsuariosVIEW usuariosVIEW = new UsuariosVIEW();
+//         this.desktopPane.add(usuariosVIEW);
+//         usuariosVIEW.setVisible(true);
+//         usuariosVIEW.setPosicao();
+
+        if (usuariosVIEW != null) {
+            usuariosVIEW.dispose();
+        }
+
+        usuariosVIEW = new UsuariosVIEW(0, 0);
+        this.desktopPane.add(usuariosVIEW);
+        usuariosVIEW.setVisible(true);
+        usuariosVIEW.setPosicao();
+
+        if (requerimentosVIEW != null) {
+            requerimentosVIEW.dispose();
+        }
+
+        if (perfilVIEW != null) {
+            perfilVIEW.dispose();
+        }
     }//GEN-LAST:event_menuUsuariosMouseClicked
 
     private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
-        PerfilVIEW perfilVIEW = new PerfilVIEW(administradorDTO);
-         this.desktopPane.add(perfilVIEW);
-         perfilVIEW.setVisible(true);
-         perfilVIEW.setPosicao();
+////        PerfilVIEW perfilVIEW = new PerfilVIEW(administradorDTO);
+//         this.desktopPane.add(perfilVIEW);
+//         perfilVIEW.setVisible(true);
+//         perfilVIEW.setPosicao();
+
+
+        if (perfilVIEW != null) {
+            perfilVIEW.dispose();
+        }
+
+        perfilVIEW = new PerfilVIEW(administradorDTO);
+        this.desktopPane.add(perfilVIEW);
+        perfilVIEW.setVisible(true);
+        perfilVIEW.setPosicao();
+
+        if (requerimentosVIEW != null) {
+            requerimentosVIEW.dispose();
+        }
+
+        if (usuariosVIEW != null) {
+            usuariosVIEW.dispose();
+        }
     }//GEN-LAST:event_jMenu1MouseClicked
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktopPane;

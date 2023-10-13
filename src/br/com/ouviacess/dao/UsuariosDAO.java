@@ -20,8 +20,7 @@ public class UsuariosDAO {
      *
      * @param usuariosDTO que vem da classe UsuariosCTR
      * @return Um boolean
-     *
-     * /
+     */
     public boolean excluirUsuarios(UsuariosDTO usuariosDTO) {
         try {
             //Chama o metodo que esta na classe ConexaoDAO para abrir o banco de dados
@@ -29,7 +28,13 @@ public class UsuariosDAO {
             //Cria o Statement que responsavel por executar alguma coisa no banco de dados
             stmt = ConexaoDAO.con.createStatement();
             //Comando SQL que sera executado no banco de dados
-            String comando = "DELETE FROM usuarios WHERE id_usuarios = " + usuariosDTO.getId_usuarios();
+            String comando = "DELETE FROM arquivo " +
+                "WHERE id_requerimento IN (SELECT id_requerimento FROM requerimento WHERE id_usuario = " + usuariosDTO.getId_usuario() + "); " +
+                "DELETE FROM requerimento " +
+                "WHERE id_usuario = " + usuariosDTO.getId_usuario() + "; " +
+                "DELETE FROM usuario " +
+                "WHERE id_usuario = " + usuariosDTO.getId_usuario();
+
 
             //Executa o comando SQL no banco de Dados
             stmt.execute(comando);

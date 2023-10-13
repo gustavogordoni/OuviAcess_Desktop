@@ -13,50 +13,33 @@ import java.sql.ResultSet;
 import br.com.ouviacess.dto.AdministradorDTO;
 import br.com.ouviacess.ctr.AdministradorCTR;
 
-public class PerfilVIEW extends javax.swing.JInternalFrame {   
-        AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto cadastroDTO
-        AdministradorCTR administradorCTR = new AdministradorCTR(); //Cria um objeto cadastrorCTR
- 
-        ResultSet rs; //Variavel usada para preenchimeto da tabela e dos campos
-        int gravar_alterar; //Variavel usada para saber se esta alterando o incluindo
-        DefaultTableModel modelo_jtl_consultar_cad; //Variavel para guardar o modelo da tabela
+public class PerfilVIEW extends javax.swing.JInternalFrame {
+
+    AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto cadastroDTO
+    AdministradorCTR administradorCTR = new AdministradorCTR(); //Cria um objeto cadastrorCTR
+
+    ResultSet rs; //Variavel usada para preenchimeto da tabela e dos campos
+    int gravar_alterar; //Variavel usada para saber se esta alterando o incluindo
+    DefaultTableModel modelo_jtl_consultar_cad; //Variavel para guardar o modelo da tabela
 
     /**
      * Creates new form CadastroVIEW
      */
-    public PerfilVIEW(AdministradorDTO administradorDTO) {     
+    public PerfilVIEW(AdministradorDTO administradorDTO) {
         initComponents();
-        //Chama todos os métodos liberaCampos
-        liberaCampos(false);
         editarCampos(false);
-        
+        liberaBotoes(true, false, false);
+
         this.administradorDTO = administradorDTO;
-//        JOptionPane.showMessageDialog(null, this.administradorDTO.getId_administrador());
-        
-        try{
-            administradorDTO.setId_administrador(this.administradorDTO.getId_administrador());
-            rs = administradorCTR.consultarAdministrador(administradorDTO, 1); //1 = é a pesquisa no id na classe DAO
-            if(rs.next()){
-                //limpaCampos();
-                
-                inputNome.setText(rs.getString("nome"));
-                inputDdd.setText(rs.getString("ddd"));
-                inputTelefone.setText(rs.getString("telefone"));
-                inputEmail.setText(rs.getString("email"));
-                inputSenha.setText(rs.getString("senha"));
-            }
-        }
-        catch(Exception erTab){
-            System.out.println("Erro SQL: "+erTab);
-        }  
+        preencheCampos();
     }
-  
+
     /**
      * Método para centralizar o internalFrame.
      */
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
-        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
+        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }//Fecha método setPosicao()
 
     @SuppressWarnings("unchecked")
@@ -70,7 +53,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         btnAtualizar = new javax.swing.JButton();
-        btnAlterarRequerimento1 = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         inputDdd = new javax.swing.JFormattedTextField();
@@ -84,6 +67,8 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         inputNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,16 +90,16 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
             }
         });
 
-        btnAlterarRequerimento1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnAlterarRequerimento1.setText("Cancelar");
-        btnAlterarRequerimento1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAlterarRequerimento1MouseClicked(evt);
+                btnCancelarMouseClicked(evt);
             }
         });
-        btnAlterarRequerimento1.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlterarRequerimento1ActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
 
@@ -139,13 +124,13 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAlterarRequerimento1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAlterarRequerimento1, btnAtualizar, btnEditar});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnCancelar, btnEditar});
 
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,12 +138,12 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAlterarRequerimento1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEditar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAlterarRequerimento1, btnAtualizar, btnEditar});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAtualizar, btnCancelar, btnEditar});
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel17.setText("Nome completo: ");
@@ -269,12 +254,14 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 568, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 568, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel1)
+                .addGap(10, 10, 10))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -289,16 +276,18 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
                         .addGap(767, 767, 767))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
                 .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -314,28 +303,29 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_inputTelefoneActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        //alterar(); 
-        
-         if(gravar_alterar == 2){
-                alterar();
-                gravar_alterar = 0;
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Erro no Sistema!!!");
-            }
+        if (gravar_alterar == 2) {
+            alterar();
+            liberaBotoes(true, false, false);
+            preencheCampos();
+            editarCampos(false);
+            
+            gravar_alterar = 0;
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro no Sistema!!!");
+        }
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void inputNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_inputNomeActionPerformed
 
-    private void btnAlterarRequerimento1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarRequerimento1ActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAlterarRequerimento1ActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnAlterarRequerimento1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAlterarRequerimento1MouseClicked
+    private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
 
-    }//GEN-LAST:event_btnAlterarRequerimento1MouseClicked
+    }//GEN-LAST:event_btnCancelarMouseClicked
 
     private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
         //possibilitarEdicao(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
@@ -346,83 +336,85 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEditarActionPerformed
-  
-      /**
+
+    /**
+     * Método utilizado para preencher os campos da tela com valores do carro.
+     *
+     * @param id_car, int com o id do carro.
+     */
+    private void preencheCampos() {
+        try {
+            administradorDTO.setId_administrador(this.administradorDTO.getId_administrador());
+            rs = administradorCTR.consultarAdministrador(administradorDTO, 1); //1 = é a pesquisa no id na classe DAO
+            if (rs.next()) {
+                //limpaCampos();
+
+                inputNome.setText(rs.getString("nome"));
+                inputDdd.setText(rs.getString("ddd"));
+                inputTelefone.setText(rs.getString("telefone"));
+                inputEmail.setText(rs.getString("email"));
+                inputSenha.setText(rs.getString("senha"));
+            }
+        } catch (Exception erTab) {
+            System.out.println("Erro SQL: " + erTab);
+        }
+    }//Fecha método preencheCampos(int id_requerimento)
+    
+    /**
      * Método utilizado para alterar os dados do carro.
      */
-    private void alterar(){
-        try{
+    private void alterar() {
+        try {
             administradorDTO.setNome(inputNome.getText());
             administradorDTO.setDdd(inputDdd.getText());
             administradorDTO.setTelefone(inputTelefone.getText());
             administradorDTO.setEmail(inputEmail.getText());
             administradorDTO.setSenha(inputSenha.getText());
-     
+
             JOptionPane.showMessageDialog(null,
                     administradorCTR.alterarAdministrador(administradorDTO)
             );
+        } catch (Exception e) {
         }
-        catch(Exception e){}
     }//Fecha método alterar()
-    
-     /**
-     * Método utilizado para preencher os campos da tela com 
-     * valores do carro.
+
+    /**
+     * Método utilizado para preencher os campos da tela com valores do carro.
+     *
      * @param id_car, int com o id do carro.
      */
-    private void possibilitarEdicao(int id_administrador){
+    private void possibilitarEdicao(int id_administrador) {
         editarCampos(true);
-        liberaCampos(true);
-        gravar_alterar = 2;
-//        try{
-//            administradorDTO.setId_administrador(id_administrador);
-//            rs = administradorCTR.consultarAdministrador(administradorDTO, 1); //1 = é a pesquisa no id na classe DAO
-//            if(rs.next()){
-//                //limpaCampos();
-//                
-//                inputNome.setText(rs.getString("nome"));
-//                inputDdd.setText(rs.getString("ddd"));
-//                inputTelefone.setText(rs.getString("telefone"));
-//                inputEmail.setText(rs.getString("email"));
-//                inputSenha.setText(rs.getString("senha"));
-//                
-//                gravar_alterar = 2;
-//                liberaCampos(true);
-//            }
-//        }
-//        catch(Exception erTab){
-//            System.out.println("Erro SQL: "+erTab);
-//        }  
+        liberaBotoes(false, true, true);
+        gravar_alterar = 2; 
     }//Fecha método possibilitarEdicao(int id_requerimento)
-    
-    /**
+
+   /**
      * Método utilizado para liberar/bloquear os campos da tela.
+     *
      * @param a, boolean com true(libera) false(bloqueia).
      */
-    private void liberaCampos(boolean a){
-        inputNome.setEnabled(a);
-        inputDdd.setEnabled(a);
-        inputTelefone.setEnabled(a);
-        inputEmail.setEnabled(a);
-        inputSenha.setEnabled(a);
-    }//Fecha método liberaCampos(boolean a)
-    
-    /**
-     * Método utilizado para liberar/bloquear os campos da tela.
-     * @param a, boolean com true(libera) false(bloqueia).
-     */
-    private void editarCampos(boolean a){
+    private void editarCampos(boolean a) {
         inputNome.setEditable(a);
         inputDdd.setEditable(a);
         inputTelefone.setEditable(a);
         inputEmail.setEditable(a);
         inputSenha.setEditable(a);
     }//Fecha método liberaCampos(boolean a)
-    
-    
+
+    /**
+     * Método utilizado para liberar os botões da tela.
+     */
+    private void liberaBotoes(boolean a, boolean b, boolean c) {
+        btnEditar.setEnabled(a);
+        btnCancelar.setEnabled(b);
+        btnAtualizar.setEnabled(c);
+    }//Fecha método liberaBotoes(boolean a, boolean b)
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAlterarRequerimento1;
     private javax.swing.JButton btnAtualizar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JFormattedTextField inputDdd;
