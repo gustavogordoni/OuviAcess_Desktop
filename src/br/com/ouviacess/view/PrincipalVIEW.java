@@ -20,7 +20,7 @@ public class PrincipalVIEW extends javax.swing.JFrame {
 
     AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto carroDTO
 
-    RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0);
+    RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0, 0, null);
     UsuariosVIEW usuariosVIEW = new UsuariosVIEW(0, 0);
     PerfilVIEW perfilVIEW = new PerfilVIEW(administradorDTO);
 
@@ -135,7 +135,7 @@ public class PrincipalVIEW extends javax.swing.JFrame {
             requerimentosVIEW.dispose();
         }
 
-        requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0);
+        requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0, 0, null);
         this.desktopPane.add(requerimentosVIEW);
         requerimentosVIEW.setVisible(true);
         requerimentosVIEW.setPosicao();

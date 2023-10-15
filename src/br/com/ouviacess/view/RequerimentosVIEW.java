@@ -4,12 +4,15 @@
  * and open the template in the editor.
  */
 package br.com.ouviacess.view;
+
 import javax.swing.JOptionPane;
 
 import javax.swing.table.DefaultTableModel;
 import br.com.ouviacess.dto.RequerimentosDTO;
 import br.com.ouviacess.ctr.RequerimentosCTR;
 import br.com.ouviacess.dto.AdministradorDTO;
+import br.com.ouviacess.dto.UsuariosDTO;
+import br.com.ouviacess.ctr.UsuariosCTR;
 
 import java.awt.Dimension;
 import java.sql.ResultSet;
@@ -19,47 +22,61 @@ import java.sql.ResultSet;
  * @author Aluno
  */
 public class RequerimentosVIEW extends javax.swing.JInternalFrame {
-    
+
     ResultSet rs; //Variavel usada para preenchimeto da tabela e dos campos
     RequerimentosDTO requerimentosDTO = new RequerimentosDTO(); //Cria um objeto requerimentosDTO
     RequerimentosCTR requerimentosCTR = new RequerimentosCTR(); //Cria um objeto requerimentosrCTR
     AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto requerimentosrCTR
-    
-    private int opcao, id_usuario,id_requerimento;
-    
+    UsuariosDTO usuariosDTO = new UsuariosDTO(); //Cria um objeto carroDTO
+    UsuariosCTR usuariosCTR = new UsuariosCTR(); //Cria um objeto carrorCTR
+
+    private int opcao, opcaoUsuario, id_usuarioEnvia, id_usuarioRecebe, id_requerimento;
+    private String nomeUsuario;
+
     DefaultTableModel modelo_tableRequerimentos; //Variavel para guardar o modelo da tabela   
 
     /**
      * Creates new form RequerimentosVIEW
      */
-    public RequerimentosVIEW(AdministradorDTO administradorDTO, int id_requerimento) {
-       initComponents();
-       
-       this.administradorDTO = administradorDTO;
-       this.id_requerimento = id_requerimento;
-       
-       //Chama todos os métodos liberaCampos
-       liberaCampos(false, false);
-       //Chama o método liberaBotoes
-       liberaBotoes(false, false, false, false, false);
-      // this.setExtendedState(this.MAXIMIZED_BOTH);
-      
-      if (this.id_requerimento != 0) {
+    public RequerimentosVIEW(AdministradorDTO administradorDTO, int id_requerimento, int id_usuarioRecebe, String nomeUsuario) {
+        initComponents();
+
+        this.administradorDTO = administradorDTO;
+        this.id_requerimento = id_requerimento;
+        this.id_usuarioEnvia = id_usuarioEnvia;
+        this.id_usuarioRecebe = id_usuarioRecebe;
+        this.nomeUsuario = nomeUsuario;
+
+        liberaCampos(false, false);
+        liberaBotoes(false, false, false, false, false);
+        liberaUsuario(true, true, true, false);
+
+        retornoUsuarios.setFocusable(false);
+
+        modelo_tableRequerimentos = (DefaultTableModel) tableRequerimentos.getModel();
+        comboSituacao.setEditable(false);
+
+        if (this.id_requerimento != 0) {
             preencheCampos(this.id_requerimento);
         }
-      
-      modelo_tableRequerimentos = (DefaultTableModel) tableRequerimentos.getModel();      
-      comboSituacao.setEditable(false);
+
+        if (this.id_usuarioRecebe != 0) {
+            inputUsuario.setText(nomeUsuario);
+            selectUsuario.setSelectedItem("Nome");
+
+            preencheUsuario(inputUsuario.getText(), selectUsuario.getSelectedItem().toString());
+            preencheTabela("", "Nenhum filtro", nomeUsuario);
+        }
     }
-    
+
     /**
      * Método para centralizar o internalFrame.
      */
     public void setPosicao() {
         Dimension d = this.getDesktopPane().getSize();
-        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
+        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
     }//Fecha método setPosicao()
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -68,7 +85,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jMenu1 = new javax.swing.JMenu();
         jPopupMenu1 = new javax.swing.JPopupMenu();
@@ -94,12 +110,17 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        labelPesquisa = new javax.swing.JLabel();
-        selectPesquisa = new javax.swing.JComboBox<>();
-        inputPesquisa = new javax.swing.JTextField();
-        btnPesquisa = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        inputUsuario = new javax.swing.JTextField();
+        retornoUsuarios = new javax.swing.JComboBox<>();
+        btnAnexar = new javax.swing.JButton();
+        selectUsuario = new javax.swing.JComboBox<>();
+        jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRequerimentos = new javax.swing.JTable();
+        btnPesquisa = new javax.swing.JButton();
+        inputPesquisa = new javax.swing.JTextField();
+        selectPesquisa = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         inputTitulo = new javax.swing.JTextField();
@@ -307,37 +328,71 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
         setClosable(true);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Especificar Usuário (opcional)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
-        labelPesquisa.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        labelPesquisa.setLabelFor(inputPesquisa);
-        labelPesquisa.setText("Pesquisa:");
-
-        selectPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nenhum filtro", "Título", "Usuário", "ID Requerimento", "ID Usuário" }));
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, selectPesquisa, org.jdesktop.beansbinding.ObjectProperty.create(), selectPesquisa, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "ITEM2");
-        bindingGroup.addBinding(binding);
-
-        selectPesquisa.addActionListener(new java.awt.event.ActionListener() {
+        inputUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectPesquisaActionPerformed(evt);
+                inputUsuarioActionPerformed(evt);
             }
         });
 
-        inputPesquisa.addActionListener(new java.awt.event.ActionListener() {
+        retornoUsuarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nenhum usuário encontrado" }));
+        retornoUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputPesquisaActionPerformed(evt);
+                retornoUsuariosActionPerformed(evt);
             }
         });
 
-        btnPesquisa.setBackground(java.awt.Color.white);
-        btnPesquisa.setForeground(java.awt.Color.white);
-        btnPesquisa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/pesquisar.png"))); // NOI18N
-        btnPesquisa.addActionListener(new java.awt.event.ActionListener() {
+        btnAnexar.setBackground(java.awt.Color.white);
+        btnAnexar.setForeground(java.awt.Color.white);
+        btnAnexar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/pesquisar.png"))); // NOI18N
+        btnAnexar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPesquisaActionPerformed(evt);
+                btnAnexarActionPerformed(evt);
             }
         });
+
+        selectUsuario.setMaximumRowCount(1000);
+        selectUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nenhum filtro", "Nome", "ID Usuário" }));
+        selectUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectUsuarioActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(retornoUsuarios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(inputUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selectUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnAnexar)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(selectUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                    .addComponent(btnAnexar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(inputUsuario, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(retornoUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel5Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAnexar, retornoUsuarios, selectUsuario});
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Buscar por:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
         tableRequerimentos.setAutoCreateRowSorter(true);
         tableRequerimentos.setModel(new javax.swing.table.DefaultTableModel(
@@ -405,38 +460,85 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(tableRequerimentos);
+        if (tableRequerimentos.getColumnModel().getColumnCount() > 0) {
+            tableRequerimentos.getColumnModel().getColumn(0).setHeaderValue("ID");
+            tableRequerimentos.getColumnModel().getColumn(1).setHeaderValue("Título");
+            tableRequerimentos.getColumnModel().getColumn(2).setHeaderValue("Tipo");
+            tableRequerimentos.getColumnModel().getColumn(3).setHeaderValue("Situação");
+        }
+
+        btnPesquisa.setBackground(java.awt.Color.white);
+        btnPesquisa.setForeground(java.awt.Color.white);
+        btnPesquisa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/pesquisar.png"))); // NOI18N
+        btnPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisaActionPerformed(evt);
+            }
+        });
+
+        inputPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputPesquisaActionPerformed(evt);
+            }
+        });
+
+        selectPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nenhum filtro", "Título", "Situação", "Tipo", "Data", "ID Requerimento" }));
+        selectPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectPesquisaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(inputPesquisa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnPesquisa)))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel6Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnPesquisa, inputPesquisa, selectPesquisa});
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(labelPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPesquisa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(labelPesquisa)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -543,7 +645,8 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnVoltar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExcluir)
@@ -551,7 +654,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addComponent(btnAtualizar)
                 .addGap(8, 8, 8)
                 .addComponent(btnSalvar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnVoltar});
@@ -559,12 +662,13 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(0, 3, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtualizar)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalvar))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnSalvar, btnVoltar});
@@ -713,9 +817,9 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10))
+                .addContainerGap())
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputBairro, inputCidade, inputData, inputLogradouro, inputTitulo});
@@ -725,40 +829,24 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
 
-        bindingGroup.bind();
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
-        preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString());
-    }//GEN-LAST:event_btnPesquisaActionPerformed
-
-    private void inputPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPesquisaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputPesquisaActionPerformed
-
-    private void selectPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPesquisaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_selectPesquisaActionPerformed
 
     private void inputTitulo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTitulo1ActionPerformed
         // TODO add your handling code here:
@@ -792,11 +880,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputRua1ActionPerformed
 
-    private void tableRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRequerimentosMouseClicked
-        //Pega a Pessoa selecionada e chama preencheCampos
-        preencheCampos(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
-    }//GEN-LAST:event_tableRequerimentosMouseClicked
-
     private void inputCepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCepActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_inputCepActionPerformed
@@ -806,7 +889,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_inputDataActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if(verificaPreenchimento()){
+        if (verificaPreenchimento()) {
             alterar();
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
@@ -826,7 +909,8 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         limpaCampos();
         liberaCampos(false, false);
         liberaBotoes(false, false, false, false, false);
-        preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString());
+        liberaUsuario(true, true, true, false);
+        preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString(), retornoUsuarios.getSelectedItem().toString());
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void inputLogradouroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputLogradouroActionPerformed
@@ -863,7 +947,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
     private void btnUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMouseClicked
         // Crie uma instância de UsuariosVIEW
-        UsuariosVIEW usuariosView = new UsuariosVIEW(this.id_usuario, this.id_requerimento);
+        UsuariosVIEW usuariosView = new UsuariosVIEW(this.id_usuarioEnvia, this.id_requerimento);
         // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
         this.getDesktopPane().add(usuariosView);
         // Defina a posição da janela interna (opcional)
@@ -873,67 +957,168 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_btnUsuarioMouseClicked
 
+    private void retornoUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornoUsuariosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_retornoUsuariosActionPerformed
+
+    private void inputPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPesquisaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputPesquisaActionPerformed
+
+    private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
+        preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString(), retornoUsuarios.getSelectedItem().toString());
+    }//GEN-LAST:event_btnPesquisaActionPerformed
+
+    private void tableRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRequerimentosMouseClicked
+        preencheCampos(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
+    }//GEN-LAST:event_tableRequerimentosMouseClicked
+
+    private void inputUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputUsuarioActionPerformed
+
+    private void selectPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPesquisaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_selectPesquisaActionPerformed
+
+    private void btnAnexarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnexarActionPerformed
+        preencheUsuario(inputUsuario.getText(), selectUsuario.getSelectedItem().toString());
+    }//GEN-LAST:event_btnAnexarActionPerformed
+
+    private void selectUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_selectUsuarioActionPerformed
+
     /**
      * Método utilizado para preencher/contruir a Jtable.
+     *
      * @param mar_car, String com a marca do requerimentos
      */
-    private void preencheTabela(String pesquisa, String filtro){
-        try{
+    private void preencheUsuario(String pesquisa, String filtro) {
+        try {
+            requerimentosDTO.setPesquisaUsuario(pesquisa);
+
+            this.opcaoUsuario = opcaoUsuario;
+            switch (filtro) {
+                case "Nome":
+                    this.opcaoUsuario = 1;
+                    break;
+
+                case "ID Usuário":
+                    this.opcaoUsuario = 2;
+
+                    if (pesquisa.equals("")) {
+                        this.opcaoUsuario = 3;
+                    }
+
+                    break;
+            }
+            if (pesquisa.equals("") && filtro.equals("Nenhum filtro")) {
+                this.opcaoUsuario = 3;
+            }
+
+            rs = usuariosCTR.consultarUsuarios(usuariosDTO, this.opcaoUsuario, pesquisa);
+            retornoUsuarios.removeAllItems();
+
+            boolean encontrouUsuario = false; // Variável para verificar se pelo menos um usuário foi encontrado
+
+            while (rs.next()) {
+                String nomeUsuario = rs.getString("nome");
+
+                if (nomeUsuario.isEmpty()) {
+                    // Nome vazio, talvez nenhum usuário tenha sido encontrado
+                    // Adicione um item especial ao JComboBox
+                    retornoUsuarios.addItem("Nenhum usuário encontrado");
+                } else {
+                    retornoUsuarios.addItem(nomeUsuario);
+                    liberaUsuario(true, true, true, true);
+                    encontrouUsuario = true; // Pelo menos um usuário foi encontrado   
+                }
+            }
+
+            if (!encontrouUsuario) {
+                // Nenhum usuário foi encontrado, adicione uma mensagem adequada
+                retornoUsuarios.addItem("Nenhum usuário encontrado");
+                liberaUsuario(true, true, true, false);
+            } else {
+                retornoUsuarios.addItem("Não especificar usuário");
+            }
+
+        } catch (Exception erTab) {
+            System.out.println("Erro SQL: " + erTab);
+        }
+    }//Fecha método preencheTabela(String titulo)
+
+    /**
+     * Método utilizado para preencher/contruir a Jtable.
+     *
+     * @param mar_car, String com a marca do requerimentos
+     */
+    private void preencheTabela(String pesquisa, String filtro, String nomeUsuario) {
+        try {
             //Limpa todas as linhas
             modelo_tableRequerimentos.setNumRows(0);
             //Enquanto tiver linhas - faça
-            requerimentosDTO.setPesquisa(pesquisa);
-            
-            this.opcao = opcao;            
-            switch (filtro){                
-                case "Título": this.opcao = 3;                    
-                break;
-                
-                case "Usuário": this.opcao = 4;                    
-                break; 
-                
-                case "ID Requerimento": this.opcao = 5;                    
-                break;               
-                  
-                case "ID Usuário": this.opcao = 6;                    
-                break;      
-                
-                case "Nenhum filtro": this.opcao = 7;                    
-                break;
-            }            
-            if(pesquisa.equals("") && filtro.equals("Nenhum filtro")){
+            requerimentosDTO.setPesquisaRequerimento(pesquisa);
+
+            this.opcao = opcao;
+            switch (filtro) {
+                case "Título":
+                    this.opcao = 2;
+                    break;
+
+                case "Situação":
+                    this.opcao = 3;
+                    break;
+
+                case "Tipo":
+                    this.opcao = 4;
+                    break;
+
+                case "Data":
+                    this.opcao = 5;
+                    break;
+
+                case "ID Requerimento":
+                    this.opcao = 6;
+                    break;
+
+                case "Nenhum filtro":
+                    this.opcao = 7;
+                    break;
+            }
+            if (pesquisa.equals("") && filtro.equals("Nenhum filtro")) {
                 this.opcao = 8;
-            }             
+            }
 //            JOptionPane.showMessageDialog(null, this.opcao);
 //            JOptionPane.showMessageDialog(null, requerimentosDTO.getPesquisa());
-//                   
-            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, this.opcao); // pesquisa por marca na classe DAO
-            while(rs.next()){
+//               
+            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, this.opcao, nomeUsuario); // pesquisa por marca na classe DAO
+            while (rs.next()) {
                 modelo_tableRequerimentos.addRow(new Object[]{
-                  rs.getString("id_requerimento"),
-                  rs.getString("titulo"),
-                  rs.getString("tipo"),
-                  rs.getString("situacao"),
-                });
-            }        
+                    rs.getString("id_requerimento"),
+                    rs.getString("titulo"),
+                    rs.getString("tipo"),
+                    rs.getString("situacao"),});
+            }
+        } catch (Exception erTab) {
+            System.out.println("Erro SQL: " + erTab);
         }
-        catch(Exception erTab){
-            System.out.println("Erro SQL: "+erTab);
-        }  
     }//Fecha método preencheTabela(String titulo)
-    
-     /**
-     * Método utilizado para preencher os campos da tela com 
-     * valores do requerimentos.
+
+    /**
+     * Método utilizado para preencher os campos da tela com valores do
+     * requerimentos.
+     *
      * @param id_car, int com o id do requerimentos.
      */
-    private void preencheCampos(int id_requerimento){
-        try{
+    private void preencheCampos(int id_requerimento) {
+        try {
             requerimentosDTO.setId_requerimento(id_requerimento);
-            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, 2); //2 = é a pesquisa no id na classe DAO
-            if(rs.next()){
+            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, 1, null); //1 = é a pesquisa no id na classe DAO
+            if (rs.next()) {
                 limpaCampos();
-                
+
                 inputTitulo.setText(rs.getString("titulo"));
                 inputTipo.setText(rs.getString("tipo"));
                 comboSituacao.setSelectedItem(rs.getString("situacao"));
@@ -944,81 +1129,77 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 inputLogradouro.setText(rs.getString("logradouro"));
                 textareaDescricao.setText(rs.getString("descricao"));
                 textareaResposta.setText(rs.getString("resposta"));
-                
-                 int idUsuario = Integer.parseInt(rs.getString("id_usuario"));
-                 this.id_usuario = idUsuario;
-                 int idRequerimento = Integer.parseInt(rs.getString("id_requerimento"));
-                 this.id_requerimento = idRequerimento;
-                
+
+                this.id_usuarioEnvia = Integer.parseInt(rs.getString("id_usuario"));
+                this.id_requerimento = Integer.parseInt(rs.getString("id_requerimento"));
+
                 //gravar_alterar = 2;
                 liberaCampos(true, true);
                 editarCampos(false, false);
-                
+
                 liberaBotoes(true, true, false, false, true);
             }
+        } catch (Exception erTab) {
+            System.out.println("Erro SQL: " + erTab);
         }
-        catch(Exception erTab){
-            System.out.println("Erro SQL: "+erTab);
-        }  
     }//Fecha método preencheCampos()
-    
+
     /**
      * Método utilizado para alterar os dados do requerimentos.
      */
-    private void alterar(){
-        try{
+    private void alterar() {
+        try {
             requerimentosDTO.setSituacao(comboSituacao.getSelectedItem().toString());
             requerimentosDTO.setResposta(textareaResposta.getText());
-     
+
             JOptionPane.showMessageDialog(null,
                     requerimentosCTR.alterarRequerimentos(requerimentosDTO, this.administradorDTO.getId_administrador())
             );
-            
+
             liberaCampos(true, true);
             editarCampos(false, false);
             liberaBotoes(true, true, false, false, true);
+        } catch (Exception e) {
         }
-        catch(Exception e){}
     }//Fecha método alterar()
-    
+
     /**
      * Método utilizado para excluir os dados do carro.
      */
-    private void excluir(){
-       if(JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir o Requerimento?","Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+    private void excluir() {
+        if (JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir o Requerimento?", "Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(null,
                     requerimentosCTR.excluirRequerimentos(requerimentosDTO)
             );
-       }
+        }
     }//Fecha método excluir()
-    
+
     /**
      * Método utilizado para verificar se os campos estão preenchidos.
+     *
      * @param não recebe parametro.
      * @return boolean false(campo não preenchido) true(campo preenchido).
      */
-    private boolean verificaPreenchimento() {                            
-        if(comboSituacao.getSelectedItem().toString() == "-"){
-              JOptionPane.showMessageDialog(null, "O campo Situação deve ser preenchido");
-              comboSituacao.requestFocus();
-              return false;
-        }
-        else{
-            if((textareaResposta.getText().equals(""))){
+    private boolean verificaPreenchimento() {
+        if (comboSituacao.getSelectedItem().toString() == "-") {
+            JOptionPane.showMessageDialog(null, "O campo Situação deve ser preenchido");
+            comboSituacao.requestFocus();
+            return false;
+        } else {
+            if ((textareaResposta.getText().equals(""))) {
                 JOptionPane.showMessageDialog(null, "O campo Resposta deve ser preenchido");
                 textareaResposta.requestFocus();
                 return false;
-            }
-            else{
+            } else {
                 return true;
             }//Fecha else sen_fun
         }//Fecha else log_fun
     }//Fecha método verificaPreenchimento()
-    
+
     /**
      * Método utilizado para limpar os campos da tela.
      */
-    private void limpaCampos(){
+    private void limpaCampos() {
         inputTitulo.setText("");
         inputTipo.setText("");
         comboSituacao.setSelectedItem("-");
@@ -1030,12 +1211,13 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         textareaDescricao.setText("");
         textareaResposta.setText("");
     }//Fecha método limpaCampos()
-    
+
     /**
      * Método utilizado para liberar/bloquear os campos da tela.
+     *
      * @param a, boolean com true(libera) false(bloqueia).
      */
-    private void liberaCampos(boolean a, boolean b){
+    private void liberaCampos(boolean a, boolean b) {
         inputTitulo.setEnabled(a);
         inputTipo.setEnabled(a);
         comboSituacao.setEnabled(b);
@@ -1047,12 +1229,13 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         textareaDescricao.setEnabled(a);
         textareaResposta.setEnabled(b);
     }//Fecha método liberaCampos(boolean a)
-    
+
     /**
      * Método utilizado para liberar/bloquear os campos da tela.
+     *
      * @param a, boolean com true(libera) false(bloqueia).
      */
-    private void editarCampos(boolean a, boolean b){
+    private void editarCampos(boolean a, boolean b) {
         inputTitulo.setEditable(a);
         inputTipo.setEditable(a);
         comboSituacao.setFocusable(b);
@@ -1064,19 +1247,31 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         textareaDescricao.setEditable(a);
         textareaResposta.setEditable(b);
     }//Fecha método liberaCampos(boolean a)
-    
+
     /**
      * Método utilizado para liberar os botões da tela.
      */
-    private void liberaBotoes(boolean a, boolean b, boolean c, boolean d, boolean e){
+    private void liberaBotoes(boolean a, boolean b, boolean c, boolean d, boolean e) {
         btnExcluir.setEnabled(a);
         btnAtualizar.setEnabled(b);
         btnSalvar.setEnabled(c);
         btnVoltar.setEnabled(d);
         btnUsuario.setEnabled(e);
     }//Fecha método liberaBotoes(boolean a, boolean b)
-    
+
+    /**
+     * Método utilizado para liberar os botões da tela.
+     */
+    private void liberaUsuario(boolean a, boolean b, boolean c, boolean d) {
+        inputUsuario.setEnabled(a);
+        selectUsuario.setEnabled(b);
+        btnAnexar.setEnabled(c);
+        retornoUsuarios.setEnabled(d);
+
+    }//Fecha método liberaBotoes(boolean a, boolean b)
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAnexar;
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnPesquisa;
@@ -1100,6 +1295,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JTextField inputTipo1;
     private javax.swing.JTextField inputTitulo;
     private javax.swing.JTextField inputTitulo1;
+    private javax.swing.JTextField inputUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1126,17 +1322,19 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JLabel labelPesquisa;
+    private javax.swing.JComboBox<String> retornoUsuarios;
     private javax.swing.JComboBox<String> selectPesquisa;
+    private javax.swing.JComboBox<String> selectUsuario;
     private javax.swing.JTable tableRequerimentos;
     private javax.swing.JTextArea textareaDescricao;
     private javax.swing.JTextArea textareaDescricao1;
     private javax.swing.JTextArea textareaResposta;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

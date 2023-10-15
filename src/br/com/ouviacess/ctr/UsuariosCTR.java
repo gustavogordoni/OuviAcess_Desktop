@@ -51,12 +51,12 @@ public class UsuariosCTR {
      * @param opcao que vem da classe da página (VIEW)
      * @return ResultSet com os dados do produto
      */
-    public ResultSet consultarUsuarios(UsuariosDTO usuariosDTO, int opcao) {
+    public ResultSet consultarUsuarios(UsuariosDTO usuariosDTO, int opcao, String pesquisa) {
         //É criado um atributo do tipo ResultSet, pois este método recebe o resultado de uma consulta.
         ResultSet rs = null;
 
         //O atributo rs recebe a consulta realizada pelo método da classe DAO
-        rs = usuariosDAO.consultarUsuarios(usuariosDTO, opcao);
+        rs = usuariosDAO.consultarUsuarios(usuariosDTO, opcao, pesquisa);
 
         return rs;
     }//Fecha o método consultarUsuarios

@@ -67,12 +67,12 @@ public class RequerimentosCTR {
      * @param opcao que vem da classe da página (VIEW)
      * @return ResultSet com os dados do produto
      */
-    public ResultSet consultarRequerimentos(RequerimentosDTO requerimentosDTO, int opcao) {
+    public ResultSet consultarRequerimentos(RequerimentosDTO requerimentosDTO, int opcao, String nomeUsuario) {
         //É criado um atributo do tipo ResultSet, pois este método recebe o resultado de uma consulta.
         ResultSet rs = null;
 
         //O atributo rs recebe a consulta realizada pelo método da classe DAO
-        rs = requerimentosDAO.consultarRequerimentos(requerimentosDTO, opcao);
+        rs = requerimentosDAO.consultarRequerimentos(requerimentosDTO, opcao, nomeUsuario);
 
         return rs;
     }//Fecha o método consultarRequerimentos

@@ -6,22 +6,23 @@ import br.com.ouviacess.dto.AdministradorDTO;
 import java.sql.*;
 
 public class RequerimentosDAO {
+
     private int id_administrador;
-    
+
     //AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto carroDTO
     /**
      * Método construtor da classe RequerimentosDAO
-     */    
-    
+     */
     public RequerimentosDAO() {
-    }    
+    }
     //Atributo do tipo ResultSet utilizado para realizar consultas
     private ResultSet rs = null;
     //Manipular o banco de dados
     private Statement stmt = null;
-    
+
     /**
-     * Método utilizado para inserir um objeto requerimentosDTO no banco de dados
+     * Método utilizado para inserir um objeto requerimentosDTO no banco de
+     * dados
      *
      * @param requerimentosDTO, que vem da classe RequerimentosCTR
      * @return Um boolean
@@ -34,10 +35,10 @@ public class RequerimentosDAO {
             stmt = ConexaoDAO.con.createStatement();
             //Comando SQL que sera executado no banco de dados
             String comando = "INSERT INTO resposta (id_requerimento, id_administrador, resposta)" + "VALUES ( "
-                + "'" + requerimentosDTO.getId_requerimento() + ", "
-                + "'" + administradorDTO.getId_administrador() + ", "
-                + "'" + requerimentosDTO.getResposta() + "'";           
-            
+                    + "'" + requerimentosDTO.getId_requerimento() + ", "
+                    + "'" + administradorDTO.getId_administrador() + ", "
+                    + "'" + requerimentosDTO.getResposta() + "'";
+
             //System.out.println(comando);
             //Executa o comando SQL no banco de Dados
             stmt.execute(comando);
@@ -56,13 +57,15 @@ public class RequerimentosDAO {
             ConexaoDAO.CloseDB();
         }
     }//Fecha o método inserirRequerimentos
-    
+
     /**
-     * Método utilizado para excluir um objeto requerimentosDTO no banco de dados
+     * Método utilizado para excluir um objeto requerimentosDTO no banco de
+     * dados
      *
      * @param requerimentosDTO que vem da classe RequerimentosCTR
      * @return Um boolean
-     **/
+     *
+     */
     public boolean excluirRequerimentos(RequerimentosDTO requerimentosDTO) {
         try {
             //Chama o metodo que esta na classe ConexaoDAO para abrir o banco de dados
@@ -89,9 +92,10 @@ public class RequerimentosDAO {
             ConexaoDAO.CloseDB();
         }
     }//Fecha o método excluirRequerimento
-    
+
     /**
-     * Método utilizado para alterar um objeto requerimentosDTO no banco de dados
+     * Método utilizado para alterar um objeto requerimentosDTO no banco de
+     * dados
      *
      * @param requerimentosDTO, que vem da classe RequerimentosCTR
      * @return Um boolean
@@ -103,12 +107,12 @@ public class RequerimentosDAO {
             //Cria o Statement que responsavel por executar alguma coisa no banco de dados
             stmt = ConexaoDAO.con.createStatement();
             //Comando SQL que sera executado no banco de dados
-            String comando = "UPDATE requerimento SET " + 
-                "situacao = '" + requerimentosDTO.getSituacao() + "'," +
-                "resposta = '" + requerimentosDTO.getResposta() + "'," + 
-                "id_administrador = '" + id_administrador + "'" + 
-                "WHERE id_requerimento = '" + requerimentosDTO.getId_requerimento() + "'";
-            
+            String comando = "UPDATE requerimento SET "
+                    + "situacao = '" + requerimentosDTO.getSituacao() + "',"
+                    + "resposta = '" + requerimentosDTO.getResposta() + "',"
+                    + "id_administrador = '" + id_administrador + "'"
+                    + "WHERE id_requerimento = '" + requerimentosDTO.getId_requerimento() + "'";
+
             //Executa o comando SQL no banco de Dados
             stmt.execute(comando);
             //Da um commit no banco de dados
@@ -126,15 +130,25 @@ public class RequerimentosDAO {
             ConexaoDAO.CloseDB();
         }
     }//Fecha o método alterarRequerimentos
-    
+
     /**
-     * Método utilizado para consultar um objeto requerimentosDTO no banco de dados
+     * Método utilizado para consultar um objeto requerimentosDTO no banco de
+     * dados
      *
      * @param requerimentosDTO, que vem da classe RequerimentosCTR
      * @param opcao, que vem da classe RequerimentosCTR
      * @return Um ResultSet com os dados do requerimentos
      */
-    public ResultSet consultarRequerimentos(RequerimentosDTO requerimentosDTO, int opcao) {
+    private String verificaUsuario(String nomeUsuario) {
+        if (nomeUsuario != null && !nomeUsuario.isEmpty() && !nomeUsuario.equals("Nenhum usuário encontrado") && !nomeUsuario.equals("Não especificar usuário")) {
+            return " AND u.nome = '" + nomeUsuario + "' ";
+        } else {
+            return "";
+        }
+    }
+
+    public ResultSet consultarRequerimentos(RequerimentosDTO requerimentosDTO, int opcao, String nomeUsuario) {
+
         try {
             //Chama o metodo que esta na classe ConexaoDAO para abrir o banco de dados
             ConexaoDAO.ConectDB();
@@ -142,76 +156,102 @@ public class RequerimentosDAO {
             stmt = ConexaoDAO.con.createStatement();
             //Comando SQL que sera executado no banco de dados
             String comando = "";
-            switch (opcao){
+            switch (opcao) {
+                // PREENCHE CAMPOS COM DADOS DO REQUERIMENTO
                 case 1:
-                    comando = "SELECT r.* "+
-                        "FROM requerimento r "+
-                        "WHERE titulo ILIKE '%" + requerimentosDTO.getPesquisa() + "%' " +
-                        "ORDER BY r.titulo";                    
-                break;
-                case 2:
-                    comando = "SELECT r.* "+
-                        "FROM requerimento r " +
-                        "WHERE r.id_requerimento = " + requerimentosDTO.getId_requerimento();
-                break;
-                
+                    comando = "SELECT r.* "
+                            + "FROM requerimento r "
+                            + "WHERE r.id_requerimento = " + requerimentosDTO.getId_requerimento();
+                    break;
+
                 // FILTRO POR TITULO
+                case 2:
+                    comando = "SELECT r.* "
+                            + "FROM requerimento r INNER JOIN usuario u "
+                            + "ON r.id_usuario =  u.id_usuario "
+                            + "WHERE r.titulo ILIKE '%" + requerimentosDTO.getPesquisaRequerimento() + "%' "
+                            + verificaUsuario(nomeUsuario)
+                            + "ORDER BY r.titulo";
+                    break;
+
+                // FILTRO POR SITUAÇÃO
                 case 3:
-                    comando = "SELECT r.* "+
-                        "FROM requerimento r "+
-                        "WHERE r.titulo ILIKE '%" + requerimentosDTO.getPesquisa() + "%' " +
-                        "ORDER BY r.titulo";  
-                break;
-                
-                // FILTRO POR NOME USUARIO
+                    comando = "SELECT r.* "
+                            + "FROM requerimento r INNER JOIN usuario u "
+                            + "ON r.id_usuario =  u.id_usuario "
+                            + "WHERE r.situacao ILIKE '%" + requerimentosDTO.getPesquisaRequerimento() + "%' "
+                            + verificaUsuario(nomeUsuario)
+                            + "ORDER BY r.situacao";
+                    break;
+
+                // FILTRO POR TIPO
                 case 4:
-                    comando = "SELECT r.* "+
-                        "FROM requerimento r INNER JOIN usuario u " +
-                        "ON r.id_usuario =  u.id_usuario " +
-                        "WHERE u.nome ILIKE '%" +  requerimentosDTO.getPesquisa() + "%' " + 
-                        "ORDER BY TO_DATE(data, 'DD/MM/YYYY') ASC;";                    
-                break;
-                
-                // FILTRO POR ID REQUERIMENTO
+                    comando = "SELECT r.* "
+                            + "FROM requerimento r INNER JOIN usuario u "
+                            + "ON r.id_usuario =  u.id_usuario "
+                            + "WHERE r.tipo ILIKE '%" + requerimentosDTO.getPesquisaRequerimento() + "%' "
+                            + verificaUsuario(nomeUsuario)
+                            + "ORDER BY r.tipo";
+                    break;
+
+                // FILTRO POR DATA
                 case 5:
-                     comando = "SELECT r.* "+
-                        "FROM requerimento r "+
-                        "WHERE r.id_requerimento = " + requerimentosDTO.getPesquisa();  
-                break;              
-                
-                // FILTRO POR ID USUARIO
+                    comando = "SELECT r.* "
+                            + "FROM requerimento r INNER JOIN usuario u "
+                            + "ON r.id_usuario =  u.id_usuario "
+                            + "WHERE r.data ILIKE '%" + requerimentosDTO.getPesquisaRequerimento() + "%' "
+                            + verificaUsuario(nomeUsuario)
+                            + "ORDER BY TO_DATE(data, 'DD/MM/YYYY') ASC";
+                    break;
+
+                //  FILTRO POR ID REQUERIMENTO
                 case 6:
-                    comando = "SELECT r.* "+
-                        "FROM requerimento r INNER JOIN usuario u " +
-                        "ON r.id_usuario =  u.id_usuario " +
-                        "WHERE r.id_usuario = " +  requerimentosDTO.getPesquisa() + 
-                        " ORDER BY TO_DATE(data, 'DD/MM/YYYY') ASC;"; 
-                break;      
-                
-                // NENHUM FILTRO
-                case 7:                    
-                    String pesquisa = requerimentosDTO.getPesquisa();
-                    comando = "SELECT r.* " +
-                                    "FROM requerimento r " +
-                                    "INNER JOIN usuario u ON r.id_usuario = u.id_usuario ";                                 
+                    comando = "SELECT r.* "
+                            + "FROM requerimento r INNER JOIN usuario u "
+                            + "ON r.id_usuario =  u.id_usuario ";
+                    if (requerimentosDTO.getPesquisaRequerimento().matches("\\d+")) {
+                        comando += "WHERE r.id_requerimento = " + requerimentosDTO.getPesquisaRequerimento();
+                        verificaUsuario(nomeUsuario);
+                    } else {
+                        if (requerimentosDTO.getPesquisaRequerimento().equals("") && verificaUsuario(nomeUsuario) == " AND u.nome = '" + nomeUsuario + "' ") {
+                            comando += "WHERE u.nome = '" + nomeUsuario + "' ";
+                        }
+                    }                    
+                    break;
+
+                //  NENHUM FILTRO (COM PESQUISA)    
+                case 7:
+                    String pesquisa = requerimentosDTO.getPesquisaRequerimento();
+                    comando = "SELECT r.* "
+                            + "FROM requerimento r "
+                            + "INNER JOIN usuario u ON r.id_usuario = u.id_usuario ";
                     // Verifique se a pesquisa é um número
                     if (pesquisa.matches("\\d+")) {
-                        comando += "WHERE r.id_requerimento = " + pesquisa +
-                                   " OR r.id_usuario = " + pesquisa;
-                    }else{
-                        comando += "WHERE r.titulo ILIKE '%" + pesquisa + "%' " +
-                                    " OR u.nome ILIKE '%" + pesquisa + "%' ";
+                        comando += "WHERE r.id_requerimento = " + pesquisa;
+                    } else {
+                        comando += "WHERE r.titulo ILIKE '%" + pesquisa + "%' ";
                     }
-                    comando += " ORDER BY r.titulo";
-                break;
-                
-                // NENHUM FILTRO
+                    comando += verificaUsuario(nomeUsuario)
+                            + " OR r.situacao ILIKE '%" + requerimentosDTO.getPesquisaRequerimento() + "%' "
+                            + "OR r.tipo ILIKE '%" + requerimentosDTO.getPesquisaRequerimento() + "%' "
+                            + "OR r.data ILIKE '%" + requerimentosDTO.getPesquisaRequerimento() + "%' "
+                            + " ORDER BY r.titulo";
+                    break;
+
+                //  NENHUM FILTRO (SEM PESQUISA)
                 case 8:
-                    comando = "SELECT r.* FROM requerimento r ORDER BY r.titulo";
-                break;
+                    comando = "SELECT r.* "
+                            + "FROM requerimento r INNER JOIN usuario u "
+                            + "ON r.id_usuario =  u.id_usuario ";
+                    if (verificaUsuario(nomeUsuario) != "") {
+                        comando += "WHERE u.nome = '" + nomeUsuario + "' ";
+                    }
+                    comando += "ORDER BY r.titulo";
+                    break;
             }
             //Executa o comando SQL no banco de Dados
-            System.out.println(comando);
+            System.out.println("REQUERIMENTO");
+            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "'\n");
             rs = stmt.executeQuery(comando);
             return rs;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
@@ -220,5 +260,5 @@ public class RequerimentosDAO {
             return rs;
         }
     }//Fecha o método consultarRequerimentos
-    
+
 }//Fecha a classe RequerimentosDAO

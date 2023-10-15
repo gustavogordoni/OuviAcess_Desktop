@@ -23,26 +23,28 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
     UsuariosDTO usuariosDTO = new UsuariosDTO(); //Cria um objeto carroDTO
     UsuariosCTR usuariosCTR = new UsuariosCTR(); //Cria um objeto carrorCTR
 
-    private int id_usuario, id_requerimento;
+    private int id_usuarioRecebe, id_usuarioEnvia, id_requerimento;
+    private String nomeUsuario;
 
     DefaultTableModel modelo_tableUsuarios; //Variavel para guardar o modelo da tabela
 
     /**
      * Creates new form UsuariosVIEW
      */
-    public UsuariosVIEW(int id_usuario, int id_requerimento) {
+    public UsuariosVIEW(int id_usuarioRecebe, int id_requerimento) {
         initComponents();
 
-        this.id_usuario = id_usuario;
+        this.id_usuarioRecebe = id_usuarioRecebe;
+        this.id_usuarioEnvia = id_usuarioEnvia;
         this.id_requerimento = id_requerimento;
-        
+
         liberaCampos(false);
         editarCampos(false);
         liberaBotoes(false, false, false);
         // this.setExtendedState(this.MAXIMIZED_BOTH);
-        
-        if (this.id_usuario != 0) {
-            preencheCampos(this.id_usuario);
+
+        if (this.id_usuarioRecebe != 0) {
+            preencheCampos(this.id_usuarioRecebe);
         }
 
         modelo_tableUsuarios = (DefaultTableModel) tableUsuarios.getModel();
@@ -473,6 +475,11 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
 
         btnRequerimentos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRequerimentos.setText("Requerimentos realizados");
+        btnRequerimentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRequerimentosMouseClicked(evt);
+            }
+        });
         btnRequerimentos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRequerimentosActionPerformed(evt);
@@ -608,7 +615,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 509, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -703,8 +710,8 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnVoltarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoltarMouseClicked
-         // Crie uma instância de UsuariosVIEW
-        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(null, this.id_requerimento);
+        // Crie uma instância de UsuariosVIEW
+        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(null, this.id_requerimento, 0, null);
         // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
         this.getDesktopPane().add(requerimentosVIEW);
         // Defina a posição da janela interna (opcional)
@@ -714,19 +721,32 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_btnVoltarMouseClicked
 
+    private void btnRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRequerimentosMouseClicked
+       this.nomeUsuario = inputNome.getText();          
+        // Crie uma instância de UsuariosVIEW
+        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(null, 0, this.id_usuarioEnvia, nomeUsuario);
+        
+        // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
+        this.getDesktopPane().add(requerimentosVIEW);
+        // Defina a posição da janela interna (opcional)
+        requerimentosVIEW.setPosicao();
+        // Torne a janela visível
+        requerimentosVIEW.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnRequerimentosMouseClicked
+
     /**
      * Método utilizado para preencher/contruir a Jtable.
      *
      * @param mar_car, String com a marca do carro
      */
-    private void preencheTabela(String nome) {
+    private void preencheTabela(String pesquisa) {
         try {
             //Limpa todas as linhas
             modelo_tableUsuarios.setNumRows(0);
 
             //Enquanto tiver linhas - faça
-            usuariosDTO.setNome(nome);
-            rs = usuariosCTR.consultarUsuarios(usuariosDTO, 1); //1 = é a pesquisa por marca na classe DAO
+            rs = usuariosCTR.consultarUsuarios(usuariosDTO, 1, pesquisa); //1 = é a pesquisa por marca na classe DAO
             while (rs.next()) {
                 modelo_tableUsuarios.addRow(new Object[]{
                     rs.getString("id_usuario"),
@@ -745,8 +765,8 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
      */
     private void preencheCampos(int id_usuario) {
         try {
-            usuariosDTO.setId_usuario(id_usuario);
-            rs = usuariosCTR.consultarUsuarios(usuariosDTO, 2); //2 = é a pesquisa no id na classe DAO
+
+            rs = usuariosCTR.consultarUsuarios(usuariosDTO, 2, String.valueOf(id_usuario)); //2 = é a pesquisa no id na classe DAO
             if (rs.next()) {
                 limpaCampos();
 
@@ -758,11 +778,12 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                 //gravar_alterar = 2;
                 liberaCampos(true);
 
-                if (this.id_usuario != 0) {
+                if (this.id_usuarioRecebe != 0) {
                     liberaBotoes(true, true, true);
-                }else{
+                } else {                    
                     liberaBotoes(true, true, false);
                 }
+                this.id_usuarioEnvia = Integer.parseInt(inputId_usuario.getText());
             }
         } catch (Exception erTab) {
             System.out.println("Erro SQL: " + erTab);

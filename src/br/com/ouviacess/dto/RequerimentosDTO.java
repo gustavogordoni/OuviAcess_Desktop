@@ -1,20 +1,28 @@
 package br.com.ouviacess.dto;
 
 public class RequerimentosDTO {
-    private String resposta, titulo, tipo, situacao, data, descricao, cep, cidade, bairro, rua, pesquisa;
+    private String resposta, titulo, tipo, situacao, data, descricao, cep, cidade, bairro, rua, pesquisaRequerimento, pesquisaUsuario;
     private int id_requerimento, id_usuario;
     
     //private String resposta, situacao;
-    //private int id_requerimento;    
+    //private int id_requerimento; 
 
-    public String getPesquisa() {
-        return pesquisa;
+    public String getPesquisaUsuario() {
+        return pesquisaUsuario;
     }
 
-    public void setPesquisa(String pesquisa) {
-        this.pesquisa = pesquisa;
-    }  
+    public void setPesquisaUsuario(String pesquisaUsuario) {
+        this.pesquisaUsuario = pesquisaUsuario;
+    }
 
+    public String getPesquisaRequerimento() {
+        return pesquisaRequerimento;
+    }
+
+    public void setPesquisaRequerimento(String pesquisaRequerimento) {
+        this.pesquisaRequerimento = pesquisaRequerimento;
+    }
+    
     public String getResposta() {
         return resposta;
     }
