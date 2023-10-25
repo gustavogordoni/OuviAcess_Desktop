@@ -51,6 +51,10 @@ public class AdministradorDTO {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }  
+
+    public void setId_requerimento(int id_requerimento) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 }

@@ -19,6 +19,7 @@ public class RequerimentosDAO {
     private ResultSet rs = null;
     //Manipular o banco de dados
     private Statement stmt = null;
+    private PreparedStatement pstmt = null;
 
     /**
      * Método utilizado para inserir um objeto requerimentosDTO no banco de
@@ -216,7 +217,7 @@ public class RequerimentosDAO {
                         if (requerimentosDTO.getPesquisaRequerimento().equals("") && verificaUsuario(nomeUsuario) == " AND u.nome = '" + nomeUsuario + "' ") {
                             comando += "WHERE u.nome = '" + nomeUsuario + "' ";
                         }
-                    }                    
+                    }
                     break;
 
                 //  NENHUM FILTRO (COM PESQUISA)    
@@ -260,5 +261,28 @@ public class RequerimentosDAO {
             return rs;
         }
     }//Fecha o método consultarRequerimentos
+
+    public ResultSet consultarImagem(RequerimentosDTO requerimentosDTO, int opcao) {
+        try {
+            ConexaoDAO.ConectDB();
+            String sql = "";
+            if (opcao == 1) {
+                sql = "SELECT a.* "
+                        + "FROM requerimento r INNER JOIN usuario u "
+                        + "ON r.id_usuario =  u.id_usuario "
+                        + "INNER JOIN arquivo a "
+                        + "ON r.id_requerimento =  a.id_requerimento "
+                        + "WHERE a.id_requerimento = ?";
+                pstmt = ConexaoDAO.con.prepareStatement(sql);
+                pstmt.setInt(1, requerimentosDTO.getId_requerimento());
+            }
+            ResultSet rs = pstmt.executeQuery();
+            return rs;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return rs;
+        }
+    }
 
 }//Fecha a classe RequerimentosDAO

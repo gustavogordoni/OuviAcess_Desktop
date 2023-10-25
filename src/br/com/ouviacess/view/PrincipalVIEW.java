@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.ouviacess.view;
 
 import javax.swing.JFrame;
@@ -12,16 +7,12 @@ import javax.swing.ImageIcon;
 
 import br.com.ouviacess.dto.AdministradorDTO;
 
-/**
- *
- * @author Aluno
- */
 public class PrincipalVIEW extends javax.swing.JFrame {
 
     AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto carroDTO
 
     RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0, 0, null);
-    UsuariosVIEW usuariosVIEW = new UsuariosVIEW(0, 0);
+    UsuariosVIEW usuariosVIEW = new UsuariosVIEW(administradorDTO, 0, 0);
     PerfilVIEW perfilVIEW = new PerfilVIEW(administradorDTO);
 
     /**
@@ -126,11 +117,6 @@ public class PrincipalVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_menuRequerimentosActionPerformed
 
     private void menuRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuRequerimentosMouseClicked
-//        //RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO);
-//         this.desktopPane.add(requerimentosVIEW);
-//         requerimentosVIEW.setVisible(true);
-//         requerimentosVIEW.setPosicao();
-
         if (requerimentosVIEW != null) {
             requerimentosVIEW.dispose();
         }
@@ -150,16 +136,11 @@ public class PrincipalVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_menuRequerimentosMouseClicked
 
     private void menuUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsuariosMouseClicked
-////        UsuariosVIEW usuariosVIEW = new UsuariosVIEW();
-//         this.desktopPane.add(usuariosVIEW);
-//         usuariosVIEW.setVisible(true);
-//         usuariosVIEW.setPosicao();
-
         if (usuariosVIEW != null) {
             usuariosVIEW.dispose();
         }
 
-        usuariosVIEW = new UsuariosVIEW(0, 0);
+        usuariosVIEW = new UsuariosVIEW(administradorDTO, 0, 0);
         this.desktopPane.add(usuariosVIEW);
         usuariosVIEW.setVisible(true);
         usuariosVIEW.setPosicao();
@@ -174,12 +155,6 @@ public class PrincipalVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_menuUsuariosMouseClicked
 
     private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
-////        PerfilVIEW perfilVIEW = new PerfilVIEW(administradorDTO);
-//         this.desktopPane.add(perfilVIEW);
-//         perfilVIEW.setVisible(true);
-//         perfilVIEW.setPosicao();
-
-
         if (perfilVIEW != null) {
             perfilVIEW.dispose();
         }

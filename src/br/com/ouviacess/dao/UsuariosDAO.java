@@ -35,19 +35,22 @@ public class UsuariosDAO {
                     + "DELETE FROM usuario "
                     + "WHERE id_usuario = " + usuariosDTO.getId_usuario();
 
+            System.out.println("USUÁRIO");
+            System.out.println("COMANDO: " + comando + "'\n");
+
             //Executa o comando SQL no banco de Dados
             stmt.execute(comando);
             //Da um commit no banco de dados
             ConexaoDAO.con.commit();
             //Fecha o statement
             stmt.close();
-            return true;
+            return true;          
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         } //Independente de dar erro ou não ele vai fechar o banco de dados.
-        finally {
+        finally {                      
             //Chama o metodo da classe ConexaoDAO para fechar o banco de dados
             ConexaoDAO.CloseDB();
         }

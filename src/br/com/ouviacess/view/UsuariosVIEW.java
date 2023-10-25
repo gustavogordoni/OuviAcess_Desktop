@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.ouviacess.dto.UsuariosDTO;
 import br.com.ouviacess.ctr.UsuariosCTR;
+import br.com.ouviacess.dto.AdministradorDTO;
 import java.awt.Dimension;
 import java.sql.ResultSet;
 
@@ -27,13 +28,16 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
     private String nomeUsuario;
 
     DefaultTableModel modelo_tableUsuarios; //Variavel para guardar o modelo da tabela
+    
+     AdministradorDTO administradorDTO = new AdministradorDTO(); //Cria um objeto requerimentosrCTR
 
     /**
      * Creates new form UsuariosVIEW
      */
-    public UsuariosVIEW(int id_usuarioRecebe, int id_requerimento) {
+    public UsuariosVIEW(AdministradorDTO administradorDTO,int id_usuarioRecebe, int id_requerimento) {
         initComponents();
 
+        this.administradorDTO = administradorDTO;
         this.id_usuarioRecebe = id_usuarioRecebe;
         this.id_usuarioEnvia = id_usuarioEnvia;
         this.id_requerimento = id_requerimento;
@@ -711,7 +715,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
 
     private void btnVoltarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoltarMouseClicked
         // Crie uma instância de UsuariosVIEW
-        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(null, this.id_requerimento, 0, null);
+        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO, this.id_requerimento, 0, null);
         // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
         this.getDesktopPane().add(requerimentosVIEW);
         // Defina a posição da janela interna (opcional)
@@ -724,7 +728,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
     private void btnRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRequerimentosMouseClicked
        this.nomeUsuario = inputNome.getText();          
         // Crie uma instância de UsuariosVIEW
-        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(null, 0, this.id_usuarioEnvia, nomeUsuario);
+        RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0, this.id_usuarioEnvia, nomeUsuario);
         
         // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
         this.getDesktopPane().add(requerimentosVIEW);
@@ -783,6 +787,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
                 } else {                    
                     liberaBotoes(true, true, false);
                 }
+                usuariosDTO.setId_usuario(Integer.parseInt(inputId_usuario.getText()));                
                 this.id_usuarioEnvia = Integer.parseInt(inputId_usuario.getText());
             }
         } catch (Exception erTab) {

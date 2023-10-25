@@ -118,6 +118,4 @@ public class RequerimentosDTO {
     public void setId_usuario(int id_usuario) {
         this.id_usuario = id_usuario;
     }
-
- 
 }

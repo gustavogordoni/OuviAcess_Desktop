@@ -16,6 +16,7 @@ import br.com.ouviacess.ctr.UsuariosCTR;
 
 import java.awt.Dimension;
 import java.sql.ResultSet;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -48,7 +49,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         this.nomeUsuario = nomeUsuario;
 
         liberaCampos(false, false);
-        liberaBotoes(false, false, false, false, false);
+        liberaBotoes(false, false, false, false, false, false);
         liberaUsuario(true, true, true, false);
 
         retornoUsuarios.setFocusable(false);
@@ -142,7 +143,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         btnExcluir = new javax.swing.JButton();
         btnAtualizar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
-        btnVoltar = new javax.swing.JButton();
+        btnImagem = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         textareaResposta = new javax.swing.JTextArea();
         jLabel21 = new javax.swing.JLabel();
@@ -633,11 +634,11 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
-        btnVoltar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnVoltar.setText("Voltar");
-        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+        btnImagem.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnImagem.setText("Abrir imagem");
+        btnImagem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVoltarActionPerformed(evt);
+                btnImagemActionPerformed(evt);
             }
         });
 
@@ -647,7 +648,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnVoltar)
+                .addComponent(btnImagem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExcluir)
                 .addGap(10, 10, 10)
@@ -657,7 +658,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnVoltar});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnImagem});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -666,12 +667,12 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtualizar)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalvar))
                 .addGap(0, 0, 0))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnSalvar, btnVoltar});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnImagem, btnSalvar});
 
         textareaResposta.setColumns(20);
         textareaResposta.setRows(5);
@@ -901,14 +902,14 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
         liberaCampos(false, true);
         editarCampos(false, true);
-        liberaBotoes(false, false, true, false, false);
+        liberaBotoes(false, false, true, false, false, false);
     }//GEN-LAST:event_btnAtualizarMouseClicked
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         excluir();
         limpaCampos();
         liberaCampos(false, false);
-        liberaBotoes(false, false, false, false, false);
+        liberaBotoes(false, false, false, false, false, false);
         liberaUsuario(true, true, true, false);
         preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString(), retornoUsuarios.getSelectedItem().toString());
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -937,9 +938,9 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboSituacaoActionPerformed
 
-    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnVoltarActionPerformed
+    private void btnImagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagemActionPerformed
+        new ExibirImagemVIEW(this.id_requerimento).setVisible(true);
+    }//GEN-LAST:event_btnImagemActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
         // TODO add your handling code here:
@@ -947,7 +948,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
     private void btnUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMouseClicked
         // Crie uma instância de UsuariosVIEW
-        UsuariosVIEW usuariosView = new UsuariosVIEW(this.id_usuarioEnvia, this.id_requerimento);
+        UsuariosVIEW usuariosView = new UsuariosVIEW(administradorDTO, this.id_usuarioEnvia, this.id_requerimento);
         // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
         this.getDesktopPane().add(usuariosView);
         // Defina a posição da janela interna (opcional)
@@ -1137,7 +1138,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 liberaCampos(true, true);
                 editarCampos(false, false);
 
-                liberaBotoes(true, true, false, false, true);
+                liberaBotoes(true, true, false, false, true, true);
             }
         } catch (Exception erTab) {
             System.out.println("Erro SQL: " + erTab);
@@ -1158,7 +1159,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
             liberaCampos(true, true);
             editarCampos(false, false);
-            liberaBotoes(true, true, false, false, true);
+            liberaBotoes(true, true, false, false, true, true);
         } catch (Exception e) {
         }
     }//Fecha método alterar()
@@ -1251,12 +1252,13 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     /**
      * Método utilizado para liberar os botões da tela.
      */
-    private void liberaBotoes(boolean a, boolean b, boolean c, boolean d, boolean e) {
+    private void liberaBotoes(boolean a, boolean b, boolean c, boolean d, boolean e, boolean f) {
         btnExcluir.setEnabled(a);
         btnAtualizar.setEnabled(b);
         btnSalvar.setEnabled(c);
-        btnVoltar.setEnabled(d);
+        btnImagem.setEnabled(d);
         btnUsuario.setEnabled(e);
+        btnImagem.setEnabled(f);
     }//Fecha método liberaBotoes(boolean a, boolean b)
 
     /**
@@ -1269,15 +1271,41 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         retornoUsuarios.setEnabled(d);
 
     }//Fecha método liberaBotoes(boolean a, boolean b)
+    
+//    private void mostraFoto(int id_requerimento){
+//        try{
+//            LabelImagem.setText("");
+// 
+//            requerimentosDTO.setId_requerimento(id_requerimento);
+//            ResultSet rs = requerimentosCTR.consultarImagem(requerimentosDTO, 1);
+//            if(rs.next()){
+//                //nome.setText(rs.getString("nom_alu"));
+//                ManipularImagemVIEW.exibiImagemLabel(rs.getBytes("dados_imagem"), LabelImagem);
+//            }
+//            else{
+//                JOptionPane.showMessageDialog(null, "Aluno não encontrado!!!");
+//                nome.setText("");
+//                LabelImagem.setText("");
+//                LabelImagem.setIcon(new ImageIcon(""));
+//            }
+//
+//        }
+//        catch(Exception ex){
+//            System.out.println("Erro: " + ex.getMessage());
+//        }
+//        finally{
+//            requerimentosCTR.CloseDB();
+//        }
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnexar;
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnImagem;
     private javax.swing.JButton btnPesquisa;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnUsuario;
-    private javax.swing.JButton btnVoltar;
     private javax.swing.JComboBox<String> comboSituacao;
     private javax.swing.JTextField inputBairro;
     private javax.swing.JTextField inputBairro1;

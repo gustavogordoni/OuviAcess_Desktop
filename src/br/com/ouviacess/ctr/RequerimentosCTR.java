@@ -4,6 +4,7 @@ package br.com.ouviacess.ctr;
  * Importando as classes necessárias para trabalhar nesta classe
  */
 import java.sql.ResultSet;
+import java.sql.*;
 import br.com.ouviacess.dto.RequerimentosDTO;
 import br.com.ouviacess.dao.RequerimentosDAO;
 import br.com.ouviacess.dao.ConexaoDAO;
@@ -76,6 +77,16 @@ public class RequerimentosCTR {
 
         return rs;
     }//Fecha o método consultarRequerimentos
+    
+     public ResultSet consultarImagem(RequerimentosDTO requerimentosDTO, int opcao) {
+        //É criado um atributo do tipo ResultSet, pois este método recebe o resultado de uma consulta.
+        ResultSet rs = null;
+
+        //O atributo rs recebe a consulta realizada pelo método da classe DAO
+        rs = requerimentosDAO.consultarImagem(requerimentosDTO, opcao);
+
+        return rs;
+    }//Fecha o método consultarCliente
 
     
     /**

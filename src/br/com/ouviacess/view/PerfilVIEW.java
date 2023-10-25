@@ -324,7 +324,9 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
-
+        editarCampos(false);
+        liberaBotoes(true, false, false);
+        preencheCampos();
     }//GEN-LAST:event_btnCancelarMouseClicked
 
     private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked

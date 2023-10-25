@@ -140,6 +140,11 @@ public class CadastroVIEW extends javax.swing.JFrame {
         btnLimpar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/cancelar.png"))); // NOI18N
         btnLimpar.setText("Limpar");
+        btnLimpar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLimparMouseClicked(evt);
+            }
+        });
         btnLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLimparbtnLimparActionPerformed(evt);
@@ -331,6 +336,10 @@ public class CadastroVIEW extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputNomeActionPerformed
 
+    private void btnLimparMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimparMouseClicked
+        limpaCampos();
+    }//GEN-LAST:event_btnLimparMouseClicked
+
     /**
      * Método utilizado para gravar os dados do administrador.
      */
@@ -389,6 +398,17 @@ public class CadastroVIEW extends javax.swing.JFrame {
             }//Fecha método verificaPreenchimento()
         }
     }
+    
+    /**
+     * Método utilizado para limpar os campos da tela.
+     */
+    private void limpaCampos() {
+        inputNome.setText("");
+        inputDdd.setText("");
+        inputTelefone.setText("");
+        inputEmail.setText("");
+        inputSenha.setText("");
+    }//Fecha método limpaCampos()
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
