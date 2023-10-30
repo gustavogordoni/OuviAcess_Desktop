@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 
 import br.com.ouviacess.dto.RequerimentosDTO;
 import br.com.ouviacess.ctr.RequerimentosCTR;
+import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
 
 /**
  *
@@ -15,7 +17,7 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
 
     RequerimentosDTO requerimentosDTO = new RequerimentosDTO(); //Cria um objeto requerimentosDTO
     RequerimentosCTR requerimentosCTR = new RequerimentosCTR(); //Cria um objeto requerimentosrCTR
-    
+        BufferedImage imagem;
     private int id_requerimento;
 
     /**
@@ -23,11 +25,13 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
      */
     public ExibirImagemVIEW(int id_requerimento) {
         initComponents();
-//        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //      Centralizar o JFrame na tela
         setLocationRelativeTo(null);
         // Impedir que a janela seja maximizada
         //setResizable(false);
+        
+        LabelOculto.setVisible(false);
         
         this.id_requerimento = id_requerimento;
         mostraFoto();    
@@ -45,16 +49,20 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         LabelImagem = new javax.swing.JLabel();
         nome = new javax.swing.JLabel();
+        LabelOculto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1270, 720));
         setSize(new java.awt.Dimension(1270, 720));
 
+        LabelImagem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelImagem.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         nome.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         nome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nome.setText("teste");
+
+        LabelOculto.setOpaque(true);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -63,8 +71,11 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LabelImagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1230, Short.MAX_VALUE))
+                    .addComponent(LabelImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(LabelOculto, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(nome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -72,8 +83,10 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(nome, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(LabelImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(LabelOculto, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(LabelImagem, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -105,9 +118,12 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
             ResultSet rs = requerimentosCTR.consultarImagem(requerimentosDTO, 1);
             if (rs.next()) {
                 nome.setText(rs.getString("nome"));
-                ManipularImagemVIEW.exibiImagemLabel(rs.getBytes("dados_arquivo"), LabelImagem);
+
+                ManipularImagemVIEW.exibiImagemLabel(rs.getBytes("dados_arquivo"), LabelOculto);                
+                imagem = ManipularImagemVIEW.setImagemDimensao(LabelOculto.getIcon(), 1280, 720);
+                LabelImagem.setIcon(new ImageIcon(imagem));
             } else {
-                JOptionPane.showMessageDialog(null, "Imagemagem não encontrada!!!");
+                JOptionPane.showMessageDialog(null, "Imagem não encontrada!!!");
                 nome.setText("");
                 LabelImagem.setText("");
                 LabelImagem.setIcon(new ImageIcon(""));
@@ -122,6 +138,7 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelImagem;
+    private javax.swing.JLabel LabelOculto;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel nome;
     // End of variables declaration//GEN-END:variables

@@ -1,5 +1,6 @@
 package br.com.ouviacess.view;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -10,30 +11,41 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- * Essa classe faz a formatação da imagem,
- * Projeto Portaria IFSP
+ * Essa classe faz a formatação da imagem, Projeto Portaria IFSP
  *
  * @author Andre Luis Gobbi Primo
  * @version 1.0
  */
 public class ManipularImagemVIEW {
 
-    public static BufferedImage setImagemDimensao(String caminhoImg, Integer imgLargura, Integer imgAltura) {
+    public static BufferedImage setImagemDimensao(Icon icon, Integer imgLargura, Integer imgAltura) {
         Double novaImgLargura = null;
         Double novaImgAltura = null;
         Double imgProporcao = null;
         Graphics2D g2d = null;
         BufferedImage imagem = null, novaImagem = null;
 
-        try {
-            //--- Obtém a imagem a ser redimensionada ---
-            imagem = ImageIO.read(new File(caminhoImg));
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            Logger.getLogger(ManipularImagemVIEW.class.getName()).log(Level.SEVERE, null, ex);
+//        try {
+//            //--- Obtém a imagem a ser redimensionada ---
+//            imagem = ImageIO.read(new File(caminhoImg));
+//        } catch (IOException ex) {
+//            System.out.println(ex.getMessage());
+//            Logger.getLogger(ManipularImagemVIEW.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        // Converte o ícone para uma imagem
+        if (icon instanceof ImageIcon) {
+            imagem = (BufferedImage) ((ImageIcon) icon).getImage();
+        } else {
+            // Se o ícone não for uma instância de ImageIcon, você pode criar uma imagem em branco
+            novaImagem = new BufferedImage(imgLargura, imgAltura, BufferedImage.TYPE_INT_RGB);
+            g2d = novaImagem.createGraphics();
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, imgLargura, imgAltura);
+            return novaImagem;
         }
 
         //--- Obtém a largura da imagem ---  

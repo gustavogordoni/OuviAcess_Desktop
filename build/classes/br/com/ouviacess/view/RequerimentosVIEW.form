@@ -960,10 +960,12 @@
         <Component class="javax.swing.JComboBox" name="comboSituacao">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="3">
+              <StringArray count="5">
                 <StringItem index="0" value="-"/>
-                <StringItem index="1" value="Em andamento"/>
-                <StringItem index="2" value="Aceito"/>
+                <StringItem index="1" value="Pendente"/>
+                <StringItem index="2" value="Em andamento"/>
+                <StringItem index="3" value="Conclu&#xed;do"/>
+                <StringItem index="4" value="Recusado"/>
               </StringArray>
             </Property>
           </Properties>

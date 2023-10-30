@@ -703,7 +703,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
-        comboSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-", "Em andamento", "Aceito" }));
+        comboSituacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-", "Pendente", "Em andamento", "Concluído", "Recusado" }));
         comboSituacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboSituacaoActionPerformed(evt);
