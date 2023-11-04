@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import java.awt.Image;
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 import br.com.ouviacess.dto.AdministradorDTO;
 
@@ -47,7 +48,8 @@ public class PrincipalVIEW extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         menuRequerimentos = new javax.swing.JMenu();
         menuUsuarios = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
+        menuPerfil = new javax.swing.JMenu();
+        menuLogout = new javax.swing.JMenu();
         menuSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -71,15 +73,33 @@ public class PrincipalVIEW extends javax.swing.JFrame {
                 menuUsuariosMouseClicked(evt);
             }
         });
-        menuBar.add(menuUsuarios);
-
-        jMenu1.setText("Perfil");
-        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu1MouseClicked(evt);
+        menuUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuUsuariosActionPerformed(evt);
             }
         });
-        menuBar.add(jMenu1);
+        menuBar.add(menuUsuarios);
+
+        menuPerfil.setText("Perfil");
+        menuPerfil.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuPerfilMouseClicked(evt);
+            }
+        });
+        menuBar.add(menuPerfil);
+
+        menuLogout.setText("Logout");
+        menuLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuLogoutMouseClicked(evt);
+            }
+        });
+        menuLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLogoutActionPerformed(evt);
+            }
+        });
+        menuBar.add(menuLogout);
 
         menuSair.setBackground(new java.awt.Color(255, 51, 51));
         menuSair.setMnemonic('h');
@@ -87,6 +107,11 @@ public class PrincipalVIEW extends javax.swing.JFrame {
         menuSair.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 menuSairMouseClicked(evt);
+            }
+        });
+        menuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSairActionPerformed(evt);
             }
         });
         menuBar.add(menuSair);
@@ -109,7 +134,7 @@ public class PrincipalVIEW extends javax.swing.JFrame {
 
     // MENU DA PRINCIPAL - NAVBAR
     private void menuSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSairMouseClicked
-        System.exit(0);
+        sair();
     }//GEN-LAST:event_menuSairMouseClicked
 
     private void menuRequerimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRequerimentosActionPerformed
@@ -154,7 +179,7 @@ public class PrincipalVIEW extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuUsuariosMouseClicked
 
-    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+    private void menuPerfilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuPerfilMouseClicked
         if (perfilVIEW != null) {
             perfilVIEW.dispose();
         }
@@ -171,13 +196,53 @@ public class PrincipalVIEW extends javax.swing.JFrame {
         if (usuariosVIEW != null) {
             usuariosVIEW.dispose();
         }
-    }//GEN-LAST:event_jMenu1MouseClicked
+    }//GEN-LAST:event_menuPerfilMouseClicked
+
+    private void menuLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLogoutMouseClicked
+        logout();
+    }//GEN-LAST:event_menuLogoutMouseClicked
+
+    private void menuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsuariosActionPerformed
+
+    }//GEN-LAST:event_menuUsuariosActionPerformed
+
+    private void menuLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLogoutActionPerformed
+
+    }//GEN-LAST:event_menuLogoutActionPerformed
+
+    private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSairActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuSairActionPerformed
+
+    /**
+     * Método para fechar o sistema.
+     */
+    private void sair() {
+        Object[] options = {"Sair", "Cancelar"};
+        if (JOptionPane.showOptionDialog(null, "Deseja Sair do Sistema", "Informação",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]) == 0) {
+            System.exit(0);
+        }
+    }
+
+    /**
+     * Método para fechar o sistema.
+     */
+    private void logout() {
+        Object[] options = {"Sim", "Cancelar"};
+        if (JOptionPane.showOptionDialog(null, "Deseja realmente desvincular sua conta do Sistema?", "Informação",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]) == 0) {
+            this.dispose();
+            new LoginVIEW().setVisible(true);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktopPane;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuLogout;
+    private javax.swing.JMenu menuPerfil;
     private javax.swing.JMenu menuRequerimentos;
     private javax.swing.JMenu menuSair;
     private javax.swing.JMenu menuUsuarios;

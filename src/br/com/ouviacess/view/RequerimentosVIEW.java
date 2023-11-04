@@ -16,9 +16,6 @@ import br.com.ouviacess.ctr.UsuariosCTR;
 
 import java.awt.Dimension;
 import java.sql.ResultSet;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 
 /**
  *
@@ -454,7 +451,15 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             new String [] {
                 "ID", "Título", "Tipo", "Situação"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableRequerimentos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tableRequerimentos.getTableHeader().setReorderingAllowed(false);
         tableRequerimentos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -892,10 +897,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-
-    }//GEN-LAST:event_btnAtualizarActionPerformed
-
-    private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
         if (alterar_cancelar == 1) {
             liberaPainel(false);
             liberaCampos(false, true);
@@ -907,10 +908,11 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             comboSituacao.removeAllItems();
 
             // Adiciona os novos itens
-            comboSituacao.addItem("Pendente");
+            //comboSituacao.addItem("Pendente");
             comboSituacao.addItem("Em andamento");
-            comboSituacao.addItem("Concluído");
+            comboSituacao.addItem("Informações incompletas");
             comboSituacao.addItem("Recusado");
+            comboSituacao.addItem("Concluído");
 
             btnAtualizar.setText("Cancelar");
             alterar_cancelar = 2;
@@ -930,22 +932,14 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 alterar_cancelar = 1;
             }
         }
+    }//GEN-LAST:event_btnAtualizarActionPerformed
+
+    private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
+
     }//GEN-LAST:event_btnAtualizarMouseClicked
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        ExibirImagemVIEW view = new ExibirImagemVIEW(this.id_requerimento);
-        if (view.existeImagem(this.id_requerimento)) {
-            excluir();
-        } else {
-            excluir();
-        }
-
         excluir();
-        limpaCampos();
-        liberaCampos(false, false);
-        liberaBotoes(false, false, false, false, false, false);
-        liberaUsuario(true, true, true, false);
-        preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString(), retornoUsuarios.getSelectedItem().toString());
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void inputLogradouroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputLogradouroActionPerformed
@@ -980,11 +974,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnImagemActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUsuarioActionPerformed
-
-    private void btnUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMouseClicked
-        // Crie uma instância de UsuariosVIEW
         UsuariosVIEW usuariosView = new UsuariosVIEW(administradorDTO, this.id_usuarioEnvia, this.id_requerimento);
         // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
         this.getDesktopPane().add(usuariosView);
@@ -993,6 +982,10 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         // Torne a janela visível
         usuariosView.setVisible(true);
         dispose();
+    }//GEN-LAST:event_btnUsuarioActionPerformed
+
+    private void btnUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMouseClicked
+
     }//GEN-LAST:event_btnUsuarioMouseClicked
 
     private void retornoUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornoUsuariosActionPerformed
@@ -1130,9 +1123,10 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             if (pesquisa.equals("") && filtro.equals("Nenhum filtro")) {
                 this.opcao = 8;
             }
-//            JOptionPane.showMessageDialog(null, this.opcao);
-//            JOptionPane.showMessageDialog(null, requerimentosDTO.getPesquisa());
-//               
+            if (nomeUsuario.equals("Não especificar usuário") || nomeUsuario.equals("Nenhum usuário encontrado")) {
+                nomeUsuario = "???";
+            }
+
             rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, this.opcao, nomeUsuario); // pesquisa por marca na classe DAO
             while (rs.next()) {
                 modelo_tableRequerimentos.addRow(new Object[]{
@@ -1174,14 +1168,17 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 comboSituacao.removeAllItems();
                 comboSituacao.addItem(rs.getString("situacao"));
 
-                this.id_usuarioEnvia = Integer.parseInt(rs.getString("id_usuario"));
+                this.id_usuarioEnvia = rs.getString("id_usuario") != null ? Integer.parseInt(rs.getString("id_usuario")) : 0;
                 this.id_requerimento = Integer.parseInt(rs.getString("id_requerimento"));
 
-                //gravar_alterar = 2;
                 liberaCampos(true, true);
                 editarCampos(false, false);
 
-                liberaBotoes(true, true, false, false, true, true);
+                if (this.id_usuarioEnvia != 0) {
+                    liberaBotoes(true, true, false, false, true, true);
+                } else {
+                    liberaBotoes(true, false, false, false, false, true);
+                }
             }
         } catch (Exception erTab) {
             System.out.println("Erro SQL: " + erTab);
@@ -1210,7 +1207,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 comboSituacao.removeAllItems();
 
                 preencheCampos(requerimentosDTO.getId_requerimento());
-
                 btnAtualizar.setText("Atualizar situação");
                 alterar_cancelar = 1;
             }
@@ -1223,9 +1219,16 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
      */
     private void excluir() {
         if (JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir o Requerimento?", "Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(null,
-                    requerimentosCTR.excluirRequerimentos(requerimentosDTO)
-            );
+            String mensagem = requerimentosCTR.excluirRequerimentos(requerimentosDTO);
+            JOptionPane.showMessageDialog(null, mensagem);
+
+            if (mensagem.equals("Requerimento Excluído com Sucesso!!!")) {
+                limpaCampos();
+                liberaCampos(false, false);
+                liberaBotoes(false, false, false, false, false, false);
+                liberaUsuario(true, true, true, false);
+                preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString(), retornoUsuarios.getSelectedItem().toString());
+            }
         }
     }//Fecha método excluir()
 
@@ -1236,20 +1239,28 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
      * @return boolean false(campo não preenchido) true(campo preenchido).
      */
     private boolean verificaPreenchimento() {
-        if (comboSituacao.getSelectedItem().toString() == "-") {
-            JOptionPane.showMessageDialog(null, "O campo Situação deve ser preenchido");
-            comboSituacao.requestFocus();
-            return false;
-        } else {
-            if ((textareaResposta.getText().equals(""))) {
-                JOptionPane.showMessageDialog(null, "O campo Resposta deve ser preenchido");
+//        if (comboSituacao.getSelectedItem().toString() == "-") {
+//            JOptionPane.showMessageDialog(null, "O campo Situação deve ser preenchido");
+//            comboSituacao.requestFocus();
+//            return false;
+//        }
+        if (comboSituacao.getSelectedItem().toString() != "Concluído") {
+            if (textareaResposta.getText().trim().isEmpty()) {
+                showMessage("O campo Resposta deve ser preenchido");
                 textareaResposta.requestFocus();
                 return false;
-            } else {
-                return true;
-            }//Fecha else sen_fun
-        }//Fecha else log_fun
-    }//Fecha método verificaPreenchimento()
+            } else if (textareaResposta.getText().length() < 15 || textareaResposta.getText().length() > 2000) {
+                showMessage("O campo Resposta deve ter entre 15 e 2000 caracteres");
+                textareaResposta.requestFocus();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
 
     /**
      * Método utilizado para limpar os campos da tela.

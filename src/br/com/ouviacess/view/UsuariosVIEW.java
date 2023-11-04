@@ -490,6 +490,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
+        tableUsuarios.setAutoCreateRowSorter(true);
         tableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -546,8 +547,17 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
             new String [] {
                 "ID", "Nome", "Email"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableUsuarios.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tableUsuarios.getTableHeader().setReorderingAllowed(false);
         tableUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableUsuariosMouseClicked(evt);
@@ -681,10 +691,6 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tableUsuariosMouseClicked
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnVoltarActionPerformed
-
-    private void btnVoltarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoltarMouseClicked
         // Crie uma instância de UsuariosVIEW
         RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO, this.id_requerimento, 0, null);
         // Adicione a instância criada ao JDesktopPane (ou ao contêiner onde deseja exibi-la)
@@ -694,13 +700,13 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         // Torne a janela visível
         requerimentosVIEW.setVisible(true);
         dispose();
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void btnVoltarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoltarMouseClicked
+
     }//GEN-LAST:event_btnVoltarMouseClicked
 
     private void btnRequerimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequerimentosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRequerimentosActionPerformed
-
-    private void btnRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRequerimentosMouseClicked
         this.nomeUsuario = inputNome.getText();
         // Crie uma instância de UsuariosVIEW
         RequerimentosVIEW requerimentosVIEW = new RequerimentosVIEW(administradorDTO, 0, this.id_usuarioEnvia, nomeUsuario);
@@ -712,14 +718,14 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
         // Torne a janela visível
         requerimentosVIEW.setVisible(true);
         dispose();
+    }//GEN-LAST:event_btnRequerimentosActionPerformed
+
+    private void btnRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRequerimentosMouseClicked
+
     }//GEN-LAST:event_btnRequerimentosMouseClicked
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         excluir();
-        limpaCampos();
-        liberaCampos(false);
-        liberaBotoes(false, false, false);
-        preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString());
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
@@ -736,15 +742,15 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
             switch (filtro) {
                 case "Nome":
                     this.opcao = 1;
-                break;
-                
+                    break;
+
                 case "ID":
                     this.opcao = 2;
-                break;
-                
+                    break;
+
                 case "Nenhum filtro":
                     this.opcao = 3;
-                break;
+                    break;
             }
             if (pesquisa.equals("") && filtro.equals("Nenhum filtro")) {
                 this.opcao = 3;
@@ -800,9 +806,17 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
      */
     private void excluir() {
         if (JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir o Usuário?", "Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(null,
-                    usuariosCTR.excluirUsuarios(usuariosDTO)
-            );
+            //JOptionPane.showMessageDialog(null,usuariosCTR.excluirUsuarios(usuariosDTO));
+
+            String mensagem = usuariosCTR.excluirUsuarios(usuariosDTO);
+            JOptionPane.showMessageDialog(null, mensagem);
+
+            if (mensagem.equals("Usuario Excluído com Sucesso!!!")) {
+                limpaCampos();
+                liberaCampos(false);
+                liberaBotoes(false, false, false);
+                preencheTabela(inputPesquisa.getText(), selectPesquisa.getSelectedItem().toString());
+            }
         }
     }//Fecha método excluir()
 

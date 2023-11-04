@@ -302,12 +302,12 @@ public class CadastroVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginbtnAlterarRequerimento1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginbtnAlterarRequerimento1ActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
+        new LoginVIEW().setVisible(true);
     }//GEN-LAST:event_btnLoginbtnAlterarRequerimento1ActionPerformed
 
     private void btnLoginbtnAlterarRequerimento1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginbtnAlterarRequerimento1MouseClicked
-        this.dispose();
-        new LoginVIEW().setVisible(true);
+        
     }//GEN-LAST:event_btnLoginbtnAlterarRequerimento1MouseClicked
 
     private void btnCadastrarbtnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarbtnCadastrarActionPerformed
@@ -318,7 +318,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCadastrarbtnCadastrarActionPerformed
 
     private void btnLimparbtnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparbtnLimparActionPerformed
-        // TODO add your handling code here:
+       limpaCampos();
     }//GEN-LAST:event_btnLimparbtnLimparActionPerformed
 
     private void inputSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputSenhaActionPerformed
@@ -338,7 +338,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_inputNomeActionPerformed
 
     private void btnLimparMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimparMouseClicked
-        limpaCampos();
+        
     }//GEN-LAST:event_btnLimparMouseClicked
 
     /**

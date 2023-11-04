@@ -107,6 +107,11 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
                 btnEditarMouseClicked(evt);
             }
         });
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -386,6 +391,10 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_inputEmailActionPerformed
 
     private void btnSenhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSenhaMouseClicked
+
+    }//GEN-LAST:event_btnSenhaMouseClicked
+
+    private void btnSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSenhaActionPerformed
         if (editar_cancelar.equals("CANCELAR") && !alterando_senha) {
             // POSSIBILITA A HABILITAÇÃO DOS CAMPOS DE SENHA
             editarCampos(false, true);
@@ -396,13 +405,13 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         } else {
 
         }
-    }//GEN-LAST:event_btnSenhaMouseClicked
-
-    private void btnSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSenhaActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnSenhaActionPerformed
 
     private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
+
+    }//GEN-LAST:event_btnEditarMouseClicked
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (editar_cancelar.equals("EDITAR")) {
             // PERMITE A EDIÇÃO E DEPOIS VIRA O CANCELAR
             editarCampos(true, false);
@@ -425,7 +434,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
                 editar_cancelar = "EDITAR";
             }
         }
-    }//GEN-LAST:event_btnEditarMouseClicked
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * Método utilizado para preencher os campos da tela com valores do carro.
@@ -475,6 +484,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
             btnEditar.setText("Editar perfil");
             editar_cancelar = "EDITAR";
             dados_senha = "";
+            alterando_senha = false;
 
             JOptionPane.showMessageDialog(null,
                     administradorCTR.alterarAdministrador(administradorDTO, this.opcao)
@@ -557,7 +567,8 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         String hashSenhaInserida = gerarHashMD5(inputSenha.getText().trim());
         if (!hashSenhaInserida.equals(senhaHash)) {
             showMessage("A Senha atual informada está incorreta");
-            inputSenhaConfirma.requestFocus();
+            inputSenha.requestFocus();
+            inputSenha.setText("");
             return false;
         }
 
@@ -568,6 +579,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         } else if (new String(inputSenhaNova.getPassword()).length() < 3 || new String(inputSenhaNova.getPassword()).length() > 150) {
             showMessage("O campo Nova senha deve ter entre 3 e 150 caracteres");
             inputSenhaNova.requestFocus();
+            inputSenhaNova.setText("");
             return false;
         }
 
@@ -579,6 +591,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         if (!inputSenhaConfirma.getText().trim().equals(inputSenhaNova.getText().trim())) {
             showMessage("A confirmação da senha não corresponde à nova senha digitada");
             inputSenhaConfirma.requestFocus();
+            inputSenhaConfirma.setText("");
             return false;
         }
         return true;

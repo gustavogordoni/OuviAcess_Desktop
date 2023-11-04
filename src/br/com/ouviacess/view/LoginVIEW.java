@@ -160,12 +160,12 @@ public class LoginVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_inputSenhaLoginActionPerformed
 
     private void btnAcionarCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcionarCadastroActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
+        new CadastroVIEW().setVisible(true);
     }//GEN-LAST:event_btnAcionarCadastroActionPerformed
 
     private void btnAcessarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAcessarMouseClicked
-//        this.dispose();
-//        new PrincipalVIEW().setVisible(true);
+
     }//GEN-LAST:event_btnAcessarMouseClicked
 
     private void btnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessarActionPerformed
@@ -175,8 +175,7 @@ public class LoginVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAcessarActionPerformed
 
     private void btnAcionarCadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAcionarCadastroMouseClicked
-        this.dispose();
-        new CadastroVIEW().setVisible(true);
+
     }//GEN-LAST:event_btnAcionarCadastroMouseClicked
 
     /**
