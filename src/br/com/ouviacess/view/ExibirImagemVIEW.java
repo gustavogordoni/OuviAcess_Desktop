@@ -15,9 +15,10 @@ import javax.swing.JFrame;
  */
 public class ExibirImagemVIEW extends javax.swing.JFrame {
 
+    ResultSet rs; //Variavel usada para preenchimeto da tabela e dos campos
     RequerimentosDTO requerimentosDTO = new RequerimentosDTO(); //Cria um objeto requerimentosDTO
     RequerimentosCTR requerimentosCTR = new RequerimentosCTR(); //Cria um objeto requerimentosrCTR
-        BufferedImage imagem;
+    BufferedImage imagem;
     private int id_requerimento;
 
     /**
@@ -30,11 +31,11 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         // Impedir que a janela seja maximizada
         //setResizable(false);
-        
+
         LabelOculto.setVisible(false);
-        
+
         this.id_requerimento = id_requerimento;
-        mostraFoto();    
+        mostraFoto();
     }
 
     /**
@@ -110,8 +111,8 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-     private void mostraFoto(){
-       try {
+    private void mostraFoto() {
+        try {
             LabelImagem.setText("");
 
             requerimentosDTO.setId_requerimento(this.id_requerimento);
@@ -119,11 +120,11 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
             if (rs.next()) {
                 nome.setText(rs.getString("nome"));
 
-                ManipularImagemVIEW.exibiImagemLabel(rs.getBytes("dados_arquivo"), LabelOculto);                
+                ManipularImagemVIEW.exibiImagemLabel(rs.getBytes("dados_arquivo"), LabelOculto);
                 imagem = ManipularImagemVIEW.setImagemDimensao(LabelOculto.getIcon(), 1280, 720);
                 LabelImagem.setIcon(new ImageIcon(imagem));
             } else {
-                JOptionPane.showMessageDialog(null, "Imagem não encontrada!!!");
+                JOptionPane.showMessageDialog(null, "Esse requerimento não possui uma imagem anexada");
                 nome.setText("");
                 LabelImagem.setText("");
                 LabelImagem.setIcon(new ImageIcon(""));
@@ -135,7 +136,26 @@ public class ExibirImagemVIEW extends javax.swing.JFrame {
             requerimentosCTR.CloseDB();
         }
     }
-    
+
+    public boolean existeImagem(int id_requerimento) {
+        try {
+            // Consulte o banco de dados para verificar a existência da imagem associada a id_requerimento
+            rs = requerimentosCTR.consultarImagem(requerimentosDTO, 1);
+
+            // Verifique se a consulta retornou algum resultado
+            if (rs.next()) {
+                // Se retornou algum resultado, a imagem existe
+                return true;
+            } else {
+                // Caso contrário, a imagem não existe
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelImagem;
     private javax.swing.JLabel LabelOculto;

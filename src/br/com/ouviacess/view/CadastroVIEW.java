@@ -313,6 +313,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
     private void btnCadastrarbtnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarbtnCadastrarActionPerformed
         if (verificaPreenchimento()) {
             gravar();
+            logar();
         }
     }//GEN-LAST:event_btnCadastrarbtnCadastrarActionPerformed
 
@@ -366,39 +367,82 @@ public class CadastroVIEW extends javax.swing.JFrame {
      * @return boolean false(campo não preenchido) true(campo preenchido).
      */
     private boolean verificaPreenchimento() {
-        if (inputNome.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "O campo Nome deve ser preenchido");
+        if (inputNome.getText().trim().isEmpty()) {
+            showMessage("O campo Nome deve ser preenchido");
             inputNome.requestFocus();
+            inputNome.setText("");
             return false;
-        } else {
-            if (inputDdd.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "O campo DDD deve ser preenchido");
-                inputDdd.requestFocus();
-                return false;
-            } else {
-                if (inputTelefone.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "O campo Telefone deve ser preenchido");
-                    inputTelefone.requestFocus();
-                    return false;
-                } else {
-                    if (inputEmail.getText().equals("")) {
-                        JOptionPane.showMessageDialog(null, "O campo Email deve ser preenchido");
-                        inputEmail.requestFocus();
-                        return false;
-                    } else {
-                        if (inputSenha.getPassword().equals("")) {
-                            JOptionPane.showMessageDialog(null, "O campo Senha deve ser preenchido");
-                            inputSenha.requestFocus();
-                            return false;
-                        } else {
-                            return true;
-                        }//Fecha else sen_fun
-                    }//Fecha else log_fun
-                }//Fecha else log_fun
-            }//Fecha método verificaPreenchimento()
+        } else if (inputNome.getText().length() < 4 || inputNome.getText().length() > 150) {
+            showMessage("O campo Nome deve ter entre 4 e 150 caracteres");
+            inputNome.requestFocus();
+            inputNome.setText("");
+            return false;
         }
+
+        String ddd = inputDdd.getText().replaceAll("[^0-9]", ""); // Remove caracteres não numéricos
+        if (ddd.isEmpty() || ddd.length() != 2) {
+            showMessage("O campo DDD deve conter exatamente 2 dígitos numéricos");
+            inputDdd.requestFocus();
+            inputDdd.setText("");
+            return false;
+        }
+
+        String telefone = inputTelefone.getText().replaceAll("[^0-9]", ""); // Remove caracteres não numéricos
+        if (telefone.isEmpty() || telefone.length() != 9) {
+            showMessage("O campo Telefone deve conter exatamente 9 dígitos numéricos");
+            inputTelefone.requestFocus();
+            inputTelefone.setText("");
+            return false;
+        }
+
+        if (inputEmail.getText().trim().isEmpty()) {
+            showMessage("O campo Email deve ser preenchido");
+            inputEmail.requestFocus();
+            inputEmail.setText("");
+            return false;
+        } else if (inputEmail.getText().length() < 7 || inputEmail.getText().length() > 150) {
+            showMessage("O campo Email deve ter entre 7 e 150 caracteres");
+            inputEmail.requestFocus();
+            inputEmail.setText("");
+            return false;
+        }
+
+        if (new String(inputSenha.getPassword()).trim().isEmpty()) {
+            showMessage("O campo Senha deve ser preenchido");
+            inputSenha.requestFocus();
+            inputSenha.setText("");
+            return false;
+        } else if (new String(inputSenha.getPassword()).length() < 3 || new String(inputSenha.getPassword()).length() > 150) {
+            showMessage("O campo Senha deve ter entre 3 e 150 caracteres");
+            inputSenha.requestFocus();
+            inputSenha.setText("");
+            return false;
+        }
+        return true;
     }
-    
+
+    private void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    /**
+     * Método utilizado para logar o administrador.
+     *
+     * @param Não recebe parametro.
+     */
+    private void logar() {
+        administradorDTO.setEmail(inputEmail.getText());
+        administradorDTO.setSenha(String.valueOf(inputSenha.getPassword()));
+        administradorDTO.setId_administrador(administradorCTR.logarAdministrador(administradorDTO));
+
+        if (administradorDTO.getId_administrador() > 0) {
+            this.dispose();
+            new PrincipalVIEW(administradorDTO).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Login ou senha\nIncorreto!!!");
+        }
+    }//Fecha método logar()
+
     /**
      * Método utilizado para limpar os campos da tela.
      */

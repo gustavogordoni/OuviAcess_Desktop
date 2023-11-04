@@ -212,10 +212,15 @@ public class RequerimentosDAO {
                             + "ON r.id_usuario =  u.id_usuario ";
                     if (requerimentosDTO.getPesquisaRequerimento().matches("\\d+")) {
                         comando += "WHERE r.id_requerimento = " + requerimentosDTO.getPesquisaRequerimento();
+                        
+                         if (verificaUsuario(nomeUsuario).equals(" AND u.nome = '" + nomeUsuario + "' ")) {
+                            comando += "AND u.nome = '" + nomeUsuario + "' ";
+                        } 
                         verificaUsuario(nomeUsuario);
                     } else {
-                        if (requerimentosDTO.getPesquisaRequerimento().equals("") && verificaUsuario(nomeUsuario) == " AND u.nome = '" + nomeUsuario + "' ") {
-                            comando += "WHERE u.nome = '" + nomeUsuario + "' ";
+                        if (requerimentosDTO.getPesquisaRequerimento().isEmpty()) {
+                        } else {
+                            comando = null;
                         }
                     }
                     break;
@@ -276,6 +281,9 @@ public class RequerimentosDAO {
                 pstmt = ConexaoDAO.con.prepareStatement(sql);
                 pstmt.setInt(1, requerimentosDTO.getId_requerimento());
             }
+            //Executa o comando SQL no banco de Dados
+            System.out.println("ARQUIVO");
+            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + sql + "'\n");
             ResultSet rs = pstmt.executeQuery();
             return rs;
 

@@ -16,7 +16,9 @@ import br.com.ouviacess.ctr.UsuariosCTR;
 
 import java.awt.Dimension;
 import java.sql.ResultSet;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -31,7 +33,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     UsuariosDTO usuariosDTO = new UsuariosDTO(); //Cria um objeto carroDTO
     UsuariosCTR usuariosCTR = new UsuariosCTR(); //Cria um objeto carrorCTR
 
-    private int opcao, opcaoUsuario, id_usuarioEnvia, id_usuarioRecebe, id_requerimento;
+    private int opcao, opcaoUsuario, id_usuarioEnvia, id_usuarioRecebe, id_requerimento, alterar_cancelar = 1;
     private String nomeUsuario;
 
     DefaultTableModel modelo_tableRequerimentos; //Variavel para guardar o modelo da tabela   
@@ -111,12 +113,12 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        painelUsuarios = new javax.swing.JPanel();
         inputUsuario = new javax.swing.JTextField();
         retornoUsuarios = new javax.swing.JComboBox<>();
         btnAnexar = new javax.swing.JButton();
         selectUsuario = new javax.swing.JComboBox<>();
-        jPanel6 = new javax.swing.JPanel();
+        painelRequerimentos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRequerimentos = new javax.swing.JTable();
         btnPesquisa = new javax.swing.JButton();
@@ -329,7 +331,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
         setClosable(true);
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Especificar Usuário (opcional)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        painelUsuarios.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Especificar Usuário (opcional)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
         inputUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -361,15 +363,15 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout painelUsuariosLayout = new javax.swing.GroupLayout(painelUsuarios);
+        painelUsuarios.setLayout(painelUsuariosLayout);
+        painelUsuariosLayout.setHorizontalGroup(
+            painelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelUsuariosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(painelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(retornoUsuarios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGroup(painelUsuariosLayout.createSequentialGroup()
                         .addComponent(inputUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(selectUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -378,11 +380,11 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        painelUsuariosLayout.setVerticalGroup(
+            painelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelUsuariosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(painelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(selectUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
                     .addComponent(btnAnexar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(inputUsuario, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -391,9 +393,9 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jPanel5Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAnexar, retornoUsuarios, selectUsuario});
+        painelUsuariosLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAnexar, retornoUsuarios, selectUsuario});
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Buscar por:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        painelRequerimentos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Buscar por:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
         tableRequerimentos.setAutoCreateRowSorter(true);
         tableRequerimentos.setModel(new javax.swing.table.DefaultTableModel(
@@ -461,12 +463,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(tableRequerimentos);
-        if (tableRequerimentos.getColumnModel().getColumnCount() > 0) {
-            tableRequerimentos.getColumnModel().getColumn(0).setHeaderValue("ID");
-            tableRequerimentos.getColumnModel().getColumn(1).setHeaderValue("Título");
-            tableRequerimentos.getColumnModel().getColumn(2).setHeaderValue("Tipo");
-            tableRequerimentos.getColumnModel().getColumn(3).setHeaderValue("Situação");
-        }
 
         btnPesquisa.setBackground(java.awt.Color.white);
         btnPesquisa.setForeground(java.awt.Color.white);
@@ -490,15 +486,15 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout painelRequerimentosLayout = new javax.swing.GroupLayout(painelRequerimentos);
+        painelRequerimentos.setLayout(painelRequerimentosLayout);
+        painelRequerimentosLayout.setHorizontalGroup(
+            painelRequerimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelRequerimentosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(painelRequerimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addGroup(painelRequerimentosLayout.createSequentialGroup()
                         .addComponent(inputPesquisa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -506,12 +502,12 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                         .addComponent(btnPesquisa)))
                 .addContainerGap())
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        painelRequerimentosLayout.setVerticalGroup(
+            painelRequerimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelRequerimentosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(painelRequerimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(painelRequerimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(selectPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
@@ -520,7 +516,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jPanel6Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnPesquisa, inputPesquisa, selectPesquisa});
+        painelRequerimentosLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnPesquisa, inputPesquisa, selectPesquisa});
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -529,17 +525,17 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(painelRequerimentos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(painelUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(painelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(painelRequerimentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -649,16 +645,16 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnImagem)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnExcluir)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAtualizar)
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSalvar)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnImagem});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnExcluir, btnImagem, btnSalvar});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -900,12 +896,50 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnAtualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtualizarMouseClicked
-        liberaCampos(false, true);
-        editarCampos(false, true);
-        liberaBotoes(false, false, true, false, false, false);
+        if (alterar_cancelar == 1) {
+            liberaPainel(false);
+            liberaCampos(false, true);
+            editarCampos(false, true);
+            //liberaBotoes(false, false, true, false, false, false);
+            liberaBotoes(false, true, true, false, false, false);
+
+            // Limpa os itens existentes no JComboBox
+            comboSituacao.removeAllItems();
+
+            // Adiciona os novos itens
+            comboSituacao.addItem("Pendente");
+            comboSituacao.addItem("Em andamento");
+            comboSituacao.addItem("Concluído");
+            comboSituacao.addItem("Recusado");
+
+            btnAtualizar.setText("Cancelar");
+            alterar_cancelar = 2;
+        } else {
+            if (alterar_cancelar == 2) {
+                liberaPainel(true);
+                liberaCampos(true, true);
+                editarCampos(false, false);
+                liberaBotoes(true, true, false, false, true, true);
+
+                // Limpa os itens existentes no JComboBox
+                comboSituacao.removeAllItems();
+
+                preencheCampos(requerimentosDTO.getId_requerimento());
+
+                btnAtualizar.setText("Atualizar situação");
+                alterar_cancelar = 1;
+            }
+        }
     }//GEN-LAST:event_btnAtualizarMouseClicked
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        ExibirImagemVIEW view = new ExibirImagemVIEW(this.id_requerimento);
+        if (view.existeImagem(this.id_requerimento)) {
+            excluir();
+        } else {
+            excluir();
+        }
+
         excluir();
         limpaCampos();
         liberaCampos(false, false);
@@ -939,7 +973,10 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_comboSituacaoActionPerformed
 
     private void btnImagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagemActionPerformed
-        new ExibirImagemVIEW(this.id_requerimento).setVisible(true);
+        ExibirImagemVIEW view = new ExibirImagemVIEW(this.id_requerimento);
+        if (view.existeImagem(this.id_requerimento)) {
+            view.setVisible(true);
+        }
     }//GEN-LAST:event_btnImagemActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
@@ -971,7 +1008,9 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnPesquisaActionPerformed
 
     private void tableRequerimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRequerimentosMouseClicked
-        preencheCampos(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
+        if (alterar_cancelar != 2) {
+            preencheCampos(Integer.parseInt(String.valueOf(tableRequerimentos.getValueAt(tableRequerimentos.getSelectedRow(), 0))));
+        }
     }//GEN-LAST:event_tableRequerimentosMouseClicked
 
     private void inputUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputUsuarioActionPerformed
@@ -1122,7 +1161,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
                 inputTitulo.setText(rs.getString("titulo"));
                 inputTipo.setText(rs.getString("tipo"));
-                comboSituacao.setSelectedItem(rs.getString("situacao"));
+                //comboSituacao.setSelectedItem(rs.getString("situacao"));
                 inputData.setText(rs.getString("data"));
                 inputCidade.setText(rs.getString("cidade"));
                 inputCep.setText(rs.getString("cep"));
@@ -1130,6 +1169,10 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 inputLogradouro.setText(rs.getString("logradouro"));
                 textareaDescricao.setText(rs.getString("descricao"));
                 textareaResposta.setText(rs.getString("resposta"));
+
+                // Limpa os itens existentes no JComboBox
+                comboSituacao.removeAllItems();
+                comboSituacao.addItem(rs.getString("situacao"));
 
                 this.id_usuarioEnvia = Integer.parseInt(rs.getString("id_usuario"));
                 this.id_requerimento = Integer.parseInt(rs.getString("id_requerimento"));
@@ -1157,9 +1200,20 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                     requerimentosCTR.alterarRequerimentos(requerimentosDTO, this.administradorDTO.getId_administrador())
             );
 
+            liberaPainel(true);
             liberaCampos(true, true);
             editarCampos(false, false);
             liberaBotoes(true, true, false, false, true, true);
+
+            if (alterar_cancelar == 2) {
+                // Limpa os itens existentes no JComboBox
+                comboSituacao.removeAllItems();
+
+                preencheCampos(requerimentosDTO.getId_requerimento());
+
+                btnAtualizar.setText("Atualizar situação");
+                alterar_cancelar = 1;
+            }
         } catch (Exception e) {
         }
     }//Fecha método alterar()
@@ -1264,6 +1318,24 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     /**
      * Método utilizado para liberar os botões da tela.
      */
+    private void liberaPainel(boolean a) {
+        painelUsuarios.setEnabled(a);
+        painelRequerimentos.setEnabled(a);
+
+        inputUsuario.setEnabled(a);
+        selectUsuario.setEnabled(a);
+        btnAnexar.setEnabled(a);
+        retornoUsuarios.setEnabled(a);
+
+        inputPesquisa.setEnabled(a);
+        selectPesquisa.setEnabled(a);
+        btnPesquisa.setEnabled(a);
+        tableRequerimentos.setEnabled(a);
+    }//Fecha método liberaBotoes(boolean a, boolean b)
+
+    /**
+     * Método utilizado para liberar os botões da tela.
+     */
     private void liberaUsuario(boolean a, boolean b, boolean c, boolean d) {
         inputUsuario.setEnabled(a);
         selectUsuario.setEnabled(b);
@@ -1271,32 +1343,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         retornoUsuarios.setEnabled(d);
 
     }//Fecha método liberaBotoes(boolean a, boolean b)
-    
-//    private void mostraFoto(int id_requerimento){
-//        try{
-//            LabelImagem.setText("");
-// 
-//            requerimentosDTO.setId_requerimento(id_requerimento);
-//            ResultSet rs = requerimentosCTR.consultarImagem(requerimentosDTO, 1);
-//            if(rs.next()){
-//                //nome.setText(rs.getString("nom_alu"));
-//                ManipularImagemVIEW.exibiImagemLabel(rs.getBytes("dados_imagem"), LabelImagem);
-//            }
-//            else{
-//                JOptionPane.showMessageDialog(null, "Aluno não encontrado!!!");
-//                nome.setText("");
-//                LabelImagem.setText("");
-//                LabelImagem.setIcon(new ImageIcon(""));
-//            }
-//
-//        }
-//        catch(Exception ex){
-//            System.out.println("Erro: " + ex.getMessage());
-//        }
-//        finally{
-//            requerimentosCTR.CloseDB();
-//        }
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnexar;
@@ -1350,13 +1396,13 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JPanel painelRequerimentos;
+    private javax.swing.JPanel painelUsuarios;
     private javax.swing.JComboBox<String> retornoUsuarios;
     private javax.swing.JComboBox<String> selectPesquisa;
     private javax.swing.JComboBox<String> selectUsuario;

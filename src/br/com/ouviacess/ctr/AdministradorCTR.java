@@ -48,10 +48,10 @@ public class AdministradorCTR {
      * @param administradorDTO, que vem da classe da página (VIEW) 
      * @return String contendo a mensagem
      */
-    public String alterarAdministrador(AdministradorDTO administradorDTO) {
+    public String alterarAdministrador(AdministradorDTO administradorDTO, int opcao) {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
-            if (administradorDAO.alterarAdministrador(administradorDTO)) {
+            if (administradorDAO.alterarAdministrador(administradorDTO, opcao)) {
                 return "Administrador Alterado com Sucesso!!!";
             } else {
                 return "Administrador NÃO Alterado!!!";

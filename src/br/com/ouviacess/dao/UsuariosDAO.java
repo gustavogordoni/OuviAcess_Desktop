@@ -44,13 +44,13 @@ public class UsuariosDAO {
             ConexaoDAO.con.commit();
             //Fecha o statement
             stmt.close();
-            return true;          
+            return true;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         } //Independente de dar erro ou não ele vai fechar o banco de dados.
-        finally {                      
+        finally {
             //Chama o metodo da classe ConexaoDAO para fechar o banco de dados
             ConexaoDAO.CloseDB();
         }
@@ -80,28 +80,30 @@ public class UsuariosDAO {
                     break;
                 case 2:
                     comando = "SELECT u.* "
-                            + "FROM usuario u "
-                            + "WHERE id_usuario = " + pesquisa;
+                            + "FROM usuario u ";
+                    if (pesquisa.matches("\\d+")) {
+                        comando += "WHERE id_usuario = " + pesquisa;
+                    } else {
+                        if (pesquisa.isEmpty()) {
+                        } else {
+                            comando = null;
+                        }
+                    }
                     break;
                 case 3:
                     comando = "SELECT u.* "
                             + "FROM usuario u ";
-                    // Verifique se a pesquisa é um número
-//                    if (pesquisa.equals("")) {
-//                        comando += "WHERE nome ILIKE '%" + pesquisa + "%' "
-//                                + "OR id_usuario = " + pesquisa;
-//                    } else {
-                        if (pesquisa.matches("\\d+")) {
-                            comando += "WHERE id_usuario = " + pesquisa;
-                        } else {
-                            comando += "WHERE nome ILIKE '%" + pesquisa + "%' ";
-                        }
+                    if (pesquisa.matches("\\d+")) {
+                        comando += "WHERE id_usuario = " + pesquisa;
+                    } else {
+                        comando += "WHERE nome ILIKE '%" + pesquisa + "%' ";
+                    }
 //                    }
                     break;
             }
             //Executa o comando SQL no banco de Dados
             System.out.println("USUÁRIO");
-            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "'\n");
+            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "\n");
             rs = stmt.executeQuery(comando.toUpperCase());
             return rs;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
