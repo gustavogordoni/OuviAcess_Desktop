@@ -7,13 +7,13 @@ import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
-//import javax.swing.JTextArea;
-//import javax.swing.JTextField;
 
 import br.com.ouviacess.dto.AdministradorDTO;
 import br.com.ouviacess.ctr.AdministradorCTR;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class PerfilVIEW extends javax.swing.JInternalFrame {
 
@@ -32,7 +32,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
     public PerfilVIEW(AdministradorDTO administradorDTO) {
         initComponents();
         editarCampos(false, false);
-        liberaBotoes(true, false, false);
+        liberaBotoes(true, true, false, false);
         liberaCampos(true, false);
 
         this.administradorDTO = administradorDTO;
@@ -57,6 +57,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         btnAtualizar = new javax.swing.JButton();
         btnSenha = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -113,6 +114,19 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
             }
         });
 
+        btnExcluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnExcluir.setText("Excluir conta");
+        btnExcluir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnExcluirMouseClicked(evt);
+            }
+        });
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -121,29 +135,29 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAtualizar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnEditar, btnSenha});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAtualizar, btnEditar, btnExcluir, btnSenha});
 
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSenha))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSenha)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAtualizar, btnSenha});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAtualizar, btnEditar, btnExcluir, btnSenha});
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 28)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -399,7 +413,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
             // POSSIBILITA A HABILITAÇÃO DOS CAMPOS DE SENHA
             editarCampos(false, true);
             liberaCampos(false, true);
-            liberaBotoes(true, false, true);
+            liberaBotoes(true, false, false, true);
             dados_senha = "SENHA";
             alterando_senha = true;
         } else {
@@ -415,7 +429,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         if (editar_cancelar.equals("EDITAR")) {
             // PERMITE A EDIÇÃO E DEPOIS VIRA O CANCELAR
             editarCampos(true, false);
-            liberaBotoes(true, true, true);
+            liberaBotoes(true, false, true, true);
             dados_senha = "DADOS";
 
             btnEditar.setText("Cancelar");
@@ -424,7 +438,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
             if (editar_cancelar.equals("CANCELAR")) {
                 // CANCELA E DEPOIS VIRA O EDITAR
                 editarCampos(false, false);
-                liberaBotoes(true, false, false);
+                liberaBotoes(true, true, false, false);
                 liberaCampos(true, false);
                 preencheCampos();
                 limpaCampos();
@@ -435,6 +449,14 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExcluirMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExcluirMouseClicked
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        excluir();
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * Método utilizado para preencher os campos da tela com valores do carro.
@@ -478,7 +500,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
                 }
             }
             editarCampos(false, false);
-            liberaBotoes(true, false, false);
+            liberaBotoes(true, true, false, false);
             liberaCampos(true, false);
             limpaCampos();
             btnEditar.setText("Editar perfil");
@@ -601,6 +623,22 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(null, message);
     }
 
+    private void excluir() {
+        if (JOptionPane.showConfirmDialog(null, "Deseja Realmente excluir sua conta?", "Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            //JOptionPane.showMessageDialog(null,usuariosCTR.excluirUsuarios(usuariosDTO));
+            String mensagem = administradorCTR.excluirAdministrador(administradorDTO);
+            JOptionPane.showMessageDialog(null, mensagem);
+
+            if (mensagem.equals("Administrador Excluído com Sucesso!")) {
+                // IR PARA TELA DE LOGIN '-'
+                JFrame principalFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                principalFrame.dispose();
+
+                new LoginVIEW().setVisible(true);
+            }
+        }
+    }//Fecha método excluir()
+
     /**
      * Método utilizado para liberar/bloquear os campos da tela.
      *
@@ -634,10 +672,11 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
     /**
      * Método utilizado para liberar os botões da tela.
      */
-    private void liberaBotoes(boolean a, boolean b, boolean c) {
+    private void liberaBotoes(boolean a, boolean b, boolean c, boolean d) {
         btnEditar.setEnabled(a);
-        btnSenha.setEnabled(b);
-        btnAtualizar.setEnabled(c);
+        btnExcluir.setEnabled(b);
+        btnSenha.setEnabled(c);
+        btnAtualizar.setEnabled(d);
     }//Fecha método liberaBotoes(boolean a, boolean b)
 
     private void limpaCampos() {
@@ -650,6 +689,7 @@ public class PerfilVIEW extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnSenha;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JFormattedTextField inputDdd;

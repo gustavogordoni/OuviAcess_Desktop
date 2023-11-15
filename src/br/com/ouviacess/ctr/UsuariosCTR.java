@@ -31,14 +31,14 @@ public class UsuariosCTR {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
             if (usuariosDAO.excluirUsuarios(usuariosDTO)) {
-                return "Usuario Excluído com Sucesso!!!";
+                return "Usuario Excluído com Sucesso!";
             } else {
-                return "Usuario NÃO Excluído!!!";
+                return "Usuario NÃO Excluído!";
             }
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {
             System.out.println(e.getMessage());
-            return "Usuario NÃO Excluído!!!";
+            return "Usuario NÃO Excluído!";
         }
     }//Fecha o método excluirUsuarios */
     

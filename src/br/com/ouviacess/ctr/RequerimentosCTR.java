@@ -26,14 +26,14 @@ public class RequerimentosCTR {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
             if (requerimentosDAO.alterarRequerimentos(requerimentosDTO, id_requerimentos)) {
-                return "Requerimentos Alterado com Sucesso!!!";
+                return "Requerimentos Alterado com Sucesso!";
             } else {
-                return "Requerimentos NÃO Alterado!!!";
+                return "Requerimentos NÃO Alterado!";
             }
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {
             System.out.println(e.getMessage());
-            return "Requerimentos NÃO Alterado!!!";
+            return "Requerimentos NÃO Alterado!";
         }
     }//Fecha o método alterarRequerimentos
     
@@ -48,14 +48,14 @@ public class RequerimentosCTR {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
             if (requerimentosDAO.excluirRequerimentos(requerimentosDTO)) {
-                return "Requerimento Excluído com Sucesso!!!";
+                return "Requerimento Excluído com Sucesso!";
             } else {
-                return "Requerimento NÃO Excluído!!!";
+                return "Requerimento NÃO Excluído!";
             }
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {
             System.out.println(e.getMessage());
-            return "Requerimento NÃO Excluído!!!";
+            return "Requerimento NÃO Excluído!";
         }
     }//Fecha o método excluirRequerimentos
 

@@ -343,7 +343,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         });
 
-        btnAnexar.setBackground(java.awt.Color.white);
         btnAnexar.setForeground(java.awt.Color.white);
         btnAnexar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/pesquisar.png"))); // NOI18N
         btnAnexar.addActionListener(new java.awt.event.ActionListener() {
@@ -469,7 +468,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tableRequerimentos);
 
-        btnPesquisa.setBackground(java.awt.Color.white);
         btnPesquisa.setForeground(java.awt.Color.white);
         btnPesquisa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/pesquisar.png"))); // NOI18N
         btnPesquisa.addActionListener(new java.awt.event.ActionListener() {
@@ -1148,6 +1146,8 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
      */
     private void preencheCampos(int id_requerimento) {
         try {
+            String descricao;
+            
             requerimentosDTO.setId_requerimento(id_requerimento);
             rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, 1, null); //1 = é a pesquisa no id na classe DAO
             if (rs.next()) {
@@ -1155,16 +1155,16 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
 
                 inputTitulo.setText(rs.getString("titulo"));
                 inputTipo.setText(rs.getString("tipo"));
-                //comboSituacao.setSelectedItem(rs.getString("situacao"));
                 inputData.setText(rs.getString("data"));
                 inputCidade.setText(rs.getString("cidade"));
                 inputCep.setText(rs.getString("cep"));
                 inputBairro.setText(rs.getString("bairro"));
                 inputLogradouro.setText(rs.getString("logradouro"));
-                textareaDescricao.setText(rs.getString("descricao"));
+//                textareaDescricao.setText(rs.getString("descricao"));                
+                descricao = rs.getString("descricao").replaceAll("&#13;&#10;","\n");    
+                textareaDescricao.setText(descricao);                
                 textareaResposta.setText(rs.getString("resposta"));
 
-                // Limpa os itens existentes no JComboBox
                 comboSituacao.removeAllItems();
                 comboSituacao.addItem(rs.getString("situacao"));
 
@@ -1203,7 +1203,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             liberaBotoes(true, true, false, false, true, true);
 
             if (alterar_cancelar == 2) {
-                // Limpa os itens existentes no JComboBox
                 comboSituacao.removeAllItems();
 
                 preencheCampos(requerimentosDTO.getId_requerimento());
@@ -1222,7 +1221,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             String mensagem = requerimentosCTR.excluirRequerimentos(requerimentosDTO);
             JOptionPane.showMessageDialog(null, mensagem);
 
-            if (mensagem.equals("Requerimento Excluído com Sucesso!!!")) {
+            if (mensagem.equals("Requerimento Excluído com Sucesso!")) {
                 limpaCampos();
                 liberaCampos(false, false);
                 liberaBotoes(false, false, false, false, false, false);
@@ -1239,11 +1238,6 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
      * @return boolean false(campo não preenchido) true(campo preenchido).
      */
     private boolean verificaPreenchimento() {
-//        if (comboSituacao.getSelectedItem().toString() == "-") {
-//            JOptionPane.showMessageDialog(null, "O campo Situação deve ser preenchido");
-//            comboSituacao.requestFocus();
-//            return false;
-//        }
         if (comboSituacao.getSelectedItem().toString() != "Concluído") {
             if (textareaResposta.getText().trim().isEmpty()) {
                 showMessage("O campo Resposta deve ser preenchido");

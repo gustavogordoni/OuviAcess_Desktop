@@ -811,7 +811,7 @@ public class UsuariosVIEW extends javax.swing.JInternalFrame {
             String mensagem = usuariosCTR.excluirUsuarios(usuariosDTO);
             JOptionPane.showMessageDialog(null, mensagem);
 
-            if (mensagem.equals("Usuario Excluído com Sucesso!!!")) {
+            if (mensagem.equals("Usuario Excluído com Sucesso!")) {
                 limpaCampos();
                 liberaCampos(false);
                 liberaBotoes(false, false, false);

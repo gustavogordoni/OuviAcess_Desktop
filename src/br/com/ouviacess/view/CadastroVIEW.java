@@ -6,11 +6,11 @@ package br.com.ouviacess.view;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
-//import javax.swing.JTextArea;
-//import javax.swing.JTextField;
-
 import br.com.ouviacess.dto.AdministradorDTO;
 import br.com.ouviacess.ctr.AdministradorCTR;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CadastroVIEW extends javax.swing.JFrame {
 
@@ -138,7 +138,6 @@ public class CadastroVIEW extends javax.swing.JFrame {
         });
 
         btnLimpar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/cancelar.png"))); // NOI18N
         btnLimpar.setText("Limpar");
         btnLimpar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -152,7 +151,6 @@ public class CadastroVIEW extends javax.swing.JFrame {
         });
 
         btnCadastrar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnCadastrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/ouviacess/view/imagens/novo.png"))); // NOI18N
         btnCadastrar.setText("Cadastrar-se");
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,14 +176,17 @@ public class CadastroVIEW extends javax.swing.JFrame {
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
-                .addContainerGap(79, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel14Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnCadastrar, btnLimpar, btnLogin});
+
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
@@ -198,6 +199,8 @@ public class CadastroVIEW extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel14Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnCadastrar, btnLimpar, btnLogin});
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
@@ -207,8 +210,8 @@ public class CadastroVIEW extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(inputSenha, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(inputNome, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(inputSenha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
@@ -217,15 +220,20 @@ public class CadastroVIEW extends javax.swing.JFrame {
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(inputTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(inputEmail, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(inputEmail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel20)
                             .addComponent(jLabel5)
                             .addComponent(jLabel19))
-                        .addGap(0, 433, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        jPanel13Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputEmail, inputNome, inputSenha});
+
+        jPanel13Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {inputDdd, inputTelefone});
+
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
@@ -255,6 +263,8 @@ public class CadastroVIEW extends javax.swing.JFrame {
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jPanel13Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {inputDdd, inputEmail, inputNome, inputSenha, inputTelefone});
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -307,7 +317,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginbtnAlterarRequerimento1ActionPerformed
 
     private void btnLoginbtnAlterarRequerimento1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginbtnAlterarRequerimento1MouseClicked
-        
+
     }//GEN-LAST:event_btnLoginbtnAlterarRequerimento1MouseClicked
 
     private void btnCadastrarbtnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarbtnCadastrarActionPerformed
@@ -318,7 +328,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCadastrarbtnCadastrarActionPerformed
 
     private void btnLimparbtnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparbtnLimparActionPerformed
-       limpaCampos();
+        limpaCampos();
     }//GEN-LAST:event_btnLimparbtnLimparActionPerformed
 
     private void inputSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputSenhaActionPerformed
@@ -338,7 +348,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_inputNomeActionPerformed
 
     private void btnLimparMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimparMouseClicked
-        
+
     }//GEN-LAST:event_btnLimparMouseClicked
 
     /**
@@ -418,6 +428,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
             inputSenha.setText("");
             return false;
         }
+        
         return true;
     }
 
@@ -439,7 +450,7 @@ public class CadastroVIEW extends javax.swing.JFrame {
             this.dispose();
             new PrincipalVIEW(administradorDTO).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Login ou senha\nIncorreto!!!");
+            JOptionPane.showMessageDialog(null, "Login ou senha\nIncorreto!");
         }
     }//Fecha método logar()
 

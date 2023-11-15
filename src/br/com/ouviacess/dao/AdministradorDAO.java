@@ -37,9 +37,8 @@ public class AdministradorDAO {
                     + "'" + administradorDTO.getTelefone()
                     + "') ";
 
-           
             //Executa o comando SQL no banco de Dados
-           // System.out.println("ADMINISTRADOR");
+            // System.out.println("ADMINISTRADOR");
             //System.out.println("OPÇÃO: default\nCOMANDO: " + comando + "'\n");
             stmt.execute(comando);
             //Da um commit no banco de dados
@@ -67,32 +66,48 @@ public class AdministradorDAO {
      */
     public boolean excluirAdministrador(AdministradorDTO administradorDTO) {
         try {
-            //Chama o metodo que esta na classe ConexaoDAO para abrir o banco de dados
+            // Chama o método que está na classe ConexaoDAO para abrir o banco de dados
             ConexaoDAO.ConectDB();
-            //Cria o Statement que responsavel por executar alguma coisa no banco de dados
-            stmt = ConexaoDAO.con.createStatement();
-            //Comando SQL que sera executado no banco de dados
-            String comando = "DELETE FROM administrador WHERE id_administrador = " + administradorDTO.getId_administrador();
-
-            //Executa o comando SQL no banco de Dados
-            //System.out.println("ADMNISTRADOR");
-            //System.out.println("OPÇÃO: default\nCOMANDO: " + comando + "'\n");
-            stmt.execute(comando);
-            //Da um commit no banco de dados
+            // Desabilitar o auto commit para que as alterações ocorram em uma transação
+            ConexaoDAO.con.setAutoCommit(false);
+            // Atualizar os requerimentos associados ao administrador
+            atualizarRequerimentos(administradorDTO.getId_administrador());
+            // Comando SQL para excluir o administrador
+            String comando = "DELETE FROM administrador WHERE id_administrador = ?";
+            // Criar o PreparedStatement para evitar SQL Injection
+            try (PreparedStatement preparedStatement = ConexaoDAO.con.prepareStatement(comando)) {
+                // Configurar parâmetro
+                preparedStatement.setInt(1, administradorDTO.getId_administrador());
+                // Executar o comando SQL para excluir o administrador
+                preparedStatement.executeUpdate();
+            }
+            // Commit da transação
+            System.out.println("ADMINISTRADOR");
+            System.out.println("COMANDO: " + comando + "'\n");
             ConexaoDAO.con.commit();
-            //Fecha o statement
-            stmt.close();
+
             return true;
-        } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
-        catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            // Lidar com exceções
+            e.printStackTrace();
             return false;
-        } //Independente de dar erro ou não ele vai fechar o banco de dados.
-        finally {
-            //Chama o metodo da classe ConexaoDAO para fechar o banco de dados
+        } finally {
+            // Chama o método da classe ConexaoDAO para fechar o banco de dados
             ConexaoDAO.CloseDB();
         }
-    }//Fecha o método excluirAdministrador
+    }
+
+    private void atualizarRequerimentos(int idAdministrador) throws SQLException {
+        // Comando SQL para atualizar os requerimentos associados ao administrador
+        String sqlUpdateRequerimentos = "UPDATE requerimento SET id_administrador = NULL WHERE id_administrador = ?";
+        // Criar o PreparedStatement para evitar SQL Injection
+        try (PreparedStatement preparedStatement = ConexaoDAO.con.prepareStatement(sqlUpdateRequerimentos)) {
+            // Configurar parâmetro
+            preparedStatement.setInt(1, idAdministrador);
+            // Executar a atualização dos requerimentos
+            preparedStatement.executeUpdate();
+        }
+    }
 
     /**
      * Método utilizado para alterar um objeto administradorDTO no banco de
@@ -114,7 +129,6 @@ public class AdministradorDAO {
                     comando = "UPDATE administrador SET "
                             + "nome = '" + administradorDTO.getNome() + "', "
                             + "email = '" + administradorDTO.getEmail() + "', "
-                            //+ "senha = md5('" + administradorDTO.getSenha() + "'),"
                             + "ddd = '" + administradorDTO.getDdd() + "', "
                             + "telefone = '" + administradorDTO.getTelefone() + "' "
                             + "WHERE id_administrador = " + administradorDTO.getId_administrador();
@@ -170,15 +184,15 @@ public class AdministradorDAO {
 
                     break;
                 case 2:
-                    comando = "SELECT a.* "
+                   comando = "SELECT a.* "
                             + "FROM administrador a "
-                            + "WHERE a.id_administrador = " + administradorDTO.getId_administrador();
+                            + "WHERE a.email = '" + administradorDTO.getEmail()+ "'";
                     break;
             }
             //Executa o comando SQL no banco de Dados
-            //System.out.println("ADMINISTRADOR");
-            //System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "'\n");
-            rs = stmt.executeQuery(comando.toUpperCase());
+            System.out.println("ADMINISTRADOR");
+            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "\n");
+            rs = stmt.executeQuery(comando);
             return rs;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {

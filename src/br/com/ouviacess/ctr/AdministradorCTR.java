@@ -29,9 +29,9 @@ public class AdministradorCTR {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
             if (administradorDAO.inserirAdministrador(administradorDTO)) {
-                return "Administrador Cadastrado com Sucesso!!!";
+                return "Administrador Cadastrado com Sucesso!";
             } else {
-                return "Administrador NÃO Cadastrado!!!";
+                return "Administrador NÃO Cadastrado!";
             }
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.		
         catch (Exception e) {
@@ -52,14 +52,14 @@ public class AdministradorCTR {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
             if (administradorDAO.alterarAdministrador(administradorDTO, opcao)) {
-                return "Administrador Alterado com Sucesso!!!";
+                return "Administrador Alterado com Sucesso!";
             } else {
-                return "Administrador NÃO Alterado!!!";
+                return "Administrador NÃO Alterado!";
             }
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {
             System.out.println(e.getMessage());
-            return "Administrador NÃO Alterado!!!";
+            return "Administrador NÃO Alterado!";
         }
     }//Fecha o método alterarAdministrador
 
@@ -75,14 +75,14 @@ public class AdministradorCTR {
         try {
             //Chama o metodo que esta na classe DAO aguardando uma resposta (true ou false)
             if (administradorDAO.excluirAdministrador(administradorDTO)) {
-                return "Administrador Excluído com Sucesso!!!";
+                return "Administrador Excluído com Sucesso!";
             } else {
-                return "Administrador NÃO Excluído!!!";
+                return "Administrador NÃO Excluído!";
             }
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
         catch (Exception e) {
             System.out.println(e.getMessage());
-            return "Administrador NÃO Excluído!!!";
+            return "Administrador NÃO Excluído!";
         }
     }//Fecha o método excluirAdministrador
     

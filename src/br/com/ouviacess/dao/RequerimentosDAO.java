@@ -336,7 +336,7 @@ public class RequerimentosDAO {
             }
             //Executa o comando SQL no banco de Dados
             System.out.println("ARQUIVO");
-            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + sql + "'\n");
+            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + sql + "\n");
             ResultSet rs = pstmt.executeQuery();
             return rs;
 

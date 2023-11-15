@@ -192,7 +192,7 @@ public class LoginVIEW extends javax.swing.JFrame {
             this.dispose();
             new PrincipalVIEW(administradorDTO).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Login ou senha\nIncorreto!!!");
+            JOptionPane.showMessageDialog(null, "Login ou senha\nIncorreto!");
         }
     }//Fecha método logar()
 
