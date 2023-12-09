@@ -1146,12 +1146,12 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
      */
     private void preencheCampos(int id_requerimento) {
         try {
-            String descricao;
+            String descricao, resposta;
             
-            requerimentosDTO.setId_requerimento(id_requerimento);
-            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, 1, null); //1 = é a pesquisa no id na classe DAO
+            requerimentosDTO.setId_requerimento(id_requerimento);           
+            rs = requerimentosCTR.consultarRequerimentos(requerimentosDTO, 1, null); //1 = é a pesquisa no id na classe DAO 
             if (rs.next()) {
-                limpaCampos();
+                limpaCampos();            
 
                 inputTitulo.setText(rs.getString("titulo"));
                 inputTipo.setText(rs.getString("tipo"));
@@ -1162,15 +1162,20 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
                 inputLogradouro.setText(rs.getString("logradouro"));
 //                textareaDescricao.setText(rs.getString("descricao"));                
                 descricao = rs.getString("descricao").replaceAll("&#13;&#10;","\n");    
-                textareaDescricao.setText(descricao);                
-                textareaResposta.setText(rs.getString("resposta"));
-
+                textareaDescricao.setText(descricao);
+                if(rs.getString("resposta") != null){
+                    resposta = rs.getString("resposta").replaceAll("&#13;&#10;","\n");    
+                    textareaResposta.setText(resposta);                
+                }else{
+                    textareaResposta.setText(rs.getString("resposta"));
+                }
+                
                 comboSituacao.removeAllItems();
                 comboSituacao.addItem(rs.getString("situacao"));
-
+                
                 this.id_usuarioEnvia = rs.getString("id_usuario") != null ? Integer.parseInt(rs.getString("id_usuario")) : 0;
                 this.id_requerimento = Integer.parseInt(rs.getString("id_requerimento"));
-
+                
                 liberaCampos(true, true);
                 editarCampos(false, false);
 
@@ -1182,6 +1187,7 @@ public class RequerimentosVIEW extends javax.swing.JInternalFrame {
             }
         } catch (Exception erTab) {
             System.out.println("Erro SQL: " + erTab);
+            System.out.println("Aqui");
         }
     }//Fecha método preencheCampos()
 

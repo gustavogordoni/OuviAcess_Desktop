@@ -35,8 +35,8 @@ public class UsuariosDAO {
                     + "DELETE FROM usuario "
                     + "WHERE id_usuario = " + usuariosDTO.getId_usuario();
 
-            System.out.println("USUÁRIO");
-            System.out.println("COMANDO: " + comando + "'\n");
+//            System.out.println("USUÁRIO");
+//            System.out.println("COMANDO: " + comando + "'\n");
 
             //Executa o comando SQL no banco de Dados
             stmt.execute(comando);
@@ -102,8 +102,8 @@ public class UsuariosDAO {
                     break;
             }
             //Executa o comando SQL no banco de Dados
-            System.out.println("USUÁRIO");
-            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "\n");
+//            System.out.println("USUÁRIO");
+//            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "\n");
             rs = stmt.executeQuery(comando.toUpperCase());
             return rs;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.

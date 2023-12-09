@@ -28,8 +28,8 @@ public class LoginVIEW extends javax.swing.JFrame {
         // Impedir que a janela seja maximizada
         setResizable(false);
 
-        inputEmailLogin.setText("a@a.com");
-        inputSenhaLogin.setText("123");
+//        inputEmailLogin.setText("a@a.com");
+//        inputSenhaLogin.setText("123");
     }
 
     /**

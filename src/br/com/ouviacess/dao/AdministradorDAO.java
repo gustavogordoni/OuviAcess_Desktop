@@ -82,8 +82,8 @@ public class AdministradorDAO {
                 preparedStatement.executeUpdate();
             }
             // Commit da transação
-            System.out.println("ADMINISTRADOR");
-            System.out.println("COMANDO: " + comando + "'\n");
+//            System.out.println("ADMINISTRADOR");
+//            System.out.println("COMANDO: " + comando + "'\n");
             ConexaoDAO.con.commit();
 
             return true;
@@ -190,8 +190,8 @@ public class AdministradorDAO {
                     break;
             }
             //Executa o comando SQL no banco de Dados
-            System.out.println("ADMINISTRADOR");
-            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "\n");
+//            System.out.println("ADMINISTRADOR");
+//            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "\n");
             rs = stmt.executeQuery(comando);
             return rs;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.

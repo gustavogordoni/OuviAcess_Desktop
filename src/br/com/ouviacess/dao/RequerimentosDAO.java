@@ -95,43 +95,6 @@ public class RequerimentosDAO {
         }
     }//Fecha o método excluirRequerimento
 
-    /**
-     * Método utilizado para alterar um objeto requerimentosDTO no banco de
-     * dados
-     *
-     * @param requerimentosDTO, que vem da classe RequerimentosCTR
-     * @return Um boolean
-     */
-//    public boolean alterarRequerimentos(RequerimentosDTO requerimentosDTO, int id_administrador) {
-//        try {
-//            //Chama o metodo que esta na classe ConexaoDAO para abrir o banco de dados
-//            ConexaoDAO.ConectDB();
-//            //Cria o Statement que responsavel por executar alguma coisa no banco de dados
-//            stmt = ConexaoDAO.con.createStatement();
-//            //Comando SQL que sera executado no banco de dados
-//            String comando = "UPDATE requerimento SET "
-//                    + "situacao = '" + requerimentosDTO.getSituacao() + "',"
-//                    + "resposta = '" + requerimentosDTO.getResposta() + "',"
-//                    + "id_administrador = '" + id_administrador + "'"
-//                    + "WHERE id_requerimento = '" + requerimentosDTO.getId_requerimento() + "'";
-//
-//            //Executa o comando SQL no banco de Dados
-//            stmt.execute(comando);
-//            //Da um commit no banco de dados
-//            ConexaoDAO.con.commit();
-//            //Fecha o statement
-//            stmt.close();
-//            return true;
-//        } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
-//        catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            return false;
-//        } //Independente de dar erro ou não ele vai fechar o banco de dados.
-//        finally {
-//            //Chama o metodo da classe ConexaoDAO para fechar o banco de dados
-//            ConexaoDAO.CloseDB();
-//        }
-//    }//Fecha o método alterarRequerimentos
     public boolean alterarRequerimentos(RequerimentosDTO requerimentosDTO, int id_administrador) {
         try {
             // Chama o método que está na classe ConexaoDAO para abrir o banco de dados
@@ -309,8 +272,8 @@ public class RequerimentosDAO {
                     break;
             }
             //Executa o comando SQL no banco de Dados
-            System.out.println("REQUERIMENTO");
-            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "\n");
+//            System.out.println("REQUERIMENTO");
+//            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + comando + "\n");
             rs = stmt.executeQuery(comando);
             return rs;
         } //Caso tenha algum erro no codigo acima é enviado uma mensagem no console com o que esta acontecendo.
@@ -335,8 +298,8 @@ public class RequerimentosDAO {
                 pstmt.setInt(1, requerimentosDTO.getId_requerimento());
             }
             //Executa o comando SQL no banco de Dados
-            System.out.println("ARQUIVO");
-            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + sql + "\n");
+//            System.out.println("ARQUIVO");
+//            System.out.println("OPÇÃO: " + opcao + "\nCOMANDO: " + sql + "\n");
             ResultSet rs = pstmt.executeQuery();
             return rs;
 

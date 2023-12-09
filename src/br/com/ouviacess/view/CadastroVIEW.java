@@ -8,9 +8,6 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import br.com.ouviacess.dto.AdministradorDTO;
 import br.com.ouviacess.ctr.AdministradorCTR;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class CadastroVIEW extends javax.swing.JFrame {
 
@@ -428,6 +425,14 @@ public class CadastroVIEW extends javax.swing.JFrame {
             inputSenha.setText("");
             return false;
         }
+        
+//        administradorCTR.consultarEmail(administradorDTO);
+//        if () {
+//           
+//            inputSenha.requestFocus();
+//            inputSenha.setText("");
+//            return false;
+//        }
         
         return true;
     }
